@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'TransportApiSdk_Example' do
+  pod 'TransportApiSdk', :path => '../'
+
+  target 'TransportApiSdk_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
