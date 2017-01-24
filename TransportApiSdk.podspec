@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
   s.name             = 'TransportApiSdk'
   s.version          = '0.1.0'
-  s.summary          = 'A short description of TransportApiSdk.'
+  s.summary          = 'SDK for the WhereIsMyTransport Transport API.'
 
 # This description is used to generate tags and improve search results.
 #   * Think: What does it do? Why did you write it? What is the focus?
@@ -18,15 +18,15 @@ Pod::Spec.new do |s|
 #   * Finally, don't worry about the indent, CocoaPods strips it!
 
   s.description      = <<-DESC
-TODO: Add long description of the pod here.
+Provides a wrapper for the WhereIsMyTransport Transport API.
                        DESC
 
-  s.homepage         = 'https://github.com/<GITHUB_USERNAME>/TransportApiSdk'
+  s.homepage         = 'https://github.com/chrisk1ng/TransportApiSdk.iOS'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
-  s.author           = { 'Bilo' => 'bilo@wimt.co.za' }
-  s.source           = { :git => 'https://github.com/<GITHUB_USERNAME>/TransportApiSdk.git', :tag => s.version.to_s }
-  # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
+  s.author           = { 'Chris King' => 'support@whereismytransport.com' }
+  s.source           = { :git => 'https://github.com/chrisk1ng/TransportApiSdk.iOS.git', :tag => s.version.to_s }
+  s.social_media_url = 'https://twitter.com/crkingza'
 
   s.ios.deployment_target = '8.0'
 

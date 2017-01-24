@@ -1,0 +1,16 @@
+PODS:
+  - TransportApiSdk (0.1.0)
+
+DEPENDENCIES:
+  - TransportApiSdk (from `../`)
+
+EXTERNAL SOURCES:
+  TransportApiSdk:
+    :path: ../
+
+SPEC CHECKSUMS:
+  TransportApiSdk: a6d0e0aeab9de4715f0e3c5ac85c4b6c7fc01f91
+
+PODFILE CHECKSUM: a9681f67b6a8cb8ca255b92d442f76cdcc1c2244
+
+COCOAPODS: 1.1.1
