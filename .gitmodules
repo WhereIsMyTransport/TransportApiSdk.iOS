@@ -1,0 +1,3 @@
+[submodule "RestEssentials"]
+	path = RestEssentials
+	url = https://github.com/sean7512/RestEssentials.git

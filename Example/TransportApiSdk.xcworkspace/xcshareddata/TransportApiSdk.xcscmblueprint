@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "9C2BBEA2BD8C6EBFCC01A062646146595A874D7C",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "9C2BBEA2BD8C6EBFCC01A062646146595A874D7C" : 9223372036854775807,
+    "3DEE348339549D2FB2F5E154D083822C5CB44DF0" : 9223372036854775807
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "4D28A7D1-0086-4590-B3A4-A51C98090F4A",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "9C2BBEA2BD8C6EBFCC01A062646146595A874D7C" : "TransportApiSdk\/",
+    "3DEE348339549D2FB2F5E154D083822C5CB44DF0" : "TransportApiSdk\/RestEssentials\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "TransportApiSdk",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "Example\/TransportApiSdk.xcworkspace",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/sean7512\/RestEssentials.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "3DEE348339549D2FB2F5E154D083822C5CB44DF0"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/chrisk1ng\/TransportApiSdk.iOS.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "9C2BBEA2BD8C6EBFCC01A062646146595A874D7C"
+    }
+  ]
+}

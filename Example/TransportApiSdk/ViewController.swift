@@ -7,14 +7,62 @@
 //
 
 import UIKit
+import TransportApiSdk
 
 class ViewController: UIViewController {
 
+    var isBlinking = false
+    let blinkingLabel = BlinkingLabel(frame: CGRect(x: 10, y: 20, width: 200, height: 30))
+    let transportApiClientSettings = TransportApiClientSettings(clientId: "10b8dfd8-9844-4e57-a510-e17868e58bea", clientSecret: "7yHZX4zlefnM7wlW2G+KAnRPk2T5X3xUYpZyOhalhu0=")
+    var transportApiClient: TransportApiClient!
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        
+        
+        transportApiClient = TransportApiClient(transportApiClientSettings: transportApiClientSettings)
+        
+        // Setup the BlinkingLabel
+        blinkingLabel.text = "Bla"
+        blinkingLabel.font = UIFont.systemFont(ofSize: 20)
+        view.addSubview(blinkingLabel)
+        blinkingLabel.startBlinking()
+        isBlinking = true
+        
+        // Create a UIButton to toggle the blinking
+        let toggleButton = UIButton(frame: CGRect(x: 10, y: 60, width: 125, height: 30))
+        toggleButton.setTitle("Toggle Blinking", for: .normal)
+        toggleButton.setTitleColor(UIColor.red, for: .normal)
+        toggleButton.addTarget(self, action: #selector(ViewController.toggleBlinking), for: .touchUpInside)
+        view.addSubview(toggleButton)
+        
+        
+        
+        
     }
-
+    
+    func toggleBlinking() {
+        if (isBlinking) {
+            blinkingLabel.stopBlinking()
+            
+           self.transportApiClient.GetAgencies
+            {
+                (result: [Agency]) in
+                print(result)
+            }
+        } else {
+            blinkingLabel.startBlinking()
+            
+            self.transportApiClient.GetAgencies
+                {
+                (result: [Agency]) in
+                print(result)
+            }
+        }
+        isBlinking = !isBlinking
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.

@@ -1,5 +1,9 @@
 PODS:
-  - TransportApiSdk (0.1.0)
+  - RestEssentials (3.0.0)
+  - SwiftyJSON (3.1.4)
+  - TransportApiSdk (0.1.0):
+    - RestEssentials (~> 3.0)
+    - SwiftyJSON
 
 DEPENDENCIES:
   - TransportApiSdk (from `../`)
@@ -9,8 +13,10 @@ EXTERNAL SOURCES:
     :path: ../
 
 SPEC CHECKSUMS:
-  TransportApiSdk: a6d0e0aeab9de4715f0e3c5ac85c4b6c7fc01f91
+  RestEssentials: 5f82f9e77a712efef38fb4b139bb7b5f93b25d18
+  SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
+  TransportApiSdk: 75866ff12937d450d615ab1f3c51fe3d675a7a04
 
-PODFILE CHECKSUM: a9681f67b6a8cb8ca255b92d442f76cdcc1c2244
+PODFILE CHECKSUM: 91986cbae20700d5b5e68c17b70c01164b22e6bd
 
 COCOAPODS: 1.1.1

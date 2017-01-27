@@ -28,7 +28,7 @@ Provides a wrapper for the WhereIsMyTransport Transport API.
   s.source           = { :git => 'https://github.com/chrisk1ng/TransportApiSdk.iOS.git', :tag => s.version.to_s }
   s.social_media_url = 'https://twitter.com/crkingza'
 
-  s.ios.deployment_target = '8.0'
+  s.ios.deployment_target = '10.0'
 
   s.source_files = 'TransportApiSdk/Classes/**/*'
   
@@ -38,5 +38,6 @@ Provides a wrapper for the WhereIsMyTransport Transport API.
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
-  # s.dependency 'AFNetworking', '~> 2.3'
+  s.dependency 'RestEssentials', '~> 3.0'
+  s.dependency 'SwiftyJSON'
 end
