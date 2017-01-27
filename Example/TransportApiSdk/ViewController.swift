@@ -46,7 +46,9 @@ class ViewController: UIViewController {
         if (isBlinking) {
             blinkingLabel.stopBlinking()
             
-           self.transportApiClient.GetAgencies
+            let d = Date()
+            
+            self.transportApiClient.GetAgencies(at: d)
             {
                 (result: [Agency]) in
                 print(result)

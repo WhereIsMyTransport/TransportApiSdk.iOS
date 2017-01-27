@@ -16,7 +16,15 @@ internal class RestApiManager: NSObject {
     
     // MARK: Perform a GET Request
     public func makeHTTPGetRequest(path: String, accessToken: String, query: String, onCompletion: @escaping ServiceResponse) {
-        let request = NSMutableURLRequest(url: NSURL(string: path)! as URL)
+        var queryString = path
+        
+        if (!query.isEmpty)
+        {
+            queryString.append("?")
+            queryString.append(query)
+        }
+        
+        let request = NSMutableURLRequest(url: NSURL(string: queryString)! as URL)
         
         let session = URLSession.shared
         
