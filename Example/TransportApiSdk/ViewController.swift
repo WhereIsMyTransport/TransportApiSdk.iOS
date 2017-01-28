@@ -14,7 +14,7 @@ class ViewController: UIViewController {
 
     var isBlinking = false
     let blinkingLabel = BlinkingLabel(frame: CGRect(x: 10, y: 20, width: 200, height: 30))
-    let transportApiClientSettings = TransportApiClientSettings(clientId: "10b8dfd8-9844-4e57-a510-e17868e58bea", clientSecret: "7yHZX4zlefnM7wlW2G+KAnRPk2T5X3xUYpZyOhalhu0=")
+    let transportApiClientSettings = TransportApiClientSettings(clientId: "", clientSecret: "")
     var transportApiClient: TransportApiClient!
     
     
