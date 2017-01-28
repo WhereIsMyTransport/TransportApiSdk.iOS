@@ -9,7 +9,7 @@
 //
 import SwiftyJSON
 
-typealias ServiceResponse = (JSON, NSError?) -> Void
+typealias ServiceResponse = (JSON, NSError?, HTTPURLResponse?) -> Void
 
 internal class RestApiManager: NSObject {
     static let sharedInstance = RestApiManager()
@@ -33,9 +33,9 @@ internal class RestApiManager: NSObject {
         let task = session.dataTask(with: request as URLRequest, completionHandler: {data, response, error -> Void in
             if let jsonData = data {
                 let json:JSON = JSON(data: jsonData)
-                onCompletion(json, error as NSError?)
+                onCompletion(json, nil, response as! HTTPURLResponse?)
             } else {
-                onCompletion(nil, error as NSError?)
+                onCompletion(nil, error as NSError?, response as! HTTPURLResponse?)
             }
         })
         task.resume()
@@ -48,15 +48,15 @@ internal class RestApiManager: NSObject {
         {
             let data = try JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
             
-            makeHTTPPostRequest(path: path, data: data, onCompletion: { json, err in
+            makeHTTPPostRequest(path: path, data: data, onCompletion: { json, err, response in
                 
-                onCompletion(json, err)
+                onCompletion(json, err, response)
             })
         }
         catch
         {
             // TODO Error Stuffs
-            onCompletion(nil, nil)
+            onCompletion(nil, nil, nil)
         }
     }
     
@@ -65,9 +65,9 @@ internal class RestApiManager: NSObject {
     {
         let data = queryUrlEncoded.data(using: .utf8)!
         
-        makeHTTPPostRequest(path: path, data: data, onCompletion: { json, err in
+        makeHTTPPostRequest(path: path, data: data, onCompletion: { json, err, response in
 
-            onCompletion(json, err)
+            onCompletion(json, err, response)
         })
 
     }
@@ -88,15 +88,15 @@ internal class RestApiManager: NSObject {
             let task = session.dataTask(with: request as URLRequest, completionHandler: {data, response, error -> Void in
                 if let jsonData = data {
                     let json:JSON = JSON(data: jsonData)
-                    onCompletion(json, nil)
+                    onCompletion(json, nil, response as! HTTPURLResponse?)
                 } else {
-                    onCompletion(nil, error as NSError?)
+                    onCompletion(nil, error as NSError?, response as! HTTPURLResponse?)
                 }
             })
             task.resume()
         } catch {
             // TODO Error Stuffs
-            onCompletion(nil, nil)
+            onCompletion(nil, nil, nil)
         }
     }
 }

@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		0CAE8915D74F7CF73F08F4FBBFAF625A /* JSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8616D74180108C94718DB0790AE9F0C /* JSON.swift */; };
 		100A6FC71E3BE79E00FA441D /* Date+Shortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 100A6FC51E3BE5F600FA441D /* Date+Shortcuts.swift */; };
+		100A6FCA1E3CE74400FA441D /* String+Shortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 100A6FC81E3CE5D800FA441D /* String+Shortcuts.swift */; };
+		100A6FCD1E3CF30E00FA441D /* TransportApiResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 100A6FCB1E3CF30B00FA441D /* TransportApiResult.swift */; };
 		1D4DE4C45B35B9023A8D686732E3E6D0 /* TransportApiClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C06BF3DB059207CBCFF18693ADA7A39 /* TransportApiClient.swift */; };
 		24A0BF1927299DF18AC1D83C8391B519 /* RestEssentials-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = A1646EACF8B45D430552EA5DB117626C /* RestEssentials-dummy.m */; };
 		25014C1ACF69EB0442D99402321076BC /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92D3DD5C9EEE17E12FB7E3105B6143BB /* Foundation.framework */; };
@@ -79,6 +81,8 @@
 		08028F64917CCBF6A7CED5072640E07E /* RestEssentials-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "RestEssentials-umbrella.h"; sourceTree = "<group>"; };
 		0E093F53BB05CB85AA45499F7FE69845 /* Agency.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Agency.swift; sourceTree = "<group>"; };
 		100A6FC51E3BE5F600FA441D /* Date+Shortcuts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Date+Shortcuts.swift"; sourceTree = "<group>"; };
+		100A6FC81E3CE5D800FA441D /* String+Shortcuts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Shortcuts.swift"; sourceTree = "<group>"; };
+		100A6FCB1E3CF30B00FA441D /* TransportApiResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransportApiResult.swift; sourceTree = "<group>"; };
 		1274F9E180093690515854FDADFBDCE3 /* SwiftyJSON.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftyJSON.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		218288F924049BCA625A67B8FF64A6F9 /* Result.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Result.swift; path = Source/Result.swift; sourceTree = "<group>"; };
 		2C13DDC25C93EB47C175AF62C156D178 /* Pods-TransportApiSdk_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-TransportApiSdk_Example.release.xcconfig"; sourceTree = "<group>"; };
@@ -319,6 +323,8 @@
 				8C06BF3DB059207CBCFF18693ADA7A39 /* TransportApiClient.swift */,
 				513134A9F7981DB8086157CDCB58F68F /* TransportApiClientSettings.swift */,
 				100A6FC51E3BE5F600FA441D /* Date+Shortcuts.swift */,
+				100A6FC81E3CE5D800FA441D /* String+Shortcuts.swift */,
+				100A6FCB1E3CF30B00FA441D /* TransportApiResult.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -504,6 +510,8 @@
 				D81CB19E360CD109F6A169F39531600C /* BlinkingLabel.swift in Sources */,
 				B87BC70878811D5690F1241F6CC65ED1 /* RestApiManager.swift in Sources */,
 				7A3507ABD84DAF94B7009CB5CD03710E /* TokenComponent.swift in Sources */,
+				100A6FCA1E3CE74400FA441D /* String+Shortcuts.swift in Sources */,
+				100A6FCD1E3CF30E00FA441D /* TransportApiResult.swift in Sources */,
 				1D4DE4C45B35B9023A8D686732E3E6D0 /* TransportApiClient.swift in Sources */,
 				2FA085A114D43F8FC3E0A693AD9697C2 /* TransportApiClientSettings.swift in Sources */,
 				2FAB85E4E09148608D059C225C745707 /* TransportApiSdk-dummy.m in Sources */,
@@ -585,7 +593,7 @@
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = "Target Support Files/Pods-TransportApiSdk_Example/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = staticlib;
 				MODULEMAP_FILE = "Target Support Files/Pods-TransportApiSdk_Example/Pods-TransportApiSdk_Example.modulemap";
@@ -641,7 +649,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				ONLY_ACTIVE_ARCH = YES;
 				PROVISIONING_PROFILE_SPECIFIER = NO_SIGNING/;
 				STRIP_INSTALLED_PRODUCT = NO;
@@ -667,7 +675,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/TransportApiSdk/TransportApiSdk-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/TransportApiSdk/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/TransportApiSdk/TransportApiSdk.modulemap";
 				MTL_ENABLE_DEBUG_INFO = NO;
@@ -797,7 +805,7 @@
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = "Target Support Files/Pods-TransportApiSdk_Example/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = staticlib;
 				MODULEMAP_FILE = "Target Support Files/Pods-TransportApiSdk_Example/Pods-TransportApiSdk_Example.modulemap";
@@ -834,7 +842,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/TransportApiSdk/TransportApiSdk-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/TransportApiSdk/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/TransportApiSdk/TransportApiSdk.modulemap";
 				MTL_ENABLE_DEBUG_INFO = YES;
@@ -913,7 +921,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				PROVISIONING_PROFILE_SPECIFIER = NO_SIGNING/;
 				STRIP_INSTALLED_PRODUCT = NO;
 				SYMROOT = "${SRCROOT}/../build";

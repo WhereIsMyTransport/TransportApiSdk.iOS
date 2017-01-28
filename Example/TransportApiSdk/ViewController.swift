@@ -50,7 +50,7 @@ class ViewController: UIViewController {
             
             self.transportApiClient.GetAgencies(at: d)
             {
-                (result: [Agency]) in
+                (result: TransportApiResult<[Agency]>) in
                 print(result)
             }
         } else {
@@ -58,7 +58,7 @@ class ViewController: UIViewController {
             
             self.transportApiClient.GetAgencies
                 {
-                (result: [Agency]) in
+                (result: TransportApiResult<[Agency]>) in
                 print(result)
             }
         }

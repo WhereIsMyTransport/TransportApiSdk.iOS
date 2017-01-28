@@ -22,7 +22,7 @@ pod "TransportApiSdk"
 
 ## Author
 
-Bilo, bilo@wimt.co.za
+Chris King, chris@whereismytransport.com
 
 ## License
 

@@ -10,8 +10,9 @@ import SwiftyJSON
 
 internal class TokenComponent
 {
-    private let identityURL = "https://identity.whereismytransport.com/connect/token/"
+    public let defaultErrorResponse = "Unable to generate access token. Please check your credentials."
     
+    private let identityURL = "https://identity.whereismytransport.com/connect/token/"
     private var transportApiClientSettings: TransportApiClientSettings
     private var accessToken: String!
     private var expiryDate = NSDate()
@@ -21,7 +22,7 @@ internal class TokenComponent
         self.transportApiClientSettings = transportApiClientSettings
     }
     
-    public func getAccessToken(onCompletion: @escaping (String) -> Void) {
+    public func getAccessToken(onCompletion: @escaping (String!) -> Void) {
         // Check if we have an access token and if the expiry date has been reached.
         
         if (self.accessToken != nil && !self.accessToken.isEmpty && NSDate().timeIntervalSince1970 < self.expiryDate.timeIntervalSince1970)
@@ -39,7 +40,7 @@ internal class TokenComponent
                 "&client_secret=" + clientSecretEncoded +
                 "&grant_type=client_credentials&scope=transportapi%3Aall"
 
-            RestApiManager.sharedInstance.makeHTTPPostRequest(path: identityURL, queryUrlEncoded: query, onCompletion: { json, err in
+            RestApiManager.sharedInstance.makeHTTPPostRequest(path: identityURL, queryUrlEncoded: query, onCompletion: { json, err, response in
                 var result = json as JSON
                 var access_token = result["access_token"].stringValue
                 var expires_in = result["expires_in"].doubleValue
