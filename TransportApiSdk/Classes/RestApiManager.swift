@@ -42,13 +42,13 @@ internal class RestApiManager: NSObject {
     }
     
     // MARK: Perform a POST Request
-    public func makeHTTPPostRequest(path: String, json: [String: String], onCompletion: @escaping ServiceResponse)
+    public func makeHTTPPostRequest(path: String, accessToken: String!, json: JSON, onCompletion: @escaping ServiceResponse)
     {
         do
         {
-            let data = try JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
-            
-            makeHTTPPostRequest(path: path, data: data, onCompletion: { json, err, response in
+            let data = json.rawString()?.data(using: .utf8)
+
+            makeHTTPPostRequest(path: path, accessToken: accessToken, data: data!, onCompletion: { json, err, response in
                 
                 onCompletion(json, err, response)
             })
@@ -61,24 +61,33 @@ internal class RestApiManager: NSObject {
     }
     
     // MARK: Perform a POST Request
-    public func makeHTTPPostRequest(path: String, queryUrlEncoded: String, onCompletion: @escaping ServiceResponse)
+    public func makeHTTPPostRequest(path: String, accessToken: String!, queryUrlEncoded: String, onCompletion: @escaping ServiceResponse)
     {
         let data = queryUrlEncoded.data(using: .utf8)!
         
-        makeHTTPPostRequest(path: path, data: data, onCompletion: { json, err, response in
+        makeHTTPPostRequest(path: path, accessToken: accessToken, data: data, onCompletion: { json, err, response in
 
             onCompletion(json, err, response)
         })
 
     }
     
-    private func makeHTTPPostRequest(path: String, data: Data, onCompletion: @escaping ServiceResponse) {
+    private func makeHTTPPostRequest(path: String, accessToken: String!, data: Data, onCompletion: @escaping ServiceResponse) {
         let request = NSMutableURLRequest(url: NSURL(string: path)! as URL)
         
         // Set the method to POST
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Accept")
-        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+
+        if (accessToken != nil && !accessToken.isEmpty)
+        {
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.setValue("Bearer " + accessToken, forHTTPHeaderField: "Authorization")
+        }
+        else
+        {
+            request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        }
         
         do {
             // Set the POST body for the request

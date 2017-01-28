@@ -40,7 +40,7 @@ internal class TokenComponent
                 "&client_secret=" + clientSecretEncoded +
                 "&grant_type=client_credentials&scope=transportapi%3Aall"
 
-            RestApiManager.sharedInstance.makeHTTPPostRequest(path: identityURL, queryUrlEncoded: query, onCompletion: { json, err, response in
+            RestApiManager.sharedInstance.makeHTTPPostRequest(path: identityURL, accessToken: nil, queryUrlEncoded: query, onCompletion: { json, err, response in
                 var result = json as JSON
                 var access_token = result["access_token"].stringValue
                 var expires_in = result["expires_in"].doubleValue

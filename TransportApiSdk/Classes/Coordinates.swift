@@ -12,29 +12,25 @@ import Foundation
 
 /* For support, please feel free to contact me at https://www.linkedin.com/in/syedabsar */
 
-public class Agency {
-    public var id : String?
-    //public var alerts : Array<String>?
-    public var href : String?
-    public var name : String?
-    public var culture : String?
+public class Coordinates {
+    public var coordinates : Array<Double>?
     
     /**
      Returns an array of models based on given dictionary.
      
      Sample usage:
-     let json4Swift_Base_list = Json4Swift_Base.modelsFromDictionaryArray(someDictionaryArrayFromJSON)
+     let coordinates_list = Coordinates.modelsFromDictionaryArray(someDictionaryArrayFromJSON)
      
      - parameter array:  NSArray from JSON dictionary.
      
-     - returns: Array of Json4Swift_Base Instances.
+     - returns: Array of Coordinates Instances.
      */
-    public class func modelsFromDictionaryArray(array:NSArray) -> [Agency]
+    public class func modelsFromDictionaryArray(array:NSArray) -> [Coordinates]
     {
-        var models:[Agency] = []
+        var models:[Coordinates] = []
         for item in array
         {
-            models.append(Agency(dictionary: item as! NSDictionary)!)
+            models.append(Coordinates(array: item as? Array<Double>)!)
         }
         return models
     }
@@ -43,37 +39,14 @@ public class Agency {
      Constructs the object based on the given dictionary.
      
      Sample usage:
-     let json4Swift_Base = Json4Swift_Base(someDictionaryFromJSON)
+     let coordinates = Coordinates(someDictionaryFromJSON)
      
      - parameter dictionary:  NSDictionary from JSON.
      
-     - returns: Json4Swift_Base Instance.
+     - returns: Coordinates Instance.
      */
-    required public init?(dictionary: NSDictionary) {
-        
-        id = dictionary["id"] as? String
-        //if (dictionary["alerts"] != nil) { alerts = Alerts.modelsFromDictionaryArray(dictionary["alerts"] as! NSArray) }
-        href = dictionary["href"] as? String
-        name = dictionary["name"] as? String
-        culture = dictionary["culture"] as? String
+    required public init?(array: Array<Double>?) {
+
+        coordinates = array
     }
-    
-    
-    /**
-     Returns the dictionary representation for the current instance.
-     
-     - returns: NSDictionary.
-     */
-    public func dictionaryRepresentation() -> NSDictionary {
-        
-        let dictionary = NSMutableDictionary()
-        
-        dictionary.setValue(self.id, forKey: "id")
-        dictionary.setValue(self.href, forKey: "href")
-        dictionary.setValue(self.name, forKey: "name")
-        dictionary.setValue(self.culture, forKey: "culture")
-        
-        return dictionary
-    }
-    
 }

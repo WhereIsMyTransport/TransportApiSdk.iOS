@@ -9,7 +9,22 @@
 
 To run the example project, clone the repo, and run `pod install` from the Example directory first.
 
-## Requirements
+## Usage
+
+// Setup your credentials.
+let transportApiClientSettings = TransportApiClientSettings(clientId: "YOUR_CLIENT_ID", clientSecret: "YOUR_CLIENT_SECRET")
+
+// Define the api client.
+let transportApiClient = TransportApiClient(transportApiClientSettings: transportApiClientSettings)
+
+// Make an api call.
+transportApiClient.GetAgencies
+{
+(result: TransportApiResult<[Agency]>) in
+
+// Do fancy things with the results.
+print(result.Data)
+}
 
 ## Installation
 
@@ -22,7 +37,7 @@ pod "TransportApiSdk"
 
 ## Author
 
-Chris King, chris@whereismytransport.com
+Chris King - https://twitter.com/crkingza
 
 ## License
 

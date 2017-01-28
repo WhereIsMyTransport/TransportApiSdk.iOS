@@ -8,6 +8,7 @@
 
 import UIKit
 import TransportApiSdk
+import CoreLocation
 
 class ViewController: UIViewController {
 
@@ -37,20 +38,25 @@ class ViewController: UIViewController {
         toggleButton.addTarget(self, action: #selector(ViewController.toggleBlinking), for: .touchUpInside)
         view.addSubview(toggleButton)
         
-        
-        
-        
     }
     
     func toggleBlinking() {
         if (isBlinking) {
             blinkingLabel.stopBlinking()
             
-            let d = Date()
+            /*let d = Date()
             
             self.transportApiClient.GetAgencies(at: d)
             {
                 (result: TransportApiResult<[Agency]>) in
+                print(result)
+            }*/
+            let startLocation = CLLocationCoordinate2D(latitude: -25.760938159763594, longitude: 28.23760986328125)
+            let endLocation = CLLocationCoordinate2D(latitude: -26.02655312878948, longitude: 28.124313354492184)
+            
+            self.transportApiClient.PostJourney(startLocation: startLocation, endLocation: endLocation)
+            {
+                (result: TransportApiResult<Journey>) in
                 print(result)
             }
         } else {

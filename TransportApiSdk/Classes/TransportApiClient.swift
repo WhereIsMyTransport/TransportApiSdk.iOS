@@ -24,11 +24,79 @@ public class TransportApiClient
         self.tokenComponent = TokenComponent(transportApiClientSettings: transportApiClientSettings)
     }
     
-    public func PostJourney(completion: @escaping (_ result: String) -> Void)
+    public func PostJourney(fareProducts: [String]! = nil,
+                            onlyAgencies: [String]! = nil,
+                            omitAgencies: [String]! = nil,
+                            onlyModes: [TransportMode]! = nil,
+                            omitModes: [TransportMode]! = nil,
+                            startLocation: CLLocationCoordinate2D,
+                            endLocation: CLLocationCoordinate2D,
+                            time: Date = Date(),
+                            timeType: TimeType = TimeType.DepartAfter,
+                            profile: Profile = Profile.ClosestToTime,
+                            maxItineraries: Int = 3,
+                            completion: @escaping (_ result: TransportApiResult<Journey>) -> Void)
     {
         tokenComponent.getAccessToken{
-            (result: String!) in
-            completion("got back: \(result)")
+            (accessToken: String!) in
+            
+            let transportApiResult = TransportApiResult<Journey>()
+            
+            if (accessToken == nil)
+            {
+                transportApiResult.error = self.tokenComponent.defaultErrorResponse
+                
+                completion(transportApiResult)
+                
+                return
+            }
+            
+            if (maxItineraries < 1 || maxItineraries > 5)
+            {
+                transportApiResult.error = "Invalid value for maxItineraries. Expected a value between or including 1 and 5.";
+                
+                completion(transportApiResult)
+                
+                return
+            }
+            
+            // TODO fare products, only omit...
+         
+            var input = "{\"geometry\": {\"type\":" +
+                           "\"Multipoint\",\"coordinates\": " +
+                           "[[" + String(startLocation.longitude) + "," + String(startLocation.latitude) + "]," +
+                           "[" + String(endLocation.longitude) + "," + String(endLocation.latitude) + "]]}," +
+                           "\"time\": \"" + time.iso8601 + "\"," +
+                           "\"timeType\": \"" + String(describing: timeType) + "\"," +
+                           "\"profile\": \"" + String(describing: profile) + "\"," +
+                           "\"maxItineraries\": " + String(maxItineraries) + "}"
+            
+            let json:JSON = JSON.parse(input)
+            
+            let path = self.platformURL + "journeys"
+            
+            RestApiManager.sharedInstance.makeHTTPPostRequest(path: path,
+                                                              accessToken : accessToken,
+                                                              json: json,
+                                                              onCompletion: { json, err, response in
+                                                                
+                transportApiResult.httpStatusCode = response?.statusCode
+                if (response?.statusCode != 201)
+                {
+                    transportApiResult.error = json.rawString()
+                }
+                else
+                {
+                    var journeyJson = json as JSON
+                    
+                    var jouneysModel = Journey.init(dictionary: (journeyJson.dictionaryObject as? NSDictionary)!)
+                    
+                    transportApiResult.isSuccess = true
+                    transportApiResult.Data = jouneysModel
+                }
+                
+                completion(transportApiResult)
+            })
         }
     }
     

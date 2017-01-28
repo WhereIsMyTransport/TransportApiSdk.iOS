@@ -11,6 +11,20 @@
 		100A6FC71E3BE79E00FA441D /* Date+Shortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 100A6FC51E3BE5F600FA441D /* Date+Shortcuts.swift */; };
 		100A6FCA1E3CE74400FA441D /* String+Shortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 100A6FC81E3CE5D800FA441D /* String+Shortcuts.swift */; };
 		100A6FCD1E3CF30E00FA441D /* TransportApiResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 100A6FCB1E3CF30B00FA441D /* TransportApiResult.swift */; };
+		100A6FCF1E3D17F400FA441D /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 100A6FCE1E3D17F400FA441D /* Enums.swift */; };
+		100A6FD11E3D25E500FA441D /* Waypoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 100A6FD01E3D25E500FA441D /* Waypoints.swift */; };
+		100A6FDB1E3D262E00FA441D /* Directions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 100A6FD21E3D262E00FA441D /* Directions.swift */; };
+		100A6FDC1E3D262E00FA441D /* Distance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 100A6FD31E3D262E00FA441D /* Distance.swift */; };
+		100A6FDD1E3D262E00FA441D /* Geometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 100A6FD41E3D262E00FA441D /* Geometry.swift */; };
+		100A6FDE1E3D262E00FA441D /* Itineraries.swift in Sources */ = {isa = PBXBuildFile; fileRef = 100A6FD51E3D262E00FA441D /* Itineraries.swift */; };
+		100A6FDF1E3D262E00FA441D /* Journey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 100A6FD61E3D262E00FA441D /* Journey.swift */; };
+		100A6FE01E3D262E00FA441D /* Legs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 100A6FD71E3D262E00FA441D /* Legs.swift */; };
+		100A6FE11E3D262E00FA441D /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 100A6FD81E3D262E00FA441D /* Location.swift */; };
+		100A6FE21E3D262E00FA441D /* Omit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 100A6FD91E3D262E00FA441D /* Omit.swift */; };
+		100A6FE31E3D262E00FA441D /* Only.swift in Sources */ = {isa = PBXBuildFile; fileRef = 100A6FDA1E3D262E00FA441D /* Only.swift */; };
+		100A6FE51E3D37BE00FA441D /* Coordinates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 100A6FE41E3D37BE00FA441D /* Coordinates.swift */; };
+		100A6FE81E3D3C6300FA441D /* ParentStop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 100A6FE61E3D3C6300FA441D /* ParentStop.swift */; };
+		100A6FE91E3D3C6300FA441D /* Stop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 100A6FE71E3D3C6300FA441D /* Stop.swift */; };
 		1D4DE4C45B35B9023A8D686732E3E6D0 /* TransportApiClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C06BF3DB059207CBCFF18693ADA7A39 /* TransportApiClient.swift */; };
 		24A0BF1927299DF18AC1D83C8391B519 /* RestEssentials-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = A1646EACF8B45D430552EA5DB117626C /* RestEssentials-dummy.m */; };
 		25014C1ACF69EB0442D99402321076BC /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92D3DD5C9EEE17E12FB7E3105B6143BB /* Foundation.framework */; };
@@ -83,6 +97,20 @@
 		100A6FC51E3BE5F600FA441D /* Date+Shortcuts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Date+Shortcuts.swift"; sourceTree = "<group>"; };
 		100A6FC81E3CE5D800FA441D /* String+Shortcuts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Shortcuts.swift"; sourceTree = "<group>"; };
 		100A6FCB1E3CF30B00FA441D /* TransportApiResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransportApiResult.swift; sourceTree = "<group>"; };
+		100A6FCE1E3D17F400FA441D /* Enums.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
+		100A6FD01E3D25E500FA441D /* Waypoints.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Waypoints.swift; sourceTree = "<group>"; };
+		100A6FD21E3D262E00FA441D /* Directions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Directions.swift; sourceTree = "<group>"; };
+		100A6FD31E3D262E00FA441D /* Distance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Distance.swift; sourceTree = "<group>"; };
+		100A6FD41E3D262E00FA441D /* Geometry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Geometry.swift; sourceTree = "<group>"; };
+		100A6FD51E3D262E00FA441D /* Itineraries.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Itineraries.swift; sourceTree = "<group>"; };
+		100A6FD61E3D262E00FA441D /* Journey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Journey.swift; sourceTree = "<group>"; };
+		100A6FD71E3D262E00FA441D /* Legs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Legs.swift; sourceTree = "<group>"; };
+		100A6FD81E3D262E00FA441D /* Location.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
+		100A6FD91E3D262E00FA441D /* Omit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Omit.swift; sourceTree = "<group>"; };
+		100A6FDA1E3D262E00FA441D /* Only.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Only.swift; sourceTree = "<group>"; };
+		100A6FE41E3D37BE00FA441D /* Coordinates.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Coordinates.swift; sourceTree = "<group>"; };
+		100A6FE61E3D3C6300FA441D /* ParentStop.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParentStop.swift; sourceTree = "<group>"; };
+		100A6FE71E3D3C6300FA441D /* Stop.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Stop.swift; sourceTree = "<group>"; };
 		1274F9E180093690515854FDADFBDCE3 /* SwiftyJSON.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftyJSON.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		218288F924049BCA625A67B8FF64A6F9 /* Result.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Result.swift; path = Source/Result.swift; sourceTree = "<group>"; };
 		2C13DDC25C93EB47C175AF62C156D178 /* Pods-TransportApiSdk_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-TransportApiSdk_Example.release.xcconfig"; sourceTree = "<group>"; };
@@ -317,6 +345,17 @@
 			isa = PBXGroup;
 			children = (
 				0E093F53BB05CB85AA45499F7FE69845 /* Agency.swift */,
+				100A6FE61E3D3C6300FA441D /* ParentStop.swift */,
+				100A6FE71E3D3C6300FA441D /* Stop.swift */,
+				100A6FD21E3D262E00FA441D /* Directions.swift */,
+				100A6FD31E3D262E00FA441D /* Distance.swift */,
+				100A6FD41E3D262E00FA441D /* Geometry.swift */,
+				100A6FD51E3D262E00FA441D /* Itineraries.swift */,
+				100A6FD61E3D262E00FA441D /* Journey.swift */,
+				100A6FD71E3D262E00FA441D /* Legs.swift */,
+				100A6FD81E3D262E00FA441D /* Location.swift */,
+				100A6FD91E3D262E00FA441D /* Omit.swift */,
+				100A6FDA1E3D262E00FA441D /* Only.swift */,
 				94FD82820092D34909110C6C97FCF9DC /* BlinkingLabel.swift */,
 				456E6CEB6DD523621956286A3F555CF3 /* RestApiManager.swift */,
 				ADEFDAB1FDFF903A4C62C0539265473E /* TokenComponent.swift */,
@@ -325,6 +364,9 @@
 				100A6FC51E3BE5F600FA441D /* Date+Shortcuts.swift */,
 				100A6FC81E3CE5D800FA441D /* String+Shortcuts.swift */,
 				100A6FCB1E3CF30B00FA441D /* TransportApiResult.swift */,
+				100A6FD01E3D25E500FA441D /* Waypoints.swift */,
+				100A6FCE1E3D17F400FA441D /* Enums.swift */,
+				100A6FE41E3D37BE00FA441D /* Coordinates.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -506,16 +548,30 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				100A6FE01E3D262E00FA441D /* Legs.swift in Sources */,
+				100A6FE31E3D262E00FA441D /* Only.swift in Sources */,
+				100A6FD11E3D25E500FA441D /* Waypoints.swift in Sources */,
 				530C12EA1352A1D65C065C5BB25A5D9B /* Agency.swift in Sources */,
+				100A6FDC1E3D262E00FA441D /* Distance.swift in Sources */,
 				D81CB19E360CD109F6A169F39531600C /* BlinkingLabel.swift in Sources */,
+				100A6FDD1E3D262E00FA441D /* Geometry.swift in Sources */,
+				100A6FE51E3D37BE00FA441D /* Coordinates.swift in Sources */,
 				B87BC70878811D5690F1241F6CC65ED1 /* RestApiManager.swift in Sources */,
 				7A3507ABD84DAF94B7009CB5CD03710E /* TokenComponent.swift in Sources */,
 				100A6FCA1E3CE74400FA441D /* String+Shortcuts.swift in Sources */,
+				100A6FE91E3D3C6300FA441D /* Stop.swift in Sources */,
 				100A6FCD1E3CF30E00FA441D /* TransportApiResult.swift in Sources */,
+				100A6FE81E3D3C6300FA441D /* ParentStop.swift in Sources */,
 				1D4DE4C45B35B9023A8D686732E3E6D0 /* TransportApiClient.swift in Sources */,
 				2FA085A114D43F8FC3E0A693AD9697C2 /* TransportApiClientSettings.swift in Sources */,
+				100A6FDE1E3D262E00FA441D /* Itineraries.swift in Sources */,
+				100A6FDF1E3D262E00FA441D /* Journey.swift in Sources */,
+				100A6FE11E3D262E00FA441D /* Location.swift in Sources */,
 				2FAB85E4E09148608D059C225C745707 /* TransportApiSdk-dummy.m in Sources */,
+				100A6FDB1E3D262E00FA441D /* Directions.swift in Sources */,
 				100A6FC71E3BE79E00FA441D /* Date+Shortcuts.swift in Sources */,
+				100A6FE21E3D262E00FA441D /* Omit.swift in Sources */,
+				100A6FCF1E3D17F400FA441D /* Enums.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

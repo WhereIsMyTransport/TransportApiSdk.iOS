@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'TransportApiSdk'
-  s.version          = '0.1.0'
+  s.version          = '0.3.0'
   s.summary          = 'SDK for the WhereIsMyTransport Transport API.'
 
 # This description is used to generate tags and improve search results.
@@ -22,7 +22,6 @@ Provides a wrapper for the WhereIsMyTransport Transport API.
                        DESC
 
   s.homepage         = 'https://github.com/chrisk1ng/TransportApiSdk.iOS'
-  # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'Chris King' => 'support@whereismytransport.com' }
   s.source           = { :git => 'https://github.com/chrisk1ng/TransportApiSdk.iOS.git', :tag => s.version.to_s }
@@ -31,13 +30,7 @@ Provides a wrapper for the WhereIsMyTransport Transport API.
   s.ios.deployment_target = '8.1'
 
   s.source_files = 'TransportApiSdk/Classes/**/*'
-  
-  # s.resource_bundles = {
-  #   'TransportApiSdk' => ['TransportApiSdk/Assets/*.png']
-  # }
 
-  # s.public_header_files = 'Pod/Classes/**/*.h'
-  # s.frameworks = 'UIKit', 'MapKit'
   s.dependency 'RestEssentials', '~> 3.0'
   s.dependency 'SwiftyJSON'
 end
