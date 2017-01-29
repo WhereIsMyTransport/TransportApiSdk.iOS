@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'TransportApiSdk'
-  s.version          = '0.3.1'
+  s.version          = '0.3.2'
   s.summary          = 'SDK for the WhereIsMyTransport Transport API.'
 
 # This description is used to generate tags and improve search results.
@@ -31,6 +31,5 @@ Provides a wrapper for the WhereIsMyTransport Transport API.
 
   s.source_files = 'TransportApiSdk/Classes/**/*'
 
-  s.dependency 'RestEssentials', '~> 3.0'
-  s.dependency 'SwiftyJSON'
+  s.dependency 'SwiftyJSON', '3.1.4'
 end

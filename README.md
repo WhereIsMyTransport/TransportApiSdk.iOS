@@ -1,6 +1,6 @@
 # TransportApiSdk
 
-[![CI Status](http://img.shields.io/travis/Bilo/TransportApiSdk.svg?style=flat)](https://travis-ci.org/Bilo/TransportApiSdk)
+[![CI Status](http://img.shields.io/travis/Bilo/TransportApiSdk.svg?style=flat)](https://travis-ci.org/chrisk1ng/TransportApiSdk.iOS)
 [![Version](https://img.shields.io/cocoapods/v/TransportApiSdk.svg?style=flat)](http://cocoapods.org/pods/TransportApiSdk)
 [![License](https://img.shields.io/cocoapods/l/TransportApiSdk.svg?style=flat)](http://cocoapods.org/pods/TransportApiSdk)
 [![Platform](https://img.shields.io/cocoapods/p/TransportApiSdk.svg?style=flat)](http://cocoapods.org/pods/TransportApiSdk)
@@ -11,6 +11,7 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 
 ## Usage
 
+'''swift
 // Setup your credentials.
 let transportApiClientSettings = TransportApiClientSettings(clientId: "YOUR_CLIENT_ID", clientSecret: "YOUR_CLIENT_SECRET")
 
@@ -22,9 +23,10 @@ transportApiClient.GetAgencies
 {
 (result: TransportApiResult<[Agency]>) in
 
-// Do fancy things with the results.
-print(result.Data)
+    // Do fancy things with the results.
+    print(result.Data.rawJson)
 }
+'''
 
 ## Installation
 
