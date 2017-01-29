@@ -48,8 +48,8 @@ public class Omit {
 */
 	required public init?(dictionary: NSDictionary) {
 
-		if (dictionary["modes"] != nil) { modes = dictionary["modes"] as! Array<String> }
-		if (dictionary["agencies"] != nil) { agencies = dictionary["agencies"] as! Array<String> }
+		if (dictionary["modes"] != nil) { modes = dictionary["modes"] as! Array<String>? }
+		if (dictionary["agencies"] != nil) { agencies = dictionary["agencies"] as! Array<String>? }
 	}
 
 		

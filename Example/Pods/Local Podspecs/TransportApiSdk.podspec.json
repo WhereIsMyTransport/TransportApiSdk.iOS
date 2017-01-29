@@ -1,6 +1,6 @@
 {
   "name": "TransportApiSdk",
-  "version": "0.1.0",
+  "version": "0.3.0",
   "summary": "SDK for the WhereIsMyTransport Transport API.",
   "description": "Provides a wrapper for the WhereIsMyTransport Transport API.",
   "homepage": "https://github.com/chrisk1ng/TransportApiSdk.iOS",
@@ -13,11 +13,11 @@
   },
   "source": {
     "git": "https://github.com/chrisk1ng/TransportApiSdk.iOS.git",
-    "tag": "0.1.0"
+    "tag": "0.3.0"
   },
   "social_media_url": "https://twitter.com/crkingza",
   "platforms": {
-    "ios": "10.0"
+    "ios": "8.1"
   },
   "source_files": "TransportApiSdk/Classes/**/*",
   "dependencies": {

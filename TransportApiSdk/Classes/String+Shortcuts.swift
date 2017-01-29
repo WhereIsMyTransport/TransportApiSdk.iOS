@@ -24,19 +24,32 @@ extension String {
         return self
     }
     
-    func addLocation(location: CLLocationCoordinate2D!) -> String {
-        if (location != nil)
+    func removeLastCharacter() -> String {
+        if (!self.isEmpty)
         {
-            return self + "&point=" + String(location.latitude) + "," + String(location.longitude)
+            var str = self
+            
+            str.remove(at: str.index(before: str.endIndex))
+            
+            return str
         }
         
         return self
     }
     
-    func addDateAt(at: Date!) -> String {
+    func addLocation(location: CLLocationCoordinate2D?) -> String {
+        if (location != nil)
+        {
+            return self + "&point=" + String(location!.latitude) + "," + String(location!.longitude)
+        }
+        
+        return self
+    }
+    
+    func addDateAt(at: Date?) -> String {
         if (at != nil)
         {
-            return self + "&at=" + at.iso8601
+            return self + "&at=" + at!.iso8601
         }
         
         return self
@@ -69,37 +82,37 @@ extension String {
         return self
     }
     
-    func addOnlyAgencies(onlyAgencies: [String]) -> String {
+    func addOnlyAgencies(onlyAgencies: [String]?) -> String {
         if (onlyAgencies != nil)
         {
-            return self + "&agencies=" + onlyAgencies.joined(separator: ",")
+            return self + "&agencies=" + onlyAgencies!.joined(separator: ",")
         }
         
         return self
     }
     
-    func addOmitAgencies(omitAgencies: [String]) -> String {
+    func addOmitAgencies(omitAgencies: [String]?) -> String {
         if (omitAgencies != nil)
         {
-            return self + "&agencies=~" + omitAgencies.joined(separator: ",~")
+            return self + "&agencies=~" + omitAgencies!.joined(separator: ",~")
         }
         
         return self
     }
     
-    func addBoundingBox(bbox: String) -> String {
-        if (bbox != nil && !bbox.isEmpty)
+    func addBoundingBox(bbox: String?) -> String {
+        if (bbox != nil && !bbox!.isEmpty)
         {
-            return self + "&bbox=" + bbox
+            return self + "&bbox=" + bbox!
         }
         
         return self
     }
     
-    func addExclude(exclude: String) -> String {
-        if (exclude != nil && !exclude.isEmpty)
+    func addExclude(exclude: String?) -> String {
+        if (exclude != nil && !exclude!.isEmpty)
         {
-            return self + "&exclude=" + exclude
+            return self + "&exclude=" + exclude!
         }
         
         return self

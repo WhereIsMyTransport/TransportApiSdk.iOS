@@ -13,6 +13,7 @@ public class TransportApiResult<T>
     public var httpStatusCode: Int!
     public var isSuccess: Bool
     public var error: String!
+    public var rawJson: String!
     public var Data: T!
 
     public init()

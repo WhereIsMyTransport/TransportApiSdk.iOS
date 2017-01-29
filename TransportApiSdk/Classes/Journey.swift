@@ -42,7 +42,7 @@ public class Journey {
 		id = dictionary["id"] as? String
 		timeType = dictionary["timeType"] as? String
 		if (dictionary["only"] != nil) { only = Only(dictionary: dictionary["only"] as! NSDictionary) }
-		if (dictionary["fareProducts"] != nil) { fareProducts = dictionary["fareProducts"] as! Array<String> }
+		if (dictionary["fareProducts"] != nil) { fareProducts = dictionary["fareProducts"] as! Array<String>? }
 		if (dictionary["itineraries"] != nil) { itineraries = Itineraries.modelsFromDictionaryArray(array: dictionary["itineraries"] as! NSArray) }
 		if (dictionary["omit"] != nil) { omit = Omit(dictionary: dictionary["omit"] as! NSDictionary) }
 		time = dictionary["time"] as? String

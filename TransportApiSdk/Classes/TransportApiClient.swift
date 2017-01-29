@@ -59,8 +59,6 @@ public class TransportApiClient
                 
                 return
             }
-            
-            // TODO fare products, only omit...
          
             var input = "{\"geometry\": {\"type\":" +
                            "\"Multipoint\",\"coordinates\": " +
@@ -69,9 +67,103 @@ public class TransportApiClient
                            "\"time\": \"" + time.iso8601 + "\"," +
                            "\"timeType\": \"" + String(describing: timeType) + "\"," +
                            "\"profile\": \"" + String(describing: profile) + "\"," +
-                           "\"maxItineraries\": " + String(maxItineraries) + "}"
+                           "\"maxItineraries\": " + String(maxItineraries) + ""
             
-            let json:JSON = JSON.parse(input)
+            if (fareProducts != nil && fareProducts.count > 0)
+            {
+                input += ",\"fareProducts\": [\"" + fareProducts.joined(separator: "\",\"") + "\"]"
+            }
+            
+            // TODO This is bad and should be done with classes if possible:
+            var only = ""
+            var agencies = ""
+            var modes = ""
+            if (onlyAgencies != nil && onlyAgencies.count > 0)
+            {
+                agencies = "\"agencies\": [\"" + onlyAgencies.joined(separator: "\",\"") + "\"]"
+            }
+            
+            if (onlyModes != nil && onlyModes.count > 0)
+            {
+                for mode in onlyModes
+                {
+                    modes += "\"" + mode.rawValue + "\","
+                }
+
+                modes = "\"modes\": [" + modes.removeLastCharacter() + "]"
+            }
+            
+            if (!agencies.isEmpty)
+            {
+                only = "\"only\": {" + agencies
+            }
+            
+            if (!modes.isEmpty && agencies.isEmpty)
+            {
+                only = "\"only\": {" + modes + "}"
+            }
+            else if (!modes.isEmpty && !agencies.isEmpty)
+            {
+                only += "," + modes + "}"
+            }
+            else if (!agencies.isEmpty)
+            {
+                only += "}"
+            }
+            
+            if (!only.isEmpty)
+            {
+                input += "," + only
+            }
+            
+            // Start more bad code. Omit:
+            var omit = ""
+            agencies = ""
+            modes = ""
+            
+            if (omitAgencies != nil && omitAgencies.count > 0)
+            {
+                agencies = "\"agencies\": [\"" + omitAgencies.joined(separator: "\",\"") + "\"]"
+            }
+            
+            if (omitModes != nil && omitModes.count > 0)
+            {
+                for mode in omitModes
+                {
+                    modes += "\"" + mode.rawValue + "\","
+                }
+
+                modes = "\"modes\": [" + modes.removeLastCharacter() + "]"
+            }
+            
+            if (!agencies.isEmpty)
+            {
+                omit = "\"omit\": {" + agencies
+            }
+            
+            if (!modes.isEmpty && agencies.isEmpty)
+            {
+                omit = "\"omit\": {" + modes + "}"
+            }
+            else if (!modes.isEmpty && !agencies.isEmpty)
+            {
+                omit += "," + modes + "}"
+            }
+            else if (!agencies.isEmpty)
+            {
+                omit += "}"
+            }
+            
+            if (!omit.isEmpty)
+            {
+                input += "," + omit
+            }
+            
+            input += "}"
+            
+            // End of really bad code section.
+            
+            let json:JSON = JSON(parseJSON: input)
             
             let path = self.platformURL + "journeys"
             
@@ -89,8 +181,9 @@ public class TransportApiClient
                 {
                     var journeyJson = json as JSON
                     
-                    var jouneysModel = Journey.init(dictionary: (journeyJson.dictionaryObject as? NSDictionary)!)
+                    let jouneysModel = Journey.init(dictionary: (journeyJson.dictionaryObject as? NSDictionary)!)
                     
+                    transportApiResult.rawJson = journeyJson.rawString(options: JSONSerialization.WritingOptions.prettyPrinted)
                     transportApiResult.isSuccess = true
                     transportApiResult.Data = jouneysModel
                 }
@@ -166,7 +259,7 @@ public class TransportApiClient
 
             let path = self.platformURL + "agencies"
             
-            var query = ""
+            let query = ""
                 .addOmitAgencies(omitAgencies: omitAgencies)
                 .addOnlyAgencies(onlyAgencies: onlyAgencies)
                 .addLocation(location: location)
@@ -192,10 +285,11 @@ public class TransportApiClient
                 {
                     var agenciesJson = json as JSON
                     
-                    var agenciesArray = agenciesJson.arrayObject as? NSArray
+                    let agenciesArray = agenciesJson.arrayObject as? NSArray
                     
-                    var agenciesModel = Agency.modelsFromDictionaryArray(array: agenciesArray!)
+                    let agenciesModel = Agency.modelsFromDictionaryArray(array: agenciesArray!)
                     
+                    transportApiResult.rawJson = json.rawString(options: JSONSerialization.WritingOptions.prettyPrinted)
                     transportApiResult.isSuccess = true
                     transportApiResult.Data = agenciesModel
                 }

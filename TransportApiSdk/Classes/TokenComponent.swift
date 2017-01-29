@@ -33,8 +33,8 @@ internal class TokenComponent
         {
             // Get new access token.
             
-            var clientIdEncoded = addingPercentEncodingForFormUrlencoded(input: self.transportApiClientSettings.ClientId)!
-            var clientSecretEncoded = addingPercentEncodingForFormUrlencoded(input: self.transportApiClientSettings.ClientSecret)!
+            let clientIdEncoded = addingPercentEncodingForFormUrlencoded(input: self.transportApiClientSettings.ClientId)!
+            let clientSecretEncoded = addingPercentEncodingForFormUrlencoded(input: self.transportApiClientSettings.ClientSecret)!
             
             let query = "client_id=" + clientIdEncoded +
                 "&client_secret=" + clientSecretEncoded +
@@ -42,8 +42,8 @@ internal class TokenComponent
 
             RestApiManager.sharedInstance.makeHTTPPostRequest(path: identityURL, accessToken: nil, queryUrlEncoded: query, onCompletion: { json, err, response in
                 var result = json as JSON
-                var access_token = result["access_token"].stringValue
-                var expires_in = result["expires_in"].doubleValue
+                let access_token = result["access_token"].stringValue
+                let expires_in = result["expires_in"].doubleValue
                 
                 if !access_token.isEmpty
                 {
