@@ -29,6 +29,7 @@ public class TransportApiClient
                             omitAgencies: [String]! = nil,
                             onlyModes: [TransportMode]! = nil,
                             omitModes: [TransportMode]! = nil,
+                            excludes: String! = nil,
                             startLocation: CLLocationCoordinate2D,
                             endLocation: CLLocationCoordinate2D,
                             time: Date = Date(),
@@ -68,6 +69,11 @@ public class TransportApiClient
                            "\"timeType\": \"" + String(describing: timeType) + "\"," +
                            "\"profile\": \"" + String(describing: profile) + "\"," +
                            "\"maxItineraries\": " + String(maxItineraries) + ""
+            
+            if (excludes != nil)
+            {
+                input += ",\"excludes\":\"" + excludes + "\""
+            }
             
             if (fareProducts != nil && fareProducts.count > 0)
             {

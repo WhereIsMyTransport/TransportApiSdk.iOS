@@ -5,13 +5,15 @@
 [![License](https://img.shields.io/cocoapods/l/TransportApiSdk.svg?style=flat)](http://cocoapods.org/pods/TransportApiSdk)
 [![Platform](https://img.shields.io/cocoapods/p/TransportApiSdk.svg?style=flat)](http://cocoapods.org/pods/TransportApiSdk)
 
-## Example
+The unofficial iOS SDK for the [WhereIsMyTransport](https://www.whereismytransport.com) API. 
 
-To run the example project, clone the repo, and run `pod install` from the Example directory first.
+Access to the platform is completely free, so for more information and to get credentials, just visit the [developer portal](https://developer.whereismytransport.com).
 
 ## Usage
 
-'''swift
+```swift
+import TransportApiSdk
+
 // Setup your credentials.
 let transportApiClientSettings = TransportApiClientSettings(clientId: "YOUR_CLIENT_ID", clientSecret: "YOUR_CLIENT_SECRET")
 
@@ -26,16 +28,31 @@ transportApiClient.GetAgencies
     // Do fancy things with the results.
     print(result.Data.rawJson)
 }
-'''
+```
 
 ## Installation
+### CocoaPods
+Install [CocoaPods](http://cocoapods.org) with the following command:
 
-TransportApiSdk is available through [CocoaPods](http://cocoapods.org). To install
-it, simply add the following line to your Podfile:
+```bash
+gem install cocoapods
+```
+
+Integrate TransportApiSdk into your Xcode project by creating a `Podfile`:
 
 ```ruby
-pod "TransportApiSdk"
+platform :ios, '8.1'
+use_frameworks!
+
+target '<Your Target Name>' do
+pod 'TransportApiSdk'
+end
 ```
+
+Run `pod install` to build your dependencies.
+
+### Carthage
+TODO
 
 ## Author
 
