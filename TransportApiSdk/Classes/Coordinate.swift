@@ -12,7 +12,7 @@ import Foundation
 
 /* For support, please feel free to contact me at https://www.linkedin.com/in/syedabsar */
 
-public class Coordinates {
+public class Coordinate {
     public var coordinates : Array<Double>?
     
     /**
@@ -25,12 +25,12 @@ public class Coordinates {
      
      - returns: Array of Coordinates Instances.
      */
-    public class func modelsFromDictionaryArray(array:NSArray) -> [Coordinates]
+    public class func modelsFromDictionaryArray(array:NSArray) -> [Coordinate]
     {
-        var models:[Coordinates] = []
+        var models:[Coordinate] = []
         for item in array
         {
-            models.append(Coordinates(array: item as? Array<Double>)!)
+            models.append(Coordinate(array: item as? Array<Double>)!)
         }
         return models
     }

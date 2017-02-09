@@ -12,7 +12,6 @@ import CoreLocation
 
 public class TransportApiClient
 {
-    private let maxLimit = 100
     private let platformURL = "https://platform.whereismytransport.com/api/"
     
     private var transportApiClientSettings: TransportApiClientSettings
@@ -29,7 +28,7 @@ public class TransportApiClient
                             omitAgencies: [String]! = nil,
                             onlyModes: [TransportMode]! = nil,
                             omitModes: [TransportMode]! = nil,
-                            excludes: String! = nil,
+                            exclude: String! = nil,
                             startLocation: CLLocationCoordinate2D,
                             endLocation: CLLocationCoordinate2D,
                             time: Date = Date(),
@@ -69,11 +68,6 @@ public class TransportApiClient
                            "\"timeType\": \"" + String(describing: timeType) + "\"," +
                            "\"profile\": \"" + String(describing: profile) + "\"," +
                            "\"maxItineraries\": " + String(maxItineraries) + ""
-            
-            if (excludes != nil)
-            {
-                input += ",\"excludes\":\"" + excludes + "\""
-            }
             
             if (fareProducts != nil && fareProducts.count > 0)
             {
@@ -172,9 +166,14 @@ public class TransportApiClient
             let json:JSON = JSON(parseJSON: input)
             
             let path = self.platformURL + "journeys"
+                
+            let query = ""
+                .addExclude(exclude: exclude)
+                .removeFirstCharacter()
             
             RestApiManager.sharedInstance.makeHTTPPostRequest(path: path,
                                                               accessToken : accessToken,
+                                                              query: query,
                                                               json: json,
                                                               onCompletion: { json, err, response in
                                                                 
@@ -200,8 +199,26 @@ public class TransportApiClient
     }
     
     public func GetAgencies(onlyAgencies: [String]! = nil,
+                                  omitAgencies: [String]! = nil,
+                                  exclude: String! = nil,
+                                  limit: Int = 100,
+                                  offset: Int = 0,
+                                  completion: @escaping (_ result: TransportApiResult<[Agency]>) -> Void)
+    {
+        TransportApiCalls.GetAgencies(tokenComponent: self.tokenComponent,
+                                      onlyAgencies: onlyAgencies,
+                                      omitAgencies: omitAgencies,
+                                      exclude: exclude,
+                                      limit: limit,
+                                      offset: offset)
+        {
+            (result: TransportApiResult<[Agency]>) in
+            completion (result)
+        }
+    }
+    
+    public func GetAgenciesNearby(onlyAgencies: [String]! = nil,
                             omitAgencies: [String]! = nil,
-                            at: Date! = nil,
                             location: CLLocationCoordinate2D! = nil,
                             boundingBox: String! = nil,
                             exclude: String! = nil,
@@ -210,100 +227,52 @@ public class TransportApiClient
                             offset: Int = 0,
                             completion: @escaping (_ result: TransportApiResult<[Agency]>) -> Void)
     {
-        tokenComponent.getAccessToken{
-            (accessToken: String!) in
-            
-            let transportApiResult = TransportApiResult<[Agency]>()
-            
-            if (accessToken == nil)
-            {
-                transportApiResult.error = self.tokenComponent.defaultErrorResponse
-                
-                completion(transportApiResult)
-                
-                return
-            }
-
-            if (radiusInMeters < -1 )
-            {
-                transportApiResult.error = "Invalid radius. Valid values are positive numbers or -1."
-                
-                completion(transportApiResult)
-                
-                return
-            }
-            
-            if (limit > self.maxLimit || limit < 0)
-            {
-                transportApiResult.error = "Invalid limit. Valid values are positive numbers up to " + String(self.maxLimit) + ".";
-                
-                completion(transportApiResult)
-                
-                return
-            }
-            
-            if (onlyAgencies != nil && omitAgencies != nil && onlyAgencies.count > 0 && omitAgencies.count > 0)
-            {
-                transportApiResult.error = "Either onlyAgencies or omitAgencies can be provided. Not both.";
-                
-                completion(transportApiResult)
-                
-                return
-            }
-            
-            if (boundingBox != nil && !boundingBox.isEmpty)
-            {
-                if (boundingBox.components(separatedBy: ",").count != 4)
-                {
-                    transportApiResult.error = "Invalid bounding box. See valid examples here: https://developer.whereismytransport.com/documentation#boundingbox";
-                    
-                    completion(transportApiResult)
-                    
-                    return
-                }
-            }
-
-            let path = self.platformURL + "agencies"
-            
-            let query = ""
-                .addOmitAgencies(omitAgencies: omitAgencies)
-                .addOnlyAgencies(onlyAgencies: onlyAgencies)
-                .addLocation(location: location)
-                .addDateAt(at: at)
-                .addBoundingBox(bbox: boundingBox)
-                .addExclude(exclude: exclude)
-                .addRadiusInMeters(radiusInMeters: radiusInMeters)
-                .addLimit(limit: limit)
-                .addOffset(offset: offset)
-                .removeFirstCharacter()
-        
-            RestApiManager.sharedInstance.makeHTTPGetRequest(path: path,
-                                                             accessToken: accessToken,
-                                                             query: query,
-                                                             onCompletion: { json, err, response in
-                
-                transportApiResult.httpStatusCode = response?.statusCode
-                if (response?.statusCode != 200)
-                {
-                    transportApiResult.error = json.rawString()
-                }
-                else
-                {
-                    var agenciesJson = json as JSON
-                    
-                    let agenciesArray = agenciesJson.arrayObject as? NSArray
-                    
-                    let agenciesModel = Agency.modelsFromDictionaryArray(array: agenciesArray!)
-                    
-                    transportApiResult.rawJson = json.rawString(options: JSONSerialization.WritingOptions.prettyPrinted)
-                    transportApiResult.isSuccess = true
-                    transportApiResult.Data = agenciesModel
-                }
- 
-                completion(transportApiResult)
-            })
+        TransportApiCalls.GetAgencies(tokenComponent: self.tokenComponent,
+                                      onlyAgencies: onlyAgencies,
+                                      omitAgencies: omitAgencies,
+                                      location: location,
+                                      exclude: exclude,
+                                      radiusInMeters: radiusInMeters,
+                                      limit: limit,
+                                      offset: offset)
+        {
+            (result: TransportApiResult<[Agency]>) in
+                completion (result)
         }
     }
-
     
+    public func GetAgenciesByBoundingBox(onlyAgencies: [String]! = nil,
+                                  omitAgencies: [String]! = nil,
+                                  boundingBox: String! = nil,
+                                  exclude: String! = nil,
+                                  limit: Int = 100,
+                                  offset: Int = 0,
+                                  completion: @escaping (_ result: TransportApiResult<[Agency]>) -> Void)
+    {
+        TransportApiCalls.GetAgencies(tokenComponent: self.tokenComponent,
+                                      onlyAgencies: onlyAgencies,
+                                      omitAgencies: omitAgencies,
+                                      boundingBox: boundingBox,
+                                      exclude: exclude,
+                                      limit: limit,
+                                      offset: offset)
+        {
+            (result: TransportApiResult<[Agency]>) in
+            completion (result)
+        }
+    }
+    
+    public func GetAgency(
+        id: String,
+        exclude: String! = nil,
+        completion: @escaping (_ result: TransportApiResult<Agency>) -> Void)
+    {
+        TransportApiCalls.GetAgency(tokenComponent: self.tokenComponent,
+                                      id: id,
+                                      exclude: exclude)
+        {
+            (result: TransportApiResult<Agency>) in
+            completion (result)
+        }
+    }
 }

@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (c) 2017 Swift Models Generated from JSON powered by http://www.json4swift.com
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -12,42 +12,54 @@ import Foundation
  
 /* For support, please feel free to contact me at https://www.linkedin.com/in/syedabsar */
 
-public class Journey {
-	public var geometry : Geometry?
-	public var href : String?
+public class Itinerary {
+	public var departureTime : String?
 	public var id : String?
-	public var timeType : String?
-	public var only : Only?
-	public var fareProducts : Array<String>?
-	public var itineraries : Array<Itinerary>?
-	public var omit : Omit?
-	public var time : String?
-	public var maxItineraries : Int?
-	public var profile : String?
+	public var arrivalTime : String?
+	public var distance : Distance?
+	public var href : String?
+	public var duration : Int?
+	public var legs : Array<Leg>?
+
+/**
+    Returns an array of models based on given dictionary.
+    
+    Sample usage:
+    let itineraries_list = Itineraries.modelsFromDictionaryArray(someDictionaryArrayFromJSON)
+
+    - parameter array:  NSArray from JSON dictionary.
+
+    - returns: Array of Itineraries Instances.
+*/
+    public class func modelsFromDictionaryArray(array:NSArray) -> [Itinerary]
+    {
+        var models:[Itinerary] = []
+        for item in array
+        {
+            models.append(Itinerary(dictionary: item as! NSDictionary)!)
+        }
+        return models
+    }
 
 /**
     Constructs the object based on the given dictionary.
     
     Sample usage:
-    let journey = Journey(someDictionaryFromJSON)
+    let itineraries = Itineraries(someDictionaryFromJSON)
 
     - parameter dictionary:  NSDictionary from JSON.
 
-    - returns: Json4Swift_Base Instance.
+    - returns: Itineraries Instance.
 */
 	required public init?(dictionary: NSDictionary) {
 
-		if (dictionary["geometry"] != nil) { geometry = Geometry(dictionary: dictionary["geometry"] as! NSDictionary) }
-		href = dictionary["href"] as? String
+		departureTime = dictionary["departureTime"] as? String
 		id = dictionary["id"] as? String
-		timeType = dictionary["timeType"] as? String
-		if (dictionary["only"] != nil) { only = Only(dictionary: dictionary["only"] as! NSDictionary) }
-		if (dictionary["fareProducts"] != nil) { fareProducts = dictionary["fareProducts"] as! Array<String>? }
-		if (dictionary["itineraries"] != nil) { itineraries = Itinerary.modelsFromDictionaryArray(array: dictionary["itineraries"] as! NSArray) }
-		if (dictionary["omit"] != nil) { omit = Omit(dictionary: dictionary["omit"] as! NSDictionary) }
-		time = dictionary["time"] as? String
-		maxItineraries = dictionary["maxItineraries"] as? Int
-		profile = dictionary["profile"] as? String
+		arrivalTime = dictionary["arrivalTime"] as? String
+		if (dictionary["distance"] != nil) { distance = Distance(dictionary: dictionary["distance"] as! NSDictionary) }
+		href = dictionary["href"] as? String
+		duration = dictionary["duration"] as? Int
+		if (dictionary["legs"] != nil) { legs = Leg.modelsFromDictionaryArray(array: dictionary["legs"] as! NSArray) }
 	}
 
 		
@@ -60,15 +72,12 @@ public class Journey {
 
 		let dictionary = NSMutableDictionary()
 
-		dictionary.setValue(self.geometry?.dictionaryRepresentation(), forKey: "geometry")
-		dictionary.setValue(self.href, forKey: "href")
+		dictionary.setValue(self.departureTime, forKey: "departureTime")
 		dictionary.setValue(self.id, forKey: "id")
-		dictionary.setValue(self.timeType, forKey: "timeType")
-		dictionary.setValue(self.only?.dictionaryRepresentation(), forKey: "only")
-		dictionary.setValue(self.omit?.dictionaryRepresentation(), forKey: "omit")
-		dictionary.setValue(self.time, forKey: "time")
-		dictionary.setValue(self.maxItineraries, forKey: "maxItineraries")
-		dictionary.setValue(self.profile, forKey: "profile")
+		dictionary.setValue(self.arrivalTime, forKey: "arrivalTime")
+		dictionary.setValue(self.distance?.dictionaryRepresentation(), forKey: "distance")
+		dictionary.setValue(self.href, forKey: "href")
+		dictionary.setValue(self.duration, forKey: "duration")
 
 		return dictionary
 	}

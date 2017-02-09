@@ -1,4 +1,4 @@
-/*
+/* 
 Copyright (c) 2017 Swift Models Generated from JSON powered by http://www.json4swift.com
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -12,26 +12,27 @@ import Foundation
  
 /* For support, please feel free to contact me at https://www.linkedin.com/in/syedabsar */
 
-public class Geometry {
-	public var type : String?
-	public var coordinates : Array<Coordinate>?
+public class Vehicle {
+	public var direction : String?
+    public var designation : String?
+    public var headsign : String?
 
 /**
     Returns an array of models based on given dictionary.
     
     Sample usage:
-    let geometry_list = Geometry.modelsFromDictionaryArray(someDictionaryArrayFromJSON)
+    let vehicle_list = Vehicle.modelsFromDictionaryArray(someDictionaryArrayFromJSON)
 
     - parameter array:  NSArray from JSON dictionary.
 
-    - returns: Array of Geometry Instances.
+    - returns: Array of Vehicle Instances.
 */
-    public class func modelsFromDictionaryArray(array:NSArray) -> [Geometry]
+    public class func modelsFromDictionaryArray(array:NSArray) -> [Vehicle]
     {
-        var models:[Geometry] = []
+        var models:[Vehicle] = []
         for item in array
         {
-            models.append(Geometry(dictionary: item as! NSDictionary)!)
+            models.append(Vehicle(dictionary: item as! NSDictionary)!)
         }
         return models
     }
@@ -40,23 +41,17 @@ public class Geometry {
     Constructs the object based on the given dictionary.
     
     Sample usage:
-    let geometry = Geometry(someDictionaryFromJSON)
+    let vehicle = Vehicle(someDictionaryFromJSON)
 
     - parameter dictionary:  NSDictionary from JSON.
 
-    - returns: Geometry Instance.
+    - returns: Vehicle Instance.
 */
 	required public init?(dictionary: NSDictionary) {
 
-		type = dictionary["type"] as? String
-        if (type == "LineString")
-        {
-            if (dictionary["coordinates"] != nil) { coordinates = Coordinate.modelsFromDictionaryArray(array: dictionary["coordinates"] as! NSArray) }
-        }
-        else
-        {
-            coordinates = [Coordinate(array: dictionary["coordinates"] as? Array<Double>)!]
-        }
+		direction = dictionary["direction"] as? String
+        designation = dictionary["designation"] as? String
+        headsign = dictionary["headsign"] as? String
 	}
 
 		
@@ -69,7 +64,9 @@ public class Geometry {
 
 		let dictionary = NSMutableDictionary()
 
-		dictionary.setValue(self.type, forKey: "type")
+		dictionary.setValue(self.direction, forKey: "direction")
+        dictionary.setValue(self.designation, forKey: "designation")
+        dictionary.setValue(self.headsign, forKey: "headsign")
 
 		return dictionary
 	}

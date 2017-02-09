@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (c) 2017 Swift Models Generated from JSON powered by http://www.json4swift.com
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -12,14 +12,17 @@ import Foundation
  
 /* For support, please feel free to contact me at https://www.linkedin.com/in/syedabsar */
 
-public class Legs {
+public class Leg {
 	public var distance : Distance?
 	public var geometry : Geometry?
 	public var href : String?
 	public var duration : Int?
 	public var type : String?
-	public var waypoints : Array<Waypoints>?
-	public var directions : Array<Directions>?
+	public var waypoints : Array<Waypoint>?
+	public var directions : Array<Direction>?
+    public var line : Line?
+    public var fare : Fare?
+    public var vehicle : Vehicle?
 
 /**
     Returns an array of models based on given dictionary.
@@ -31,12 +34,12 @@ public class Legs {
 
     - returns: Array of Legs Instances.
 */
-    public class func modelsFromDictionaryArray(array:NSArray) -> [Legs]
+    public class func modelsFromDictionaryArray(array:NSArray) -> [Leg]
     {
-        var models:[Legs] = []
+        var models:[Leg] = []
         for item in array
         {
-            models.append(Legs(dictionary: item as! NSDictionary)!)
+            models.append(Leg(dictionary: item as! NSDictionary)!)
         }
         return models
     }
@@ -58,9 +61,12 @@ public class Legs {
 		href = dictionary["href"] as? String
 		duration = dictionary["duration"] as? Int
 		type = dictionary["type"] as? String
-		if (dictionary["waypoints"] != nil) { waypoints = Waypoints.modelsFromDictionaryArray(array: dictionary["waypoints"] as! NSArray) }
-		if (dictionary["directions"] != nil) { directions = Directions.modelsFromDictionaryArray(array: dictionary["directions"] as! NSArray) }
-	}
+		if (dictionary["waypoints"] != nil) { waypoints = Waypoint.modelsFromDictionaryArray(array: dictionary["waypoints"] as! NSArray) }
+		if (dictionary["directions"] != nil) { directions = Direction.modelsFromDictionaryArray(array: dictionary["directions"] as! NSArray) }
+        if (dictionary["line"] != nil) { line = Line(dictionary: dictionary["line"] as! NSDictionary) }
+        if (dictionary["fare"] != nil) { fare = Fare(dictionary: dictionary["fare"] as! NSDictionary) }
+        if (dictionary["vehicle"] != nil) { vehicle = Vehicle(dictionary: dictionary["vehicle"] as! NSDictionary) }
+    }
 
 		
 /**
@@ -77,6 +83,9 @@ public class Legs {
 		dictionary.setValue(self.href, forKey: "href")
 		dictionary.setValue(self.duration, forKey: "duration")
 		dictionary.setValue(self.type, forKey: "type")
+        dictionary.setValue(self.line?.dictionaryRepresentation(), forKey: "line")
+        dictionary.setValue(self.fare?.dictionaryRepresentation(), forKey: "fare")
+        dictionary.setValue(self.vehicle?.dictionaryRepresentation(), forKey: "vehicle")
 
 		return dictionary
 	}

@@ -1,4 +1,4 @@
-/*
+/* 
 Copyright (c) 2017 Swift Models Generated from JSON powered by http://www.json4swift.com
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -12,31 +12,29 @@ import Foundation
  
 /* For support, please feel free to contact me at https://www.linkedin.com/in/syedabsar */
 
-public class Itineraries {
-	public var departureTime : String?
+public class FareProduct {
 	public var id : String?
-	public var arrivalTime : String?
-	public var distance : Distance?
 	public var href : String?
-	public var duration : Int?
-	public var legs : Array<Legs>?
+	public var agency : Agency?
+	public var name : String?
+	public var isDefault : Bool?
 
 /**
     Returns an array of models based on given dictionary.
     
     Sample usage:
-    let itineraries_list = Itineraries.modelsFromDictionaryArray(someDictionaryArrayFromJSON)
+    let fareProduct_list = FareProduct.modelsFromDictionaryArray(someDictionaryArrayFromJSON)
 
     - parameter array:  NSArray from JSON dictionary.
 
-    - returns: Array of Itineraries Instances.
+    - returns: Array of FareProduct Instances.
 */
-    public class func modelsFromDictionaryArray(array:NSArray) -> [Itineraries]
+    public class func modelsFromDictionaryArray(array:NSArray) -> [FareProduct]
     {
-        var models:[Itineraries] = []
+        var models:[FareProduct] = []
         for item in array
         {
-            models.append(Itineraries(dictionary: item as! NSDictionary)!)
+            models.append(FareProduct(dictionary: item as! NSDictionary)!)
         }
         return models
     }
@@ -45,21 +43,19 @@ public class Itineraries {
     Constructs the object based on the given dictionary.
     
     Sample usage:
-    let itineraries = Itineraries(someDictionaryFromJSON)
+    let fareProduct = FareProduct(someDictionaryFromJSON)
 
     - parameter dictionary:  NSDictionary from JSON.
 
-    - returns: Itineraries Instance.
+    - returns: FareProduct Instance.
 */
 	required public init?(dictionary: NSDictionary) {
 
-		departureTime = dictionary["departureTime"] as? String
 		id = dictionary["id"] as? String
-		arrivalTime = dictionary["arrivalTime"] as? String
-		if (dictionary["distance"] != nil) { distance = Distance(dictionary: dictionary["distance"] as! NSDictionary) }
 		href = dictionary["href"] as? String
-		duration = dictionary["duration"] as? Int
-		if (dictionary["legs"] != nil) { legs = Legs.modelsFromDictionaryArray(array: dictionary["legs"] as! NSArray) }
+		if (dictionary["agency"] != nil) { agency = Agency(dictionary: dictionary["agency"] as! NSDictionary) }
+		name = dictionary["name"] as? String
+		isDefault = dictionary["isDefault"] as? Bool
 	}
 
 		
@@ -72,12 +68,11 @@ public class Itineraries {
 
 		let dictionary = NSMutableDictionary()
 
-		dictionary.setValue(self.departureTime, forKey: "departureTime")
 		dictionary.setValue(self.id, forKey: "id")
-		dictionary.setValue(self.arrivalTime, forKey: "arrivalTime")
-		dictionary.setValue(self.distance?.dictionaryRepresentation(), forKey: "distance")
 		dictionary.setValue(self.href, forKey: "href")
-		dictionary.setValue(self.duration, forKey: "duration")
+		dictionary.setValue(self.agency?.dictionaryRepresentation(), forKey: "agency")
+		dictionary.setValue(self.name, forKey: "name")
+		dictionary.setValue(self.isDefault, forKey: "isDefault")
 
 		return dictionary
 	}

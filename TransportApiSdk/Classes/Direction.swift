@@ -12,28 +12,26 @@ import Foundation
  
 /* For support, please feel free to contact me at https://www.linkedin.com/in/syedabsar */
 
-public class Waypoints {
-	public var arrivalTime : String?
-	public var location : Location?
-    public var stop : Stop?
-	public var departureTime : String?
+public class Direction {
+	public var distance : Distance?
+	public var instruction : String?
 
 /**
     Returns an array of models based on given dictionary.
     
     Sample usage:
-    let waypoints_list = Waypoints.modelsFromDictionaryArray(someDictionaryArrayFromJSON)
+    let directions_list = Directions.modelsFromDictionaryArray(someDictionaryArrayFromJSON)
 
     - parameter array:  NSArray from JSON dictionary.
 
-    - returns: Array of Waypoints Instances.
+    - returns: Array of Directions Instances.
 */
-    public class func modelsFromDictionaryArray(array:NSArray) -> [Waypoints]
+    public class func modelsFromDictionaryArray(array:NSArray) -> [Direction]
     {
-        var models:[Waypoints] = []
+        var models:[Direction] = []
         for item in array
         {
-            models.append(Waypoints(dictionary: item as! NSDictionary)!)
+            models.append(Direction(dictionary: item as! NSDictionary)!)
         }
         return models
     }
@@ -42,18 +40,16 @@ public class Waypoints {
     Constructs the object based on the given dictionary.
     
     Sample usage:
-    let waypoints = Waypoints(someDictionaryFromJSON)
+    let directions = Directions(someDictionaryFromJSON)
 
     - parameter dictionary:  NSDictionary from JSON.
 
-    - returns: Waypoints Instance.
+    - returns: Directions Instance.
 */
 	required public init?(dictionary: NSDictionary) {
 
-		arrivalTime = dictionary["arrivalTime"] as? String
-		if (dictionary["location"] != nil) { location = Location(dictionary: dictionary["location"] as! NSDictionary) }
-        if (dictionary["stop"] != nil) { stop = Stop(dictionary: dictionary["stop"] as! NSDictionary) }
-        departureTime = dictionary["departureTime"] as? String
+		if (dictionary["distance"] != nil) { distance = Distance(dictionary: dictionary["distance"] as! NSDictionary) }
+		instruction = dictionary["instruction"] as? String
 	}
 
 		
@@ -66,10 +62,8 @@ public class Waypoints {
 
 		let dictionary = NSMutableDictionary()
 
-		dictionary.setValue(self.arrivalTime, forKey: "arrivalTime")
-		dictionary.setValue(self.location?.dictionaryRepresentation(), forKey: "location")
-        dictionary.setValue(self.stop?.dictionaryRepresentation(), forKey: "stop")
-		dictionary.setValue(self.departureTime, forKey: "departureTime")
+		dictionary.setValue(self.distance?.dictionaryRepresentation(), forKey: "distance")
+		dictionary.setValue(self.instruction, forKey: "instruction")
 
 		return dictionary
 	}

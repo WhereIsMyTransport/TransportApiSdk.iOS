@@ -12,26 +12,28 @@ import Foundation
  
 /* For support, please feel free to contact me at https://www.linkedin.com/in/syedabsar */
 
-public class Geometry {
-	public var type : String?
-	public var coordinates : Array<Coordinate>?
+public class Fare {
+	public var description : String?
+	public var fareProduct : FareProduct?
+	public var cost : Cost?
+	public var messages : Array<String>?
 
 /**
     Returns an array of models based on given dictionary.
     
     Sample usage:
-    let geometry_list = Geometry.modelsFromDictionaryArray(someDictionaryArrayFromJSON)
+    let fare_list = Fare.modelsFromDictionaryArray(someDictionaryArrayFromJSON)
 
     - parameter array:  NSArray from JSON dictionary.
 
-    - returns: Array of Geometry Instances.
+    - returns: Array of Fare Instances.
 */
-    public class func modelsFromDictionaryArray(array:NSArray) -> [Geometry]
+    public class func modelsFromDictionaryArray(array:NSArray) -> [Fare]
     {
-        var models:[Geometry] = []
+        var models:[Fare] = []
         for item in array
         {
-            models.append(Geometry(dictionary: item as! NSDictionary)!)
+            models.append(Fare(dictionary: item as! NSDictionary)!)
         }
         return models
     }
@@ -40,23 +42,18 @@ public class Geometry {
     Constructs the object based on the given dictionary.
     
     Sample usage:
-    let geometry = Geometry(someDictionaryFromJSON)
+    let fare = Fare(someDictionaryFromJSON)
 
     - parameter dictionary:  NSDictionary from JSON.
 
-    - returns: Geometry Instance.
+    - returns: Fare Instance.
 */
 	required public init?(dictionary: NSDictionary) {
 
-		type = dictionary["type"] as? String
-        if (type == "LineString")
-        {
-            if (dictionary["coordinates"] != nil) { coordinates = Coordinate.modelsFromDictionaryArray(array: dictionary["coordinates"] as! NSArray) }
-        }
-        else
-        {
-            coordinates = [Coordinate(array: dictionary["coordinates"] as? Array<Double>)!]
-        }
+		description = dictionary["description"] as? String
+		if (dictionary["fareProduct"] != nil) { fareProduct = FareProduct(dictionary: dictionary["fareProduct"] as! NSDictionary) }
+		if (dictionary["cost"] != nil) { cost = Cost(dictionary: dictionary["cost"] as! NSDictionary) }
+		if (dictionary["messages"] != nil) { messages = dictionary["messages"] as! Array<String> }
 	}
 
 		
@@ -69,7 +66,9 @@ public class Geometry {
 
 		let dictionary = NSMutableDictionary()
 
-		dictionary.setValue(self.type, forKey: "type")
+		dictionary.setValue(self.description, forKey: "description")
+		dictionary.setValue(self.fareProduct?.dictionaryRepresentation(), forKey: "fareProduct")
+		dictionary.setValue(self.cost?.dictionaryRepresentation(), forKey: "cost")
 
 		return dictionary
 	}

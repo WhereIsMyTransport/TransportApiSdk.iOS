@@ -52,13 +52,13 @@ internal class RestApiManager: NSObject {
     }
 
     // MARK: Perform a POST Request
-    public func makeHTTPPostRequest(path: String, accessToken: String!, json: JSON, onCompletion: @escaping ServiceResponse)
+    public func makeHTTPPostRequest(path: String, accessToken: String!, query: String?, json: JSON, onCompletion: @escaping ServiceResponse)
     {
         do
         {
             let data = try json.rawString()?.data(using: .utf8)
 
-            try makeHTTPPostRequest(path: path, accessToken: accessToken, data: data!, onCompletion: { json, err, response in
+            try makeHTTPPostRequest(path: path, accessToken: accessToken, query: query, data: data!, onCompletion: { json, err, response in
                 
                 onCompletion(json, err, response)
             })
@@ -75,15 +75,23 @@ internal class RestApiManager: NSObject {
     {
         let data = queryUrlEncoded.data(using: .utf8)!
         
-        makeHTTPPostRequest(path: path, accessToken: accessToken, data: data, onCompletion: { json, err, response in
+        makeHTTPPostRequest(path: path, accessToken: accessToken, query: nil, data: data, onCompletion: { json, err, response in
 
             onCompletion(json, err, response)
         })
 
     }
     
-    private func makeHTTPPostRequest(path: String, accessToken: String!, data: Data, onCompletion: @escaping ServiceResponse) {
-        let request = NSMutableURLRequest(url: NSURL(string: path)! as URL)
+    private func makeHTTPPostRequest(path: String, accessToken: String!, query: String?, data: Data, onCompletion: @escaping ServiceResponse) {
+        var queryString = path
+        
+        if (query != nil)
+        {
+            queryString.append("?")
+            queryString.append(query!)
+        }
+        
+        let request = NSMutableURLRequest(url: NSURL(string: queryString)! as URL)
         
         // Set the method to POST
         request.httpMethod = "POST"

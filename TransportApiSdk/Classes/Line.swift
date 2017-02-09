@@ -12,26 +12,32 @@ import Foundation
  
 /* For support, please feel free to contact me at https://www.linkedin.com/in/syedabsar */
 
-public class Directions {
-	public var distance : Distance?
-	public var instruction : String?
+public class Line {
+	public var id : String?
+	public var href : String?
+	public var agency : Agency?
+	public var name : String?
+	public var shortName : String?
+	public var mode : String?
+	public var colour : String?
+	public var textColour : String?
 
 /**
     Returns an array of models based on given dictionary.
     
     Sample usage:
-    let directions_list = Directions.modelsFromDictionaryArray(someDictionaryArrayFromJSON)
+    let line_list = Line.modelsFromDictionaryArray(someDictionaryArrayFromJSON)
 
     - parameter array:  NSArray from JSON dictionary.
 
-    - returns: Array of Directions Instances.
+    - returns: Array of Line Instances.
 */
-    public class func modelsFromDictionaryArray(array:NSArray) -> [Directions]
+    public class func modelsFromDictionaryArray(array:NSArray) -> [Line]
     {
-        var models:[Directions] = []
+        var models:[Line] = []
         for item in array
         {
-            models.append(Directions(dictionary: item as! NSDictionary)!)
+            models.append(Line(dictionary: item as! NSDictionary)!)
         }
         return models
     }
@@ -40,16 +46,22 @@ public class Directions {
     Constructs the object based on the given dictionary.
     
     Sample usage:
-    let directions = Directions(someDictionaryFromJSON)
+    let line = Line(someDictionaryFromJSON)
 
     - parameter dictionary:  NSDictionary from JSON.
 
-    - returns: Directions Instance.
+    - returns: Line Instance.
 */
 	required public init?(dictionary: NSDictionary) {
 
-		if (dictionary["distance"] != nil) { distance = Distance(dictionary: dictionary["distance"] as! NSDictionary) }
-		instruction = dictionary["instruction"] as? String
+		id = dictionary["id"] as? String
+		href = dictionary["href"] as? String
+		if (dictionary["agency"] != nil) { agency = Agency(dictionary: dictionary["agency"] as! NSDictionary) }
+		name = dictionary["name"] as? String
+		shortName = dictionary["shortName"] as? String
+		mode = dictionary["mode"] as? String
+		colour = dictionary["colour"] as? String
+		textColour = dictionary["textColour"] as? String
 	}
 
 		
@@ -62,8 +74,14 @@ public class Directions {
 
 		let dictionary = NSMutableDictionary()
 
-		dictionary.setValue(self.distance?.dictionaryRepresentation(), forKey: "distance")
-		dictionary.setValue(self.instruction, forKey: "instruction")
+		dictionary.setValue(self.id, forKey: "id")
+		dictionary.setValue(self.href, forKey: "href")
+		dictionary.setValue(self.agency?.dictionaryRepresentation(), forKey: "agency")
+		dictionary.setValue(self.name, forKey: "name")
+		dictionary.setValue(self.shortName, forKey: "shortName")
+		dictionary.setValue(self.mode, forKey: "mode")
+		dictionary.setValue(self.colour, forKey: "colour")
+		dictionary.setValue(self.textColour, forKey: "textColour")
 
 		return dictionary
 	}

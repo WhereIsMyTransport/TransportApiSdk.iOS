@@ -1,4 +1,4 @@
-# TransportApiSdk
+# TransportApiSdk - WhereIsMyTransport API Client Library for iOS
 
 [![CI Status](http://img.shields.io/travis/Bilo/TransportApiSdk.svg?style=flat)](https://travis-ci.org/chrisk1ng/TransportApiSdk.iOS)
 [![Version](https://img.shields.io/cocoapods/v/TransportApiSdk.svg?style=flat)](http://cocoapods.org/pods/TransportApiSdk)
@@ -6,8 +6,6 @@
 [![Platform](https://img.shields.io/cocoapods/p/TransportApiSdk.svg?style=flat)](http://cocoapods.org/pods/TransportApiSdk)
 
 The unofficial iOS SDK for the [WhereIsMyTransport](https://www.whereismytransport.com) API. 
-
-Access to the platform is completely free, so for more information and to get credentials, just visit the [developer portal](https://developer.whereismytransport.com).
 
 ## Usage
 
@@ -53,6 +51,10 @@ Run `pod install` to build your dependencies.
 
 ### Carthage
 TODO
+
+## Documentation
+
+Access to the platform is completely free, so for more information and to get credentials, just visit the [developer portal](https://developer.whereismytransport.com).
 
 ## Author
 
