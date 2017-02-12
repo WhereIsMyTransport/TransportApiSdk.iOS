@@ -100,6 +100,42 @@ extension String {
         return self
     }
     
+    func addServesLines(servesLines: [String]?) -> String {
+        if (servesLines != nil)
+        {
+            return self + "&servesLines=" + servesLines!.joined(separator: ",~")
+        }
+        
+        return self
+    }
+    
+    func addShowChildren(showChildren: Bool) -> String {
+        if (showChildren)
+        {
+            return self + "&showChildren=true"
+        }
+        else
+        {
+            return self + "&showChildren=false"
+        }
+    }
+    
+    func addLimitModes(limitModes: [TransportMode]?) -> String {
+        if (limitModes != nil)
+        {
+            var limitedModes = ""
+            
+            for mode in limitModes!
+            {
+                limitedModes = limitedModes + mode.rawValue + ","
+            }
+            
+            return self + "&modes=" + limitedModes.removeLastCharacter()
+        }
+        
+        return self
+    }
+    
     func addBoundingBox(bbox: String?) -> String {
         if (bbox != nil && !bbox!.isEmpty)
         {

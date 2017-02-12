@@ -37,6 +37,42 @@ class ViewController: UIViewController {
                     self.resultTextView.text = result.rawJson
                 }
         }
+        
+        /*self.transportApiClient.GetAgencies()
+        {
+            (result: TransportApiResult<[Agency]>) in
+            DispatchQueue.main.async
+                {
+                    self.resultTextView.text = result.rawJson
+            }
+        }*/
+        
+        /*self.transportApiClient.GetAgency(id: "A1JHSPIg_kWV5XRHIepCLw")
+            {
+                (result: TransportApiResult<Agency>) in
+                DispatchQueue.main.async
+                    {
+                        self.resultTextView.text = result.rawJson
+                }
+        }*/
+        
+        /*self.transportApiClient.GetStops()
+        {
+            (result: TransportApiResult<[Stop]>) in
+            DispatchQueue.main.async
+                {
+                    self.resultTextView.text = result.rawJson
+            }
+        }*/
+        
+        /*self.transportApiClient.GetStop(id: "S1twiBqUm0ul6ZMtCnfOcg")
+        {
+            (result: TransportApiResult<Stop>) in
+            DispatchQueue.main.async
+                {
+                    self.resultTextView.text = result.rawJson
+            }
+        }*/
     }
     
     override func viewDidLoad() {
