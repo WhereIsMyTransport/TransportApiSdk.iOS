@@ -54,7 +54,20 @@ public class TransportApiClient
             (result: TransportApiResult<Journey>) in
             completion (result)
         }
-
+    }
+    
+    public func GetJourney(
+        id: String,
+        exclude: String! = nil,
+        completion: @escaping (_ result: TransportApiResult<Journey>) -> Void)
+    {
+        TransportApiCalls.GetJourney(tokenComponent: self.tokenComponent,
+                                    id: id,
+                                    exclude: exclude)
+        {
+            (result: TransportApiResult<Journey>) in
+            completion (result)
+        }
     }
     
     public func GetAgencies(onlyAgencies: [String]! = nil,

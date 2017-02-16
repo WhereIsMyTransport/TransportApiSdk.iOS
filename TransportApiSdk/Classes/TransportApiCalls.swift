@@ -189,8 +189,65 @@ internal class TransportApiCalls
                                                                 completion(transportApiResult)
             })
         }
-
-        
+    }
+    
+    class func GetJourney(tokenComponent: TokenComponent,
+                         id: String,
+                         exclude: String! = nil,
+                         completion: @escaping (_ result: TransportApiResult<Journey>) -> Void)
+    {
+        tokenComponent.getAccessToken{
+            (accessToken: String!) in
+            
+            let transportApiResult = TransportApiResult<Journey>()
+            
+            if (id.isEmpty)
+            {
+                transportApiResult.error = "JourneyId is required."
+                
+                completion(transportApiResult)
+                
+                return
+            }
+            
+            if (accessToken == nil)
+            {
+                transportApiResult.error = tokenComponent.defaultErrorResponse
+                
+                completion(transportApiResult)
+                
+                return
+            }
+            
+            let query = ""
+                .addExclude(exclude: exclude)
+            
+            let path = self.platformURL + "journeys/" + id
+            
+            RestApiManager.sharedInstance.makeHTTPGetRequest(path: path,
+                                                             accessToken: accessToken,
+                                                             query: query,
+                                                             onCompletion: { json, err, response in
+                                                                
+                                                                transportApiResult.httpStatusCode = response?.statusCode
+                                                                if (response?.statusCode != 200)
+                                                                {
+                                                                    transportApiResult.error = json.rawString()
+                                                                }
+                                                                else
+                                                                {
+                                                                    let journeyJson = json as JSON
+                                                                    
+                                                                    let jouneysModel = Journey.init(dictionary: NSDictionary(dictionary: journeyJson.dictionaryObject!))
+                                                                    
+                                                                    transportApiResult.rawJson = journeyJson.rawString(options: JSONSerialization.WritingOptions.prettyPrinted)
+                                                                    transportApiResult.isSuccess = true
+                                                                    transportApiResult.Data = jouneysModel
+                                                                }
+                                                                
+                                                                completion(transportApiResult)
+            })
+        }
     }
 
     class func GetAgencies(tokenComponent: TokenComponent,
