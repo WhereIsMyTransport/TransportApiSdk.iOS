@@ -13,8 +13,8 @@ import CoreLocation
 class ViewController: UIViewController {
 
     // To get access credentials go to https://developer.whereismytransport.com
-    let clientId = "dafaba75-dd54-4c35-af04-c53e348e4837"
-    let clientSecret = "z+ecIyHxXxsYzHCp4EmuBSUcu42BFkZcOk2n2NWdbas="
+    let clientId = "CLIENT_ID"
+    let clientSecret = "CLIENT_SECRET"
     
     var transportApiClient: TransportApiClient!
     
