@@ -109,6 +109,15 @@ extension String {
         return self
     }
     
+    func addServesStops(servesStops: [String]?) -> String {
+        if (servesStops != nil)
+        {
+            return self + "&servesStops=" + servesStops!.joined(separator: ",~")
+        }
+        
+        return self
+    }
+    
     func addShowChildren(showChildren: Bool) -> String {
         if (showChildren)
         {

@@ -588,5 +588,313 @@ internal class TransportApiCalls
         }
     }
 
+    class func GetLines(tokenComponent: TokenComponent,
+                        onlyAgencies: [String]! = nil,
+                        omitAgencies: [String]! = nil,
+                        limitModes: [TransportMode]! = nil,
+                        servesStops: [String]! = nil,
+                        location: CLLocationCoordinate2D! = nil,
+                        boundingBox: String! = nil,
+                        exclude: String! = nil,
+                        radiusInMeters: Int = -1,
+                        limit: Int = 100,
+                        offset: Int = 0,
+                        completion: @escaping (_ result: TransportApiResult<[Line]>) -> Void)
+    {
+        tokenComponent.getAccessToken{
+            (accessToken: String!) in
+            
+            let transportApiResult = TransportApiResult<[Line]>()
+            
+            if (accessToken == nil)
+            {
+                transportApiResult.error = tokenComponent.defaultErrorResponse
+                
+                completion(transportApiResult)
+                
+                return
+            }
+            
+            if (radiusInMeters < -1 )
+            {
+                transportApiResult.error = "Invalid radius. Valid values are positive numbers or -1."
+                
+                completion(transportApiResult)
+                
+                return
+            }
+            
+            if (limit > self.maxLimit || limit < 0)
+            {
+                transportApiResult.error = "Invalid limit. Valid values are positive numbers up to " + String(self.maxLimit) + ".";
+                
+                completion(transportApiResult)
+                
+                return
+            }
+            
+            if (onlyAgencies != nil && omitAgencies != nil && onlyAgencies.count > 0 && omitAgencies.count > 0)
+            {
+                transportApiResult.error = "Either onlyAgencies or omitAgencies can be provided. Not both.";
+                
+                completion(transportApiResult)
+                
+                return
+            }
+            
+            if (boundingBox != nil && !boundingBox.isEmpty)
+            {
+                if (boundingBox.components(separatedBy: ",").count != 4)
+                {
+                    transportApiResult.error = "Invalid bounding box. See valid examples here: https://developer.whereismytransport.com/documentation#boundingbox";
+                    
+                    completion(transportApiResult)
+                    
+                    return
+                }
+            }
+            
+            let path = self.platformURL + "lines"
+            
+            let query = ""
+                .addOmitAgencies(omitAgencies: omitAgencies)
+                .addOnlyAgencies(onlyAgencies: onlyAgencies)
+                .addLimitModes(limitModes: limitModes)
+                .addServesStops(servesStops: servesStops)
+                .addLocation(location: location)
+                .addBoundingBox(bbox: boundingBox)
+                .addExclude(exclude: exclude)
+                .addRadiusInMeters(radiusInMeters: radiusInMeters)
+                .addLimit(limit: limit)
+                .addOffset(offset: offset)
+                .removeFirstCharacter()
+            
+            RestApiManager.sharedInstance.makeHTTPGetRequest(path: path,
+                                                             accessToken: accessToken,
+                                                             query: query,
+                                                             onCompletion: { json, err, response in
+                                                                
+                                                                transportApiResult.httpStatusCode = response?.statusCode
+                                                                if (response?.statusCode != 200)
+                                                                {
+                                                                    transportApiResult.error = json.rawString()
+                                                                }
+                                                                else
+                                                                {
+                                                                    let linesJson = json as JSON
+                                                                    
+                                                                    let linesArray = linesJson.arrayObject as! NSArray
+                                                                    
+                                                                    let linesModel = Line.modelsFromDictionaryArray(array: linesArray)
+                                                                    
+                                                                    transportApiResult.rawJson = json.rawString(options: JSONSerialization.WritingOptions.prettyPrinted)
+                                                                    transportApiResult.isSuccess = true
+                                                                    transportApiResult.Data = linesModel
+                                                                }
+                                                                
+                                                                completion(transportApiResult)
+            })
+        }
+    }
+
+    class func GetLine(tokenComponent: TokenComponent,
+                       id: String,
+                       exclude: String! = nil,
+                       completion: @escaping (_ result: TransportApiResult<Line>) -> Void)
+    {
+        tokenComponent.getAccessToken{
+            (accessToken: String!) in
+            
+            let transportApiResult = TransportApiResult<Line>()
+            
+            if (id.isEmpty)
+            {
+                transportApiResult.error = "LineId is required."
+                
+                completion(transportApiResult)
+                
+                return
+            }
+            
+            if (accessToken == nil)
+            {
+                transportApiResult.error = tokenComponent.defaultErrorResponse
+                
+                completion(transportApiResult)
+                
+                return
+            }
+            
+            let query = ""
+                .addExclude(exclude: exclude)
+            
+            let path = self.platformURL + "lines/" + id
+            
+            RestApiManager.sharedInstance.makeHTTPGetRequest(path: path,
+                                                             accessToken: accessToken,
+                                                             query: query,
+                                                             onCompletion: { json, err, response in
+                                                                
+                                                                transportApiResult.httpStatusCode = response?.statusCode
+                                                                if (response?.statusCode != 200)
+                                                                {
+                                                                    transportApiResult.error = json.rawString()
+                                                                }
+                                                                else
+                                                                {
+                                                                    let lineJson = json as JSON
+                                                                    
+                                                                    let lineDict = lineJson.dictionaryObject as! NSDictionary
+                                                                    
+                                                                    let lineModel = Line.init(dictionary: lineDict)
+                                                                    
+                                                                    transportApiResult.rawJson = json.rawString(options: JSONSerialization.WritingOptions.prettyPrinted)
+                                                                    transportApiResult.isSuccess = true
+                                                                    transportApiResult.Data = lineModel
+                                                                }
+                                                                
+                                                                completion(transportApiResult)
+            })
+        }
+    }
+
+    class func GetFareProducts(tokenComponent: TokenComponent,
+                        onlyAgencies: [String]! = nil,
+                        omitAgencies: [String]! = nil,
+                        exclude: String! = nil,
+                        limit: Int = 100,
+                        offset: Int = 0,
+                        completion: @escaping (_ result: TransportApiResult<[FareProduct]>) -> Void)
+    {
+        tokenComponent.getAccessToken{
+            (accessToken: String!) in
+            
+            let transportApiResult = TransportApiResult<[FareProduct]>()
+            
+            if (accessToken == nil)
+            {
+                transportApiResult.error = tokenComponent.defaultErrorResponse
+                
+                completion(transportApiResult)
+                
+                return
+            }
+            
+            if (limit > self.maxLimit || limit < 0)
+            {
+                transportApiResult.error = "Invalid limit. Valid values are positive numbers up to " + String(self.maxLimit) + ".";
+                
+                completion(transportApiResult)
+                
+                return
+            }
+            
+            if (onlyAgencies != nil && omitAgencies != nil && onlyAgencies.count > 0 && omitAgencies.count > 0)
+            {
+                transportApiResult.error = "Either onlyAgencies or omitAgencies can be provided. Not both.";
+                
+                completion(transportApiResult)
+                
+                return
+            }
+            
+            let path = self.platformURL + "fareproducts"
+            
+            let query = ""
+                .addOmitAgencies(omitAgencies: omitAgencies)
+                .addOnlyAgencies(onlyAgencies: onlyAgencies)
+                .addExclude(exclude: exclude)
+                .addLimit(limit: limit)
+                .addOffset(offset: offset)
+                .removeFirstCharacter()
+            
+            RestApiManager.sharedInstance.makeHTTPGetRequest(path: path,
+                                                             accessToken: accessToken,
+                                                             query: query,
+                                                             onCompletion: { json, err, response in
+                                                                
+                                                                transportApiResult.httpStatusCode = response?.statusCode
+                                                                if (response?.statusCode != 200)
+                                                                {
+                                                                    transportApiResult.error = json.rawString()
+                                                                }
+                                                                else
+                                                                {
+                                                                    let fareProductsJson = json as JSON
+                                                                    
+                                                                    let fareProductsArray = fareProductsJson.arrayObject as! NSArray
+                                                                    
+                                                                    let fareProductsModel = FareProduct.modelsFromDictionaryArray(array: fareProductsArray)
+                                                                    
+                                                                    transportApiResult.rawJson = json.rawString(options: JSONSerialization.WritingOptions.prettyPrinted)
+                                                                    transportApiResult.isSuccess = true
+                                                                    transportApiResult.Data = fareProductsModel
+                                                                }
+                                                                
+                                                                completion(transportApiResult)
+            })
+        }
+    }
+
+    class func GetFareProduct(tokenComponent: TokenComponent,
+                       id: String,
+                       exclude: String! = nil,
+                       completion: @escaping (_ result: TransportApiResult<FareProduct>) -> Void)
+    {
+        tokenComponent.getAccessToken{
+            (accessToken: String!) in
+            
+            let transportApiResult = TransportApiResult<FareProduct>()
+            
+            if (id.isEmpty)
+            {
+                transportApiResult.error = "FareProductId is required."
+                
+                completion(transportApiResult)
+                
+                return
+            }
+            
+            if (accessToken == nil)
+            {
+                transportApiResult.error = tokenComponent.defaultErrorResponse
+                
+                completion(transportApiResult)
+                
+                return
+            }
+            
+            let query = ""
+                .addExclude(exclude: exclude)
+            
+            let path = self.platformURL + "fareproducts/" + id
+            
+            RestApiManager.sharedInstance.makeHTTPGetRequest(path: path,
+                                                             accessToken: accessToken,
+                                                             query: query,
+                                                             onCompletion: { json, err, response in
+                                                                
+                                                                transportApiResult.httpStatusCode = response?.statusCode
+                                                                if (response?.statusCode != 200)
+                                                                {
+                                                                    transportApiResult.error = json.rawString()
+                                                                }
+                                                                else
+                                                                {
+                                                                    let fareProductJson = json as JSON
+                                                                    
+                                                                    let fareProductDict = fareProductJson.dictionaryObject as! NSDictionary
+                                                                    
+                                                                    let fareProductModel = FareProduct.init(dictionary: fareProductDict)
+                                                                    
+                                                                    transportApiResult.rawJson = json.rawString(options: JSONSerialization.WritingOptions.prettyPrinted)
+                                                                    transportApiResult.isSuccess = true
+                                                                    transportApiResult.Data = fareProductModel
+                                                                }
+                                                                
+                                                                completion(transportApiResult)
+            })
+        }
+    }
     
 }

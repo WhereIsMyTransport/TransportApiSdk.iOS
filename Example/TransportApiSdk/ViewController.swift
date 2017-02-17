@@ -3,7 +3,7 @@
 //  TransportApiSdk
 //
 //  Created by Chris on 01/24/2017.
-//  Copyright (c) 2017 Bilo. All rights reserved.
+//  Copyright (c) 2017 Chris. All rights reserved.
 //
 
 import UIKit
@@ -13,8 +13,8 @@ import CoreLocation
 class ViewController: UIViewController {
 
     // To get access credentials go to https://developer.whereismytransport.com
-    let clientId = "CLIENT_ID"
-    let clientSecret = "CLIENT_SECRET"
+    let clientId = "dafaba75-dd54-4c35-af04-c53e348e4837"
+    let clientSecret = "z+ecIyHxXxsYzHCp4EmuBSUcu42BFkZcOk2n2NWdbas="
     
     var transportApiClient: TransportApiClient!
     
@@ -38,14 +38,14 @@ class ViewController: UIViewController {
                 }
         }*/
         
-        self.transportApiClient.GetJourney(id: "rHfzAvs4Rki3jKccAUoGYA")
+        /*self.transportApiClient.GetJourney(id: "rHfzAvs4Rki3jKccAUoGYA")
         {
             (result: TransportApiResult<Journey>) in
             DispatchQueue.main.async
                 {
                     self.resultTextView.text = result.rawJson
             }
-        }
+        }*/
         
         /*self.transportApiClient.GetAgencies()
         {
@@ -82,6 +82,42 @@ class ViewController: UIViewController {
                     self.resultTextView.text = result.rawJson
             }
         }*/
+        
+        /*self.transportApiClient.GetLines()
+         {
+            (result: TransportApiResult<[Line]>) in
+            DispatchQueue.main.async
+                {
+                    self.resultTextView.text = result.rawJson
+            }
+         }
+        
+        self.transportApiClient.GetLine(id: "giwBPOBfeE-C4acZAI_7uQ")
+         {
+            (result: TransportApiResult<Line>) in
+            DispatchQueue.main.async
+                {
+                    self.resultTextView.text = result.rawJson
+            }
+         }*/
+        
+        /*self.transportApiClient.GetFareProducts()
+            {
+                (result: TransportApiResult<[FareProduct]>) in
+                DispatchQueue.main.async
+                    {
+                        self.resultTextView.text = result.rawJson
+                }
+        }*/
+        
+        self.transportApiClient.GetFareProduct(id: "BQWEZcffgUGF52ah5E9kJQ")
+        {
+            (result: TransportApiResult<FareProduct>) in
+            DispatchQueue.main.async
+                {
+                    self.resultTextView.text = result.rawJson
+            }
+        }
     }
     
     override func viewDidLoad() {

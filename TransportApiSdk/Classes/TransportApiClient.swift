@@ -243,4 +243,127 @@ public class TransportApiClient
             completion (result)
         }
     }
+    
+    public func GetLines(onlyAgencies: [String]! = nil,
+                         omitAgencies: [String]! = nil,
+                         limitModes: [TransportMode]! = nil,
+                         servesStops: [String]! = nil,
+                         exclude: String! = nil,
+                         limit: Int = 100,
+                         offset: Int = 0,
+                         completion: @escaping (_ result: TransportApiResult<[Line]>) -> Void)
+    {
+        TransportApiCalls.GetLines(tokenComponent: self.tokenComponent,
+                                   onlyAgencies: onlyAgencies,
+                                   omitAgencies: omitAgencies,
+                                   limitModes: limitModes,
+                                   servesStops: servesStops,
+                                   exclude: exclude,
+                                   limit: limit,
+                                   offset: offset)
+        {
+            (result: TransportApiResult<[Line]>) in
+            completion (result)
+        }
+    }
+    
+    public func GetLinesNearby(onlyAgencies: [String]! = nil,
+                               omitAgencies: [String]! = nil,
+                               limitModes: [TransportMode]! = nil,
+                               servesStops: [String]! = nil,
+                               location: CLLocationCoordinate2D! = nil,
+                               boundingBox: String! = nil,
+                               exclude: String! = nil,
+                               radiusInMeters: Int = -1,
+                               limit: Int = 100,
+                               offset: Int = 0,
+                               completion: @escaping (_ result: TransportApiResult<[Line]>) -> Void)
+    {
+        TransportApiCalls.GetLines(tokenComponent: self.tokenComponent,
+                                   onlyAgencies: onlyAgencies,
+                                   omitAgencies: omitAgencies,
+                                   limitModes: limitModes,
+                                   servesStops: servesStops,
+                                   location: location,
+                                   exclude: exclude,
+                                   radiusInMeters: radiusInMeters,
+                                   limit: limit,
+                                   offset: offset)
+        {
+            (result: TransportApiResult<[Line]>) in
+            completion (result)
+        }
+    }
+    
+    public func GetLinesByBoundingBox(onlyAgencies: [String]! = nil,
+                                      omitAgencies: [String]! = nil,
+                                      limitModes: [TransportMode]! = nil,
+                                      servesStops: [String]! = nil,
+                                      boundingBox: String! = nil,
+                                      exclude: String! = nil,
+                                      limit: Int = 100,
+                                      offset: Int = 0,
+                                      completion: @escaping (_ result: TransportApiResult<[Line]>) -> Void)
+    {
+        TransportApiCalls.GetLines(tokenComponent: self.tokenComponent,
+                                   onlyAgencies: onlyAgencies,
+                                   omitAgencies: omitAgencies,
+                                   limitModes: limitModes,
+                                   servesStops: servesStops,
+                                   boundingBox: boundingBox,
+                                   exclude: exclude,
+                                   limit: limit,
+                                   offset: offset)
+        {
+            (result: TransportApiResult<[Line]>) in
+            completion (result)
+        }
+    }
+    
+    public func GetLine(
+        id: String,
+        exclude: String! = nil,
+        completion: @escaping (_ result: TransportApiResult<Line>) -> Void)
+    {
+        TransportApiCalls.GetLine(tokenComponent: self.tokenComponent,
+                                  id: id,
+                                  exclude: exclude)
+        {
+            (result: TransportApiResult<Line>) in
+            completion (result)
+        }
+    }
+    
+    public func GetFareProducts(onlyAgencies: [String]! = nil,
+                                      omitAgencies: [String]! = nil,
+                                      exclude: String! = nil,
+                                      limit: Int = 100,
+                                      offset: Int = 0,
+                                      completion: @escaping (_ result: TransportApiResult<[FareProduct]>) -> Void)
+    {
+        TransportApiCalls.GetFareProducts(tokenComponent: self.tokenComponent,
+                                   onlyAgencies: onlyAgencies,
+                                   omitAgencies: omitAgencies,
+                                   exclude: exclude,
+                                   limit: limit,
+                                   offset: offset)
+        {
+            (result: TransportApiResult<[FareProduct]>) in
+            completion (result)
+        }
+    }
+    
+    public func GetFareProduct(
+        id: String,
+        exclude: String! = nil,
+        completion: @escaping (_ result: TransportApiResult<FareProduct>) -> Void)
+    {
+        TransportApiCalls.GetFareProduct(tokenComponent: self.tokenComponent,
+                                  id: id,
+                                  exclude: exclude)
+        {
+            (result: TransportApiResult<FareProduct>) in
+            completion (result)
+        }
+    }
 }
