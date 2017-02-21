@@ -10,7 +10,8 @@ import SwiftyJSON
 
 internal class TokenComponent
 {
-    public let defaultErrorResponse = "Unable to generate access token. Please check your credentials."
+    private let defaultErrorResponse = "Unable to generate access token. Please check your credentials."
+    private let noInternetErrorResponse = "The internet connection appears to be offline."
     
     private let identityURL = "https://identity.whereismytransport.com/connect/token/"
     private var transportApiClientSettings: TransportApiClientSettings
@@ -22,12 +23,12 @@ internal class TokenComponent
         self.transportApiClientSettings = transportApiClientSettings
     }
     
-    public func getAccessToken(onCompletion: @escaping (String!) -> Void) {
+    public func getAccessToken(onCompletion: @escaping (AccessToken) -> Void) {
         // Check if we have an access token and if the expiry date has been reached.
         
         if (self.accessToken != nil && !self.accessToken.isEmpty && NSDate().timeIntervalSince1970 < self.expiryDate.timeIntervalSince1970)
         {
-            onCompletion(self.accessToken)
+            onCompletion(AccessToken(accessToken: self.accessToken, error: nil))
         }
         else
         {
@@ -40,24 +41,45 @@ internal class TokenComponent
                 "&client_secret=" + clientSecretEncoded +
                 "&grant_type=client_credentials&scope=transportapi%3Aall"
 
-            RestApiManager.sharedInstance.makeHTTPPostRequest(path: identityURL, accessToken: nil, queryUrlEncoded: query, onCompletion: { json, err, response in
-                var result = json as JSON
-                let access_token = result["access_token"].stringValue
-                let expires_in = result["expires_in"].doubleValue
+            RestApiManager.sharedInstance.makeHTTPPostRequest(path: identityURL, accessToken: nil, timeout: Double(self.transportApiClientSettings.TimeoutInSeconds), queryUrlEncoded: query, onCompletion: { json, err, response in
                 
-                if !access_token.isEmpty
+                var accessToken: AccessToken?
+                
+                if (err != nil)
                 {
-                    self.accessToken = access_token
-                    
-                    // Expiry date will be the current time plus the expiry window.
-                    self.expiryDate = NSDate().addingTimeInterval(expires_in)
+                    if (err?.code == -1009)
+                    {
+                        // No internet
+                        accessToken = AccessToken(accessToken: nil, error: self.noInternetErrorResponse)
+                    }
+                    else
+                    {
+                        accessToken = AccessToken(accessToken: nil, error: self.defaultErrorResponse)
+                    }
                 }
                 else
                 {
-                    self.accessToken = nil
+                    var result = json as JSON
+                    let access_token = result["access_token"].stringValue
+                    let expires_in = result["expires_in"].doubleValue
+                    
+                    if !access_token.isEmpty
+                    {
+                        self.accessToken = access_token
+                        accessToken = AccessToken(accessToken: access_token, error: nil)
+                        
+                        // Expiry date will be the current time plus the expiry window.
+                        self.expiryDate = NSDate().addingTimeInterval(expires_in)
+                    }
+                    else
+                    {
+                        self.accessToken = nil
+                        
+                        accessToken = AccessToken(accessToken: nil, error: self.defaultErrorResponse)
+                    }
                 }
                 
-                onCompletion(self.accessToken)
+                onCompletion(accessToken!)
             })
         }
     }

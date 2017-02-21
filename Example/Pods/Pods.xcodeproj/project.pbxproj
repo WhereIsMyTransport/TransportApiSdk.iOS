@@ -16,6 +16,9 @@
 		106A5F311E4BAB1D002177DE /* Line.swift in Sources */ = {isa = PBXBuildFile; fileRef = 106A5F2C1E4BAB1D002177DE /* Line.swift */; };
 		106A5F321E4BAB1D002177DE /* Vehicle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 106A5F2D1E4BAB1D002177DE /* Vehicle.swift */; };
 		106A5F341E4BADB6002177DE /* Hail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 106A5F331E4BADB6002177DE /* Hail.swift */; };
+		106A5F761E5C60FA002177DE /* StopTimetable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 106A5F751E5C60F8002177DE /* StopTimetable.swift */; };
+		106A5F781E5C6733002177DE /* LineTimetable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 106A5F771E5C6733002177DE /* LineTimetable.swift */; };
+		10CA99831E5C7D4D0046E650 /* AccessToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10CA99821E5C7D4D0046E650 /* AccessToken.swift */; };
 		10D3D9E61E4A2BEE0077AD63 /* TransportApiCalls.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10D3D9E51E4A2BEE0077AD63 /* TransportApiCalls.swift */; };
 		1341E4CBA2B865016A2017500441516A /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDE506ECE97701EBA44FDBFF401C1A04 /* SwiftyJSON.swift */; };
 		13E8B0810643C23F2348D9CCB825C0C7 /* Agency.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0B57967A51A949FEF5F0DAB9FDA34F /* Agency.swift */; };
@@ -84,6 +87,9 @@
 		106A5F2C1E4BAB1D002177DE /* Line.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Line.swift; sourceTree = "<group>"; };
 		106A5F2D1E4BAB1D002177DE /* Vehicle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Vehicle.swift; sourceTree = "<group>"; };
 		106A5F331E4BADB6002177DE /* Hail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Hail.swift; sourceTree = "<group>"; };
+		106A5F751E5C60F8002177DE /* StopTimetable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StopTimetable.swift; sourceTree = "<group>"; };
+		106A5F771E5C6733002177DE /* LineTimetable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LineTimetable.swift; sourceTree = "<group>"; };
+		10CA99821E5C7D4D0046E650 /* AccessToken.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccessToken.swift; sourceTree = "<group>"; };
 		10D3D9E51E4A2BEE0077AD63 /* TransportApiCalls.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransportApiCalls.swift; sourceTree = "<group>"; };
 		18C684373902A602B43851495089F10E /* TransportApiClientSettings.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TransportApiClientSettings.swift; sourceTree = "<group>"; };
 		1AAFD30B2ADF38BB05910F17F4C39C51 /* Distance.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Distance.swift; sourceTree = "<group>"; };
@@ -187,6 +193,8 @@
 				40CC589E7DE74B437D0072350ACB6B41 /* Stop.swift */,
 				DB72A95532799DEDEBE813E75B6C0451 /* Waypoint.swift */,
 				106A5F331E4BADB6002177DE /* Hail.swift */,
+				106A5F751E5C60F8002177DE /* StopTimetable.swift */,
+				106A5F771E5C6733002177DE /* LineTimetable.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -292,6 +300,7 @@
 				10D3D9E31E47A3250077AD63 /* Models */,
 				10D3D9E41E47A3330077AD63 /* Shortcuts */,
 				4356EFB56BCFEADC8FD49ED1B3AF9D6B /* RestApiManager.swift */,
+				10CA99821E5C7D4D0046E650 /* AccessToken.swift */,
 				F62F8DA61DB2B10F108612BD9A699B90 /* TokenComponent.swift */,
 				78E8E5308E227AF0E24B438A85A9C699 /* TransportApiClient.swift */,
 				18C684373902A602B43851495089F10E /* TransportApiClientSettings.swift */,
@@ -498,6 +507,7 @@
 				9F864D480C76331AD9043E0A0B68F874 /* Journey.swift in Sources */,
 				106A5F341E4BADB6002177DE /* Hail.swift in Sources */,
 				0B2E060037A1381DA6BA999A2A07A8CD /* Leg.swift in Sources */,
+				106A5F781E5C6733002177DE /* LineTimetable.swift in Sources */,
 				106A5F321E4BAB1D002177DE /* Vehicle.swift in Sources */,
 				99F40BC6D490A112FAC5C25478DEA695 /* Location.swift in Sources */,
 				B260133D1644FD8D525AEF65A9F12084 /* Omit.swift in Sources */,
@@ -505,6 +515,7 @@
 				1DC4A10B86ED7E1EC2AA6C94F55174E9 /* Only.swift in Sources */,
 				BB5EBE73E81367C06DB313135D479662 /* ParentStop.swift in Sources */,
 				762D0B03B54E19B44C707C1DAEEEFD70 /* RestApiManager.swift in Sources */,
+				106A5F761E5C60FA002177DE /* StopTimetable.swift in Sources */,
 				106A5F2F1E4BAB1D002177DE /* Fare.swift in Sources */,
 				F5A7B1A23D70EEE065F5FB69B24B3CB5 /* Stop.swift in Sources */,
 				CBE1ED127EC7145685BAFD99BBBF97A4 /* String+Shortcuts.swift in Sources */,
@@ -515,6 +526,7 @@
 				106A5F301E4BAB1D002177DE /* FareProduct.swift in Sources */,
 				4AB07A35B16F936E21C13735DB44F683 /* TransportApiSdk-dummy.m in Sources */,
 				E9B7BC159C0DFC1E6DD59E33A14ABD2F /* Waypoint.swift in Sources */,
+				10CA99831E5C7D4D0046E650 /* AccessToken.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

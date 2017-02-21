@@ -37,6 +37,7 @@ The following end-points are available:
 * GET api/agencies/{id}
 * GET api/stops
 * GET api/stops/{id}
+* GET api/stops/{id}/timetables
 * GET api/lines
 * GET api/lines/{id}
 * GET api/fareproducts

@@ -15,7 +15,7 @@ internal class RestApiManager: NSObject {
     static let sharedInstance = RestApiManager()
     
     // MARK: Perform a GET Request
-    public func makeHTTPGetRequest(path: String, accessToken: String, query: String, onCompletion: @escaping ServiceResponse) {
+    public func makeHTTPGetRequest(path: String, accessToken: String, timeout: Double, query: String, onCompletion: @escaping ServiceResponse) {
         var queryString = path
         
         if (!query.isEmpty)
@@ -26,7 +26,7 @@ internal class RestApiManager: NSObject {
         
         do
         {
-            let request = try NSMutableURLRequest(url: NSURL(string: queryString)! as URL)
+            let request = try NSMutableURLRequest(url: NSURL(string: queryString)! as URL, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: timeout)
             
             let session = URLSession.shared
             
@@ -52,13 +52,13 @@ internal class RestApiManager: NSObject {
     }
 
     // MARK: Perform a POST Request
-    public func makeHTTPPostRequest(path: String, accessToken: String!, query: String?, json: JSON, onCompletion: @escaping ServiceResponse)
+    public func makeHTTPPostRequest(path: String, accessToken: String!, timeout: Double, query: String?, json: JSON, onCompletion: @escaping ServiceResponse)
     {
         do
         {
             let data = try json.rawString()?.data(using: .utf8)
 
-            try makeHTTPPostRequest(path: path, accessToken: accessToken, query: query, data: data!, onCompletion: { json, err, response in
+            try makeHTTPPostRequest(path: path, accessToken: accessToken, timeout: timeout, query: query, data: data!, onCompletion: { json, err, response in
                 
                 onCompletion(json, err, response)
             })
@@ -71,18 +71,37 @@ internal class RestApiManager: NSObject {
     }
     
     // MARK: Perform a POST Request
-    public func makeHTTPPostRequest(path: String, accessToken: String!, queryUrlEncoded: String, onCompletion: @escaping ServiceResponse)
+    public func makeHTTPPostRequest(path: String, accessToken: String!, timeout: Double, queryUrlEncoded: String, onCompletion: @escaping ServiceResponse)
     {
         let data = queryUrlEncoded.data(using: .utf8)!
         
-        makeHTTPPostRequest(path: path, accessToken: accessToken, query: nil, data: data, onCompletion: { json, err, response in
+        makeHTTPPostRequest(path: path, accessToken: accessToken, timeout: timeout, query: nil, data: data, onCompletion: { json, err, response in
 
             onCompletion(json, err, response)
         })
 
     }
     
-    private func makeHTTPPostRequest(path: String, accessToken: String!, query: String?, data: Data, onCompletion: @escaping ServiceResponse) {
+    public func getErrorCode(error: NSError) -> Int
+    {
+        if (error.code == -1001)
+        {
+            // Timeout
+            return 504
+        }
+        else
+        {
+            // Unknown
+            return 500
+        }
+    }
+    
+    public func getErrorDescription(error: NSError) -> String
+    {
+        return error.localizedDescription
+    }
+    
+    private func makeHTTPPostRequest(path: String, accessToken: String!, timeout: Double, query: String?, data: Data, onCompletion: @escaping ServiceResponse) {
         var queryString = path
         
         if (query != nil)
@@ -91,7 +110,7 @@ internal class RestApiManager: NSObject {
             queryString.append(query!)
         }
         
-        let request = NSMutableURLRequest(url: NSURL(string: queryString)! as URL)
+        let request = NSMutableURLRequest(url: NSURL(string: queryString)! as URL, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: timeout)
         
         // Set the method to POST
         request.httpMethod = "POST"

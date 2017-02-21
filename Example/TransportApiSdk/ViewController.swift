@@ -22,21 +22,21 @@ class ViewController: UIViewController {
     
     @IBAction func requestButton(_ sender: UIButton) {
         //let exclude = "geometry,directions,distance"
-        //let startLocation = CLLocationCoordinate2D(latitude: -25.760938159763594, longitude: 28.23760986328125)
-        //let endLocation = CLLocationCoordinate2D(latitude: -26.02655312878948, longitude: 28.124313354492184)
+        let startLocation = CLLocationCoordinate2D(latitude: -25.760938159763594, longitude: 28.23760986328125)
+        let endLocation = CLLocationCoordinate2D(latitude: -26.02655312878948, longitude: 28.124313354492184)
         //let onlyMode = [TransportMode.Rail]
         //let onlyAgencies = [""]
         
         self.resultTextView.text = "Something amazing is about to happen..."
         
-        /*self.transportApiClient.PostJourney(startLocation: startLocation, endLocation: endLocation)
+        self.transportApiClient.PostJourney(startLocation: startLocation, endLocation: endLocation)
         {
             (result: TransportApiResult<Journey>) in
                 DispatchQueue.main.async
                 {
                     self.resultTextView.text = result.rawJson
                 }
-        }*/
+        }
         
         /*self.transportApiClient.GetJourney(id: "rHfzAvs4Rki3jKccAUoGYA")
         {
@@ -83,6 +83,15 @@ class ViewController: UIViewController {
             }
         }*/
         
+        /*self.transportApiClient.GetStopTimetable(id: "S1twiBqUm0ul6ZMtCnfOcg")
+        {
+            (result: TransportApiResult<[StopTimetable]>) in
+            DispatchQueue.main.async
+                {
+                    self.resultTextView.text = result.rawJson
+            }
+        }*/
+        
         /*self.transportApiClient.GetLines()
          {
             (result: TransportApiResult<[Line]>) in
@@ -101,6 +110,15 @@ class ViewController: UIViewController {
             }
          }*/
         
+        /*self.transportApiClient.GetLineTimetable(id: "giwBPOBfeE-C4acZAI_7uQ")
+        {
+            (result: TransportApiResult<[LineTimetable]>) in
+            DispatchQueue.main.async
+                {
+                    self.resultTextView.text = result.rawJson
+            }
+        }*/
+        
         /*self.transportApiClient.GetFareProducts()
             {
                 (result: TransportApiResult<[FareProduct]>) in
@@ -110,14 +128,14 @@ class ViewController: UIViewController {
                 }
         }*/
         
-        self.transportApiClient.GetFareProduct(id: "BQWEZcffgUGF52ah5E9kJQ")
+        /*self.transportApiClient.GetFareProduct(id: "BQWEZcffgUGF52ah5E9kJQ")
         {
             (result: TransportApiResult<FareProduct>) in
             DispatchQueue.main.async
                 {
                     self.resultTextView.text = result.rawJson
             }
-        }
+        }*/
     }
     
     override func viewDidLoad() {

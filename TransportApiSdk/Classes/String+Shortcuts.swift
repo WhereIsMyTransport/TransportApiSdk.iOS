@@ -82,6 +82,15 @@ extension String {
         return self
     }
     
+    func addString(parameterName: String, value: String?) -> String {
+        if (value != nil)
+        {
+            return self + "&" + parameterName + "=" + value!
+        }
+        
+        return self
+    }
+    
     func addOnlyAgencies(onlyAgencies: [String]?) -> String {
         if (onlyAgencies != nil)
         {
@@ -158,6 +167,15 @@ extension String {
         if (exclude != nil && !exclude!.isEmpty)
         {
             return self + "&exclude=" + exclude!
+        }
+        
+        return self
+    }
+    
+    func addDate(parameterName: String, date: Date?) -> String {
+        if (date != nil)
+        {
+            return self + "&" + parameterName + "=" + date!.iso8601
         }
         
         return self

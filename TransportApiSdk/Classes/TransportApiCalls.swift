@@ -16,6 +16,7 @@ internal class TransportApiCalls
     private static let platformURL = "https://platform.whereismytransport.com/api/"
     
     class func PostJourney(tokenComponent: TokenComponent,
+                           transportApiClientSettings: TransportApiClientSettings,
                            fareProducts: [String]! = nil,
                            onlyAgencies: [String]! = nil,
                            omitAgencies: [String]! = nil,
@@ -31,13 +32,13 @@ internal class TransportApiCalls
                            completion: @escaping (_ result: TransportApiResult<Journey>) -> Void)
     {
         tokenComponent.getAccessToken{
-            (accessToken: String!) in
+            (accessToken: AccessToken) in
             
             let transportApiResult = TransportApiResult<Journey>()
             
-            if (accessToken == nil)
+            if (accessToken.accessToken == nil)
             {
-                transportApiResult.error = tokenComponent.defaultErrorResponse
+                transportApiResult.error = accessToken.error
                 
                 completion(transportApiResult)
                 
@@ -165,25 +166,35 @@ internal class TransportApiCalls
                 .removeFirstCharacter()
             
             RestApiManager.sharedInstance.makeHTTPPostRequest(path: path,
-                                                              accessToken : accessToken,
+                                                              accessToken : accessToken.accessToken,
+                                                              timeout: Double(transportApiClientSettings.TimeoutInSeconds),
                                                               query: query,
                                                               json: json,
                                                               onCompletion: { json, err, response in
                                                                 
-                                                                transportApiResult.httpStatusCode = response?.statusCode
-                                                                if (response?.statusCode != 201)
+                                                                if (err != nil)
                                                                 {
-                                                                    transportApiResult.error = json.rawString()
+                                                                    transportApiResult.httpStatusCode = RestApiManager.sharedInstance.getErrorCode(error: err!)
+                                                                    transportApiResult.error = RestApiManager.sharedInstance.getErrorDescription(error: err!)
+                                                                    transportApiResult.isSuccess = false
                                                                 }
                                                                 else
                                                                 {
-                                                                    let journeyJson = json as JSON
-                                                                    
-                                                                    let jouneysModel = Journey.init(dictionary: NSDictionary(dictionary: journeyJson.dictionaryObject!))
-                                                                    
-                                                                    transportApiResult.rawJson = journeyJson.rawString(options: JSONSerialization.WritingOptions.prettyPrinted)
-                                                                    transportApiResult.isSuccess = true
-                                                                    transportApiResult.Data = jouneysModel
+                                                                    transportApiResult.httpStatusCode = response?.statusCode
+                                                                    if (response?.statusCode != 201)
+                                                                    {
+                                                                        transportApiResult.error = json.rawString()
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        let journeyJson = json as JSON
+                                                                        
+                                                                        let jouneysModel = Journey.init(dictionary: NSDictionary(dictionary: journeyJson.dictionaryObject!))
+                                                                        
+                                                                        transportApiResult.rawJson = journeyJson.rawString(options: JSONSerialization.WritingOptions.prettyPrinted)
+                                                                        transportApiResult.isSuccess = true
+                                                                        transportApiResult.data = jouneysModel
+                                                                    }
                                                                 }
                                                                 
                                                                 completion(transportApiResult)
@@ -192,12 +203,13 @@ internal class TransportApiCalls
     }
     
     class func GetJourney(tokenComponent: TokenComponent,
+                          transportApiClientSettings: TransportApiClientSettings,
                          id: String,
                          exclude: String! = nil,
                          completion: @escaping (_ result: TransportApiResult<Journey>) -> Void)
     {
         tokenComponent.getAccessToken{
-            (accessToken: String!) in
+            (accessToken: AccessToken) in
             
             let transportApiResult = TransportApiResult<Journey>()
             
@@ -210,9 +222,9 @@ internal class TransportApiCalls
                 return
             }
             
-            if (accessToken == nil)
+            if (accessToken.accessToken == nil)
             {
-                transportApiResult.error = tokenComponent.defaultErrorResponse
+                transportApiResult.error = accessToken.error
                 
                 completion(transportApiResult)
                 
@@ -221,28 +233,39 @@ internal class TransportApiCalls
             
             let query = ""
                 .addExclude(exclude: exclude)
+                .removeFirstCharacter()
             
             let path = self.platformURL + "journeys/" + id
             
             RestApiManager.sharedInstance.makeHTTPGetRequest(path: path,
-                                                             accessToken: accessToken,
+                                                             accessToken: accessToken.accessToken,
+                                                             timeout: Double(transportApiClientSettings.TimeoutInSeconds),
                                                              query: query,
                                                              onCompletion: { json, err, response in
                                                                 
-                                                                transportApiResult.httpStatusCode = response?.statusCode
-                                                                if (response?.statusCode != 200)
+                                                                if (err != nil)
                                                                 {
-                                                                    transportApiResult.error = json.rawString()
+                                                                    transportApiResult.httpStatusCode = RestApiManager.sharedInstance.getErrorCode(error: err!)
+                                                                    transportApiResult.error = RestApiManager.sharedInstance.getErrorDescription(error: err!)
+                                                                    transportApiResult.isSuccess = false
                                                                 }
                                                                 else
                                                                 {
-                                                                    let journeyJson = json as JSON
-                                                                    
-                                                                    let jouneysModel = Journey.init(dictionary: NSDictionary(dictionary: journeyJson.dictionaryObject!))
-                                                                    
-                                                                    transportApiResult.rawJson = journeyJson.rawString(options: JSONSerialization.WritingOptions.prettyPrinted)
-                                                                    transportApiResult.isSuccess = true
-                                                                    transportApiResult.Data = jouneysModel
+                                                                    transportApiResult.httpStatusCode = response?.statusCode
+                                                                    if (response?.statusCode != 200)
+                                                                    {
+                                                                        transportApiResult.error = json.rawString()
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        let journeyJson = json as JSON
+                                                                        
+                                                                        let jouneysModel = Journey.init(dictionary: NSDictionary(dictionary: journeyJson.dictionaryObject!))
+                                                                        
+                                                                        transportApiResult.rawJson = journeyJson.rawString(options: JSONSerialization.WritingOptions.prettyPrinted)
+                                                                        transportApiResult.isSuccess = true
+                                                                        transportApiResult.data = jouneysModel
+                                                                    }
                                                                 }
                                                                 
                                                                 completion(transportApiResult)
@@ -251,6 +274,7 @@ internal class TransportApiCalls
     }
 
     class func GetAgencies(tokenComponent: TokenComponent,
+                           transportApiClientSettings: TransportApiClientSettings,
                             onlyAgencies: [String]! = nil,
                             omitAgencies: [String]! = nil,
                             location: CLLocationCoordinate2D! = nil,
@@ -262,13 +286,13 @@ internal class TransportApiCalls
                             completion: @escaping (_ result: TransportApiResult<[Agency]>) -> Void)
     {
         tokenComponent.getAccessToken{
-            (accessToken: String!) in
+            (accessToken: AccessToken) in
             
             let transportApiResult = TransportApiResult<[Agency]>()
             
-            if (accessToken == nil)
+            if (accessToken.accessToken == nil)
             {
-                transportApiResult.error = tokenComponent.defaultErrorResponse
+                transportApiResult.error = accessToken.error
                 
                 completion(transportApiResult)
                 
@@ -328,26 +352,36 @@ internal class TransportApiCalls
                 .removeFirstCharacter()
             
             RestApiManager.sharedInstance.makeHTTPGetRequest(path: path,
-                                                             accessToken: accessToken,
+                                                             accessToken: accessToken.accessToken,
+                                                             timeout: Double(transportApiClientSettings.TimeoutInSeconds),
                                                              query: query,
                                                              onCompletion: { json, err, response in
                                                                 
-                                                                transportApiResult.httpStatusCode = response?.statusCode
-                                                                if (response?.statusCode != 200)
+                                                                if (err != nil)
                                                                 {
-                                                                    transportApiResult.error = json.rawString()
+                                                                    transportApiResult.httpStatusCode = RestApiManager.sharedInstance.getErrorCode(error: err!)
+                                                                    transportApiResult.error = RestApiManager.sharedInstance.getErrorDescription(error: err!)
+                                                                    transportApiResult.isSuccess = false
                                                                 }
                                                                 else
                                                                 {
-                                                                    let agenciesJson = json as JSON
-                                                                    
-                                                                    let agenciesArray = agenciesJson.arrayObject as! NSArray
-                                                                    
-                                                                    let agenciesModel = Agency.modelsFromDictionaryArray(array: agenciesArray)
-                                                                    
-                                                                    transportApiResult.rawJson = json.rawString(options: JSONSerialization.WritingOptions.prettyPrinted)
-                                                                    transportApiResult.isSuccess = true
-                                                                    transportApiResult.Data = agenciesModel
+                                                                    transportApiResult.httpStatusCode = response?.statusCode
+                                                                    if (response?.statusCode != 200)
+                                                                    {
+                                                                        transportApiResult.error = json.rawString()
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        let agenciesJson = json as JSON
+                                                                        
+                                                                        let agenciesArray = agenciesJson.arrayObject as! NSArray
+                                                                        
+                                                                        let agenciesModel = Agency.modelsFromDictionaryArray(array: agenciesArray)
+                                                                        
+                                                                        transportApiResult.rawJson = json.rawString(options: JSONSerialization.WritingOptions.prettyPrinted)
+                                                                        transportApiResult.isSuccess = true
+                                                                        transportApiResult.data = agenciesModel
+                                                                    }
                                                                 }
                                                                 
                                                                 completion(transportApiResult)
@@ -356,12 +390,13 @@ internal class TransportApiCalls
     }
     
     class func GetAgency(tokenComponent: TokenComponent,
+        transportApiClientSettings: TransportApiClientSettings,
         id: String,
         exclude: String! = nil,
         completion: @escaping (_ result: TransportApiResult<Agency>) -> Void)
     {
         tokenComponent.getAccessToken{
-            (accessToken: String!) in
+            (accessToken: AccessToken) in
             
             let transportApiResult = TransportApiResult<Agency>()
             
@@ -374,9 +409,9 @@ internal class TransportApiCalls
                 return
             }
             
-            if (accessToken == nil)
+            if (accessToken.accessToken == nil)
             {
-                transportApiResult.error = tokenComponent.defaultErrorResponse
+                transportApiResult.error = accessToken.error
                 
                 completion(transportApiResult)
                 
@@ -385,30 +420,41 @@ internal class TransportApiCalls
             
             let query = ""
                 .addExclude(exclude: exclude)
+                .removeFirstCharacter()
             
             let path = self.platformURL + "agencies/" + id
             
             RestApiManager.sharedInstance.makeHTTPGetRequest(path: path,
-                                                             accessToken: accessToken,
+                                                             accessToken: accessToken.accessToken,
+                                                             timeout: Double(transportApiClientSettings.TimeoutInSeconds),
                                                              query: query,
                                                              onCompletion: { json, err, response in
                                                                 
-                                                                transportApiResult.httpStatusCode = response?.statusCode
-                                                                if (response?.statusCode != 200)
+                                                                if (err != nil)
                                                                 {
-                                                                    transportApiResult.error = json.rawString()
+                                                                    transportApiResult.httpStatusCode = RestApiManager.sharedInstance.getErrorCode(error: err!)
+                                                                    transportApiResult.error = RestApiManager.sharedInstance.getErrorDescription(error: err!)
+                                                                    transportApiResult.isSuccess = false
                                                                 }
                                                                 else
                                                                 {
-                                                                    let agencyJson = json as JSON
-                                    
-                                                                    let agencyDict = agencyJson.dictionaryObject as! NSDictionary
-                                                                   
-                                                                    let agencyModel = Agency(dictionary: agencyDict)
-                                                                    
-                                                                    transportApiResult.rawJson = json.rawString(options: JSONSerialization.WritingOptions.prettyPrinted)
-                                                                    transportApiResult.isSuccess = true
-                                                                    transportApiResult.Data = agencyModel
+                                                                    transportApiResult.httpStatusCode = response?.statusCode
+                                                                    if (response?.statusCode != 200)
+                                                                    {
+                                                                        transportApiResult.error = json.rawString()
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        let agencyJson = json as JSON
+                                        
+                                                                        let agencyDict = agencyJson.dictionaryObject as! NSDictionary
+                                                                       
+                                                                        let agencyModel = Agency(dictionary: agencyDict)
+                                                                        
+                                                                        transportApiResult.rawJson = json.rawString(options: JSONSerialization.WritingOptions.prettyPrinted)
+                                                                        transportApiResult.isSuccess = true
+                                                                        transportApiResult.data = agencyModel
+                                                                    }
                                                                 }
                                                                 
                                                                 completion(transportApiResult)
@@ -417,6 +463,7 @@ internal class TransportApiCalls
     }
     
     class func GetStops(tokenComponent: TokenComponent,
+                        transportApiClientSettings: TransportApiClientSettings,
                            onlyAgencies: [String]! = nil,
                            omitAgencies: [String]! = nil,
                            limitModes: [TransportMode]! = nil,
@@ -431,13 +478,13 @@ internal class TransportApiCalls
                            completion: @escaping (_ result: TransportApiResult<[Stop]>) -> Void)
     {
         tokenComponent.getAccessToken{
-            (accessToken: String!) in
+            (accessToken: AccessToken) in
             
             let transportApiResult = TransportApiResult<[Stop]>()
             
-            if (accessToken == nil)
+            if (accessToken.accessToken == nil)
             {
-                transportApiResult.error = tokenComponent.defaultErrorResponse
+                transportApiResult.error = accessToken.error
                 
                 completion(transportApiResult)
                 
@@ -500,26 +547,36 @@ internal class TransportApiCalls
                 .removeFirstCharacter()
             
             RestApiManager.sharedInstance.makeHTTPGetRequest(path: path,
-                                                             accessToken: accessToken,
+                                                             accessToken: accessToken.accessToken,
+                                                             timeout: Double(transportApiClientSettings.TimeoutInSeconds),
                                                              query: query,
                                                              onCompletion: { json, err, response in
                                                                 
-                                                                transportApiResult.httpStatusCode = response?.statusCode
-                                                                if (response?.statusCode != 200)
+                                                                if (err != nil)
                                                                 {
-                                                                    transportApiResult.error = json.rawString()
+                                                                    transportApiResult.httpStatusCode = RestApiManager.sharedInstance.getErrorCode(error: err!)
+                                                                    transportApiResult.error = RestApiManager.sharedInstance.getErrorDescription(error: err!)
+                                                                    transportApiResult.isSuccess = false
                                                                 }
                                                                 else
                                                                 {
-                                                                    let stopsJson = json as JSON
-                                                                    
-                                                                    let stopsArray = stopsJson.arrayObject as! NSArray
-                                                                    
-                                                                    let stopsModel = Stop.modelsFromDictionaryArray(array: stopsArray)
-                                                                    
-                                                                    transportApiResult.rawJson = json.rawString(options: JSONSerialization.WritingOptions.prettyPrinted)
-                                                                    transportApiResult.isSuccess = true
-                                                                    transportApiResult.Data = stopsModel
+                                                                    transportApiResult.httpStatusCode = response?.statusCode
+                                                                    if (response?.statusCode != 200)
+                                                                    {
+                                                                        transportApiResult.error = json.rawString()
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        let stopsJson = json as JSON
+                                                                        
+                                                                        let stopsArray = stopsJson.arrayObject as! NSArray
+                                                                        
+                                                                        let stopsModel = Stop.modelsFromDictionaryArray(array: stopsArray)
+                                                                        
+                                                                        transportApiResult.rawJson = json.rawString(options: JSONSerialization.WritingOptions.prettyPrinted)
+                                                                        transportApiResult.isSuccess = true
+                                                                        transportApiResult.data = stopsModel
+                                                                    }
                                                                 }
                                                                 
                                                                 completion(transportApiResult)
@@ -528,12 +585,13 @@ internal class TransportApiCalls
     }
     
     class func GetStop(tokenComponent: TokenComponent,
+                       transportApiClientSettings: TransportApiClientSettings,
                          id: String,
                          exclude: String! = nil,
                          completion: @escaping (_ result: TransportApiResult<Stop>) -> Void)
     {
         tokenComponent.getAccessToken{
-            (accessToken: String!) in
+            (accessToken: AccessToken) in
             
             let transportApiResult = TransportApiResult<Stop>()
             
@@ -546,9 +604,9 @@ internal class TransportApiCalls
                 return
             }
             
-            if (accessToken == nil)
+            if (accessToken.accessToken == nil)
             {
-                transportApiResult.error = tokenComponent.defaultErrorResponse
+                transportApiResult.error = accessToken.error
                 
                 completion(transportApiResult)
                 
@@ -557,30 +615,41 @@ internal class TransportApiCalls
             
             let query = ""
                 .addExclude(exclude: exclude)
+                .removeFirstCharacter()
             
             let path = self.platformURL + "stops/" + id
             
             RestApiManager.sharedInstance.makeHTTPGetRequest(path: path,
-                                                             accessToken: accessToken,
+                                                             accessToken: accessToken.accessToken,
+                                                             timeout: Double(transportApiClientSettings.TimeoutInSeconds),
                                                              query: query,
                                                              onCompletion: { json, err, response in
                                                                 
-                                                                transportApiResult.httpStatusCode = response?.statusCode
-                                                                if (response?.statusCode != 200)
+                                                                if (err != nil)
                                                                 {
-                                                                    transportApiResult.error = json.rawString()
+                                                                    transportApiResult.httpStatusCode = RestApiManager.sharedInstance.getErrorCode(error: err!)
+                                                                    transportApiResult.error = RestApiManager.sharedInstance.getErrorDescription(error: err!)
+                                                                    transportApiResult.isSuccess = false
                                                                 }
                                                                 else
                                                                 {
-                                                                    let stopJson = json as JSON
-                                                                    
-                                                                    let stopDict = stopJson.dictionaryObject as! NSDictionary
-                                                                    
-                                                                    let stopModel = Stop.init(dictionary: stopDict)
-                                                                    
-                                                                    transportApiResult.rawJson = json.rawString(options: JSONSerialization.WritingOptions.prettyPrinted)
-                                                                    transportApiResult.isSuccess = true
-                                                                    transportApiResult.Data = stopModel
+                                                                    transportApiResult.httpStatusCode = response?.statusCode
+                                                                    if (response?.statusCode != 200)
+                                                                    {
+                                                                        transportApiResult.error = json.rawString()
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        let stopJson = json as JSON
+                                                                        
+                                                                        let stopDict = stopJson.dictionaryObject as! NSDictionary
+                                                                        
+                                                                        let stopModel = Stop.init(dictionary: stopDict)
+                                                                        
+                                                                        transportApiResult.rawJson = json.rawString(options: JSONSerialization.WritingOptions.prettyPrinted)
+                                                                        transportApiResult.isSuccess = true
+                                                                        transportApiResult.data = stopModel
+                                                                    }
                                                                 }
                                                                 
                                                                 completion(transportApiResult)
@@ -589,6 +658,7 @@ internal class TransportApiCalls
     }
 
     class func GetLines(tokenComponent: TokenComponent,
+                        transportApiClientSettings: TransportApiClientSettings,
                         onlyAgencies: [String]! = nil,
                         omitAgencies: [String]! = nil,
                         limitModes: [TransportMode]! = nil,
@@ -602,13 +672,13 @@ internal class TransportApiCalls
                         completion: @escaping (_ result: TransportApiResult<[Line]>) -> Void)
     {
         tokenComponent.getAccessToken{
-            (accessToken: String!) in
+            (accessToken: AccessToken) in
             
             let transportApiResult = TransportApiResult<[Line]>()
             
-            if (accessToken == nil)
+            if (accessToken.accessToken == nil)
             {
-                transportApiResult.error = tokenComponent.defaultErrorResponse
+                transportApiResult.error = accessToken.error
                 
                 completion(transportApiResult)
                 
@@ -670,26 +740,36 @@ internal class TransportApiCalls
                 .removeFirstCharacter()
             
             RestApiManager.sharedInstance.makeHTTPGetRequest(path: path,
-                                                             accessToken: accessToken,
+                                                             accessToken: accessToken.accessToken,
+                                                             timeout: Double(transportApiClientSettings.TimeoutInSeconds),
                                                              query: query,
                                                              onCompletion: { json, err, response in
                                                                 
-                                                                transportApiResult.httpStatusCode = response?.statusCode
-                                                                if (response?.statusCode != 200)
+                                                                if (err != nil)
                                                                 {
-                                                                    transportApiResult.error = json.rawString()
+                                                                    transportApiResult.httpStatusCode = RestApiManager.sharedInstance.getErrorCode(error: err!)
+                                                                    transportApiResult.error = RestApiManager.sharedInstance.getErrorDescription(error: err!)
+                                                                    transportApiResult.isSuccess = false
                                                                 }
                                                                 else
                                                                 {
-                                                                    let linesJson = json as JSON
-                                                                    
-                                                                    let linesArray = linesJson.arrayObject as! NSArray
-                                                                    
-                                                                    let linesModel = Line.modelsFromDictionaryArray(array: linesArray)
-                                                                    
-                                                                    transportApiResult.rawJson = json.rawString(options: JSONSerialization.WritingOptions.prettyPrinted)
-                                                                    transportApiResult.isSuccess = true
-                                                                    transportApiResult.Data = linesModel
+                                                                    transportApiResult.httpStatusCode = response?.statusCode
+                                                                    if (response?.statusCode != 200)
+                                                                    {
+                                                                        transportApiResult.error = json.rawString()
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        let linesJson = json as JSON
+                                                                        
+                                                                        let linesArray = linesJson.arrayObject as! NSArray
+                                                                        
+                                                                        let linesModel = Line.modelsFromDictionaryArray(array: linesArray)
+                                                                        
+                                                                        transportApiResult.rawJson = json.rawString(options: JSONSerialization.WritingOptions.prettyPrinted)
+                                                                        transportApiResult.isSuccess = true
+                                                                        transportApiResult.data = linesModel
+                                                                    }
                                                                 }
                                                                 
                                                                 completion(transportApiResult)
@@ -698,12 +778,13 @@ internal class TransportApiCalls
     }
 
     class func GetLine(tokenComponent: TokenComponent,
+                       transportApiClientSettings: TransportApiClientSettings,
                        id: String,
                        exclude: String! = nil,
                        completion: @escaping (_ result: TransportApiResult<Line>) -> Void)
     {
         tokenComponent.getAccessToken{
-            (accessToken: String!) in
+            (accessToken: AccessToken) in
             
             let transportApiResult = TransportApiResult<Line>()
             
@@ -716,9 +797,9 @@ internal class TransportApiCalls
                 return
             }
             
-            if (accessToken == nil)
+            if (accessToken.accessToken == nil)
             {
-                transportApiResult.error = tokenComponent.defaultErrorResponse
+                transportApiResult.error = accessToken.error
                 
                 completion(transportApiResult)
                 
@@ -727,30 +808,41 @@ internal class TransportApiCalls
             
             let query = ""
                 .addExclude(exclude: exclude)
+                .removeFirstCharacter()
             
             let path = self.platformURL + "lines/" + id
             
             RestApiManager.sharedInstance.makeHTTPGetRequest(path: path,
-                                                             accessToken: accessToken,
+                                                             accessToken: accessToken.accessToken,
+                                                             timeout: Double(transportApiClientSettings.TimeoutInSeconds),
                                                              query: query,
                                                              onCompletion: { json, err, response in
                                                                 
-                                                                transportApiResult.httpStatusCode = response?.statusCode
-                                                                if (response?.statusCode != 200)
+                                                                if (err != nil)
                                                                 {
-                                                                    transportApiResult.error = json.rawString()
+                                                                    transportApiResult.httpStatusCode = RestApiManager.sharedInstance.getErrorCode(error: err!)
+                                                                    transportApiResult.error = RestApiManager.sharedInstance.getErrorDescription(error: err!)
+                                                                    transportApiResult.isSuccess = false
                                                                 }
                                                                 else
                                                                 {
-                                                                    let lineJson = json as JSON
-                                                                    
-                                                                    let lineDict = lineJson.dictionaryObject as! NSDictionary
-                                                                    
-                                                                    let lineModel = Line.init(dictionary: lineDict)
-                                                                    
-                                                                    transportApiResult.rawJson = json.rawString(options: JSONSerialization.WritingOptions.prettyPrinted)
-                                                                    transportApiResult.isSuccess = true
-                                                                    transportApiResult.Data = lineModel
+                                                                    transportApiResult.httpStatusCode = response?.statusCode
+                                                                    if (response?.statusCode != 200)
+                                                                    {
+                                                                        transportApiResult.error = json.rawString()
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        let lineJson = json as JSON
+                                                                        
+                                                                        let lineDict = lineJson.dictionaryObject as! NSDictionary
+                                                                        
+                                                                        let lineModel = Line.init(dictionary: lineDict)
+                                                                        
+                                                                        transportApiResult.rawJson = json.rawString(options: JSONSerialization.WritingOptions.prettyPrinted)
+                                                                        transportApiResult.isSuccess = true
+                                                                        transportApiResult.data = lineModel
+                                                                    }
                                                                 }
                                                                 
                                                                 completion(transportApiResult)
@@ -759,6 +851,7 @@ internal class TransportApiCalls
     }
 
     class func GetFareProducts(tokenComponent: TokenComponent,
+                               transportApiClientSettings: TransportApiClientSettings,
                         onlyAgencies: [String]! = nil,
                         omitAgencies: [String]! = nil,
                         exclude: String! = nil,
@@ -767,13 +860,13 @@ internal class TransportApiCalls
                         completion: @escaping (_ result: TransportApiResult<[FareProduct]>) -> Void)
     {
         tokenComponent.getAccessToken{
-            (accessToken: String!) in
+            (accessToken: AccessToken) in
             
             let transportApiResult = TransportApiResult<[FareProduct]>()
             
-            if (accessToken == nil)
+            if (accessToken.accessToken == nil)
             {
-                transportApiResult.error = tokenComponent.defaultErrorResponse
+                transportApiResult.error = accessToken.error
                 
                 completion(transportApiResult)
                 
@@ -809,26 +902,36 @@ internal class TransportApiCalls
                 .removeFirstCharacter()
             
             RestApiManager.sharedInstance.makeHTTPGetRequest(path: path,
-                                                             accessToken: accessToken,
+                                                             accessToken: accessToken.accessToken,
+                                                             timeout: Double(transportApiClientSettings.TimeoutInSeconds),
                                                              query: query,
                                                              onCompletion: { json, err, response in
                                                                 
-                                                                transportApiResult.httpStatusCode = response?.statusCode
-                                                                if (response?.statusCode != 200)
+                                                                if (err != nil)
                                                                 {
-                                                                    transportApiResult.error = json.rawString()
+                                                                    transportApiResult.httpStatusCode = RestApiManager.sharedInstance.getErrorCode(error: err!)
+                                                                    transportApiResult.error = RestApiManager.sharedInstance.getErrorDescription(error: err!)
+                                                                    transportApiResult.isSuccess = false
                                                                 }
                                                                 else
                                                                 {
-                                                                    let fareProductsJson = json as JSON
-                                                                    
-                                                                    let fareProductsArray = fareProductsJson.arrayObject as! NSArray
-                                                                    
-                                                                    let fareProductsModel = FareProduct.modelsFromDictionaryArray(array: fareProductsArray)
-                                                                    
-                                                                    transportApiResult.rawJson = json.rawString(options: JSONSerialization.WritingOptions.prettyPrinted)
-                                                                    transportApiResult.isSuccess = true
-                                                                    transportApiResult.Data = fareProductsModel
+                                                                    transportApiResult.httpStatusCode = response?.statusCode
+                                                                    if (response?.statusCode != 200)
+                                                                    {
+                                                                        transportApiResult.error = json.rawString()
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        let fareProductsJson = json as JSON
+                                                                        
+                                                                        let fareProductsArray = fareProductsJson.arrayObject as! NSArray
+                                                                        
+                                                                        let fareProductsModel = FareProduct.modelsFromDictionaryArray(array: fareProductsArray)
+                                                                        
+                                                                        transportApiResult.rawJson = json.rawString(options: JSONSerialization.WritingOptions.prettyPrinted)
+                                                                        transportApiResult.isSuccess = true
+                                                                        transportApiResult.data = fareProductsModel
+                                                                    }
                                                                 }
                                                                 
                                                                 completion(transportApiResult)
@@ -837,12 +940,13 @@ internal class TransportApiCalls
     }
 
     class func GetFareProduct(tokenComponent: TokenComponent,
+                              transportApiClientSettings: TransportApiClientSettings,
                        id: String,
                        exclude: String! = nil,
                        completion: @escaping (_ result: TransportApiResult<FareProduct>) -> Void)
     {
         tokenComponent.getAccessToken{
-            (accessToken: String!) in
+            (accessToken: AccessToken) in
             
             let transportApiResult = TransportApiResult<FareProduct>()
             
@@ -855,9 +959,9 @@ internal class TransportApiCalls
                 return
             }
             
-            if (accessToken == nil)
+            if (accessToken.accessToken == nil)
             {
-                transportApiResult.error = tokenComponent.defaultErrorResponse
+                transportApiResult.error = accessToken.error
                 
                 completion(transportApiResult)
                 
@@ -866,30 +970,41 @@ internal class TransportApiCalls
             
             let query = ""
                 .addExclude(exclude: exclude)
+                .removeFirstCharacter()
             
             let path = self.platformURL + "fareproducts/" + id
             
             RestApiManager.sharedInstance.makeHTTPGetRequest(path: path,
-                                                             accessToken: accessToken,
+                                                             accessToken: accessToken.accessToken,
+                                                             timeout: Double(transportApiClientSettings.TimeoutInSeconds),
                                                              query: query,
                                                              onCompletion: { json, err, response in
                                                                 
-                                                                transportApiResult.httpStatusCode = response?.statusCode
-                                                                if (response?.statusCode != 200)
+                                                                if (err != nil)
                                                                 {
-                                                                    transportApiResult.error = json.rawString()
+                                                                    transportApiResult.httpStatusCode = RestApiManager.sharedInstance.getErrorCode(error: err!)
+                                                                    transportApiResult.error = RestApiManager.sharedInstance.getErrorDescription(error: err!)
+                                                                    transportApiResult.isSuccess = false
                                                                 }
                                                                 else
                                                                 {
-                                                                    let fareProductJson = json as JSON
-                                                                    
-                                                                    let fareProductDict = fareProductJson.dictionaryObject as! NSDictionary
-                                                                    
-                                                                    let fareProductModel = FareProduct.init(dictionary: fareProductDict)
-                                                                    
-                                                                    transportApiResult.rawJson = json.rawString(options: JSONSerialization.WritingOptions.prettyPrinted)
-                                                                    transportApiResult.isSuccess = true
-                                                                    transportApiResult.Data = fareProductModel
+                                                                    transportApiResult.httpStatusCode = response?.statusCode
+                                                                    if (response?.statusCode != 200)
+                                                                    {
+                                                                        transportApiResult.error = json.rawString()
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        let fareProductJson = json as JSON
+                                                                        
+                                                                        let fareProductDict = fareProductJson.dictionaryObject as! NSDictionary
+                                                                        
+                                                                        let fareProductModel = FareProduct.init(dictionary: fareProductDict)
+                                                                        
+                                                                        transportApiResult.rawJson = json.rawString(options: JSONSerialization.WritingOptions.prettyPrinted)
+                                                                        transportApiResult.isSuccess = true
+                                                                        transportApiResult.data = fareProductModel
+                                                                }
                                                                 }
                                                                 
                                                                 completion(transportApiResult)
@@ -897,4 +1012,169 @@ internal class TransportApiCalls
         }
     }
     
+    class func GetStopTimetable(
+        tokenComponent: TokenComponent,
+        transportApiClientSettings: TransportApiClientSettings,
+        id: String,
+        earliestArrivalTime: Date! = nil,
+        latestArrivalTime: Date! = nil,
+        limit: Int = 100,
+        offset: Int = 0,
+        exclude: String! = nil,
+        completion: @escaping (_ result: TransportApiResult<[StopTimetable]>) -> Void)
+    {
+        tokenComponent.getAccessToken{
+            (accessToken: AccessToken) in
+            
+            let transportApiResult = TransportApiResult<[StopTimetable]>()
+            
+            if (id.isEmpty)
+            {
+                transportApiResult.error = "StopId is required."
+                
+                completion(transportApiResult)
+                
+                return
+            }
+            
+            if (accessToken.accessToken == nil)
+            {
+                transportApiResult.error = accessToken.error
+                
+                completion(transportApiResult)
+                
+                return
+            }
+            
+            let query = ""
+                .addExclude(exclude: exclude)
+                .addDate(parameterName: "earliestArrivalTime", date: earliestArrivalTime)
+                .addDate(parameterName: "latestArrivalTime", date: latestArrivalTime)
+                .addLimit(limit: limit)
+                .addOffset(offset: offset)
+                .removeFirstCharacter()
+            
+            let path = self.platformURL + "stops/" + id + "/timetables"
+            
+            RestApiManager.sharedInstance.makeHTTPGetRequest(path: path,
+                                                             accessToken: accessToken.accessToken,
+                                                             timeout: Double(transportApiClientSettings.TimeoutInSeconds),
+                                                             query: query,
+                                                             onCompletion: { json, err, response in
+                                                                
+                                                                if (err != nil)
+                                                                {
+                                                                    transportApiResult.httpStatusCode = RestApiManager.sharedInstance.getErrorCode(error: err!)
+                                                                    transportApiResult.error = RestApiManager.sharedInstance.getErrorDescription(error: err!)
+                                                                    transportApiResult.isSuccess = false
+                                                                }
+                                                                else
+                                                                {
+                                                                    transportApiResult.httpStatusCode = response?.statusCode
+                                                                    if (response?.statusCode != 200)
+                                                                    {
+                                                                        transportApiResult.error = json.rawString()
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        let stopTimetableJson = json as JSON
+                                                                        
+                                                                        let stopTimetableArray = stopTimetableJson.arrayObject as! NSArray
+                                                                        
+                                                                        let stopTimetableModel = StopTimetable.modelsFromDictionaryArray(array: stopTimetableArray)
+
+                                                                        transportApiResult.rawJson = json.rawString(options: JSONSerialization.WritingOptions.prettyPrinted)
+                                                                        transportApiResult.isSuccess = true
+                                                                        transportApiResult.data = stopTimetableModel
+                                                                    }
+                                                                }
+                                                                
+                                                                completion(transportApiResult)
+            })
+        }
+    }
+
+    class func GetLineTimetable(tokenComponent: TokenComponent,
+                                transportApiClientSettings: TransportApiClientSettings,
+                                id: String,
+                                departureStopIdFilter: String! = nil,
+                                arrivalStopIdFilter: String! = nil,
+                                earliestDepartureTime: Date! = nil,
+                                latestDepartureTime: Date! = nil,
+                                limit: Int = 100,
+                                offset: Int = 0,
+                                exclude: String! = nil,
+                                completion: @escaping (_ result: TransportApiResult<[LineTimetable]>) -> Void)
+    {
+        tokenComponent.getAccessToken{
+            (accessToken: AccessToken) in
+            
+            let transportApiResult = TransportApiResult<[LineTimetable]>()
+            
+            if (id.isEmpty)
+            {
+                transportApiResult.error = "LineId is required."
+                
+                completion(transportApiResult)
+                
+                return
+            }
+            
+            if (accessToken.accessToken == nil)
+            {
+                transportApiResult.error = accessToken.error
+                
+                completion(transportApiResult)
+                
+                return
+            }
+            
+            let query = ""
+                .addDate(parameterName: "earliestDepartureTime", date: earliestDepartureTime)
+                .addDate(parameterName: "latestDepartureTime", date: latestDepartureTime)
+                .addString(parameterName: "departureStopIdFilter", value: departureStopIdFilter)
+                .addString(parameterName: "arrivalStopIdFilter", value: arrivalStopIdFilter)
+                .addExclude(exclude: exclude)
+                .addLimit(limit: limit)
+                .addOffset(offset: offset)
+                .removeFirstCharacter()
+            
+            let path = self.platformURL + "lines/" + id + "/timetables"
+            
+            RestApiManager.sharedInstance.makeHTTPGetRequest(path: path,
+                                                             accessToken: accessToken.accessToken,
+                                                             timeout: Double(transportApiClientSettings.TimeoutInSeconds),
+                                                             query: query,
+                                                             onCompletion: { json, err, response in
+                                                                
+                                                                if (err != nil)
+                                                                {
+                                                                    transportApiResult.httpStatusCode = RestApiManager.sharedInstance.getErrorCode(error: err!)
+                                                                    transportApiResult.error = RestApiManager.sharedInstance.getErrorDescription(error: err!)
+                                                                    transportApiResult.isSuccess = false
+                                                                }
+                                                                else
+                                                                {
+                                                                    transportApiResult.httpStatusCode = response?.statusCode
+                                                                    if (response?.statusCode != 200)
+                                                                    {
+                                                                        transportApiResult.error = json.rawString()
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        let lineTimetableJson = json as JSON
+                                                                        
+                                                                        let lineTimetableArray = lineTimetableJson.arrayObject as! NSArray
+                                                                        
+                                                                        let lineTimetableModel = LineTimetable.modelsFromDictionaryArray(array: lineTimetableArray)
+                                                                        
+                                                                        transportApiResult.rawJson = json.rawString(options: JSONSerialization.WritingOptions.prettyPrinted)
+                                                                        transportApiResult.isSuccess = true
+                                                                        transportApiResult.data = lineTimetableModel
+                                                                    }
+                                                                }
+                                                                completion(transportApiResult)
+            })
+        }
+    }
 }

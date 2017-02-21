@@ -14,7 +14,7 @@ public class TransportApiResult<T>
     public var isSuccess: Bool
     public var error: String!
     public var rawJson: String!
-    public var Data: T!
+    public var data: T!
 
     public init()
     {

@@ -38,6 +38,7 @@ public class TransportApiClient
                             completion: @escaping (_ result: TransportApiResult<Journey>) -> Void)
     {
         TransportApiCalls.PostJourney(tokenComponent: self.tokenComponent,
+                                      transportApiClientSettings: self.transportApiClientSettings,
                                       fareProducts: fareProducts,
                                       onlyAgencies: onlyAgencies,
                                       omitAgencies: omitAgencies,
@@ -62,7 +63,8 @@ public class TransportApiClient
         completion: @escaping (_ result: TransportApiResult<Journey>) -> Void)
     {
         TransportApiCalls.GetJourney(tokenComponent: self.tokenComponent,
-                                    id: id,
+                                     transportApiClientSettings: self.transportApiClientSettings,
+                                     id: id,
                                     exclude: exclude)
         {
             (result: TransportApiResult<Journey>) in
@@ -78,6 +80,7 @@ public class TransportApiClient
                                   completion: @escaping (_ result: TransportApiResult<[Agency]>) -> Void)
     {
         TransportApiCalls.GetAgencies(tokenComponent: self.tokenComponent,
+                                      transportApiClientSettings: self.transportApiClientSettings,
                                       onlyAgencies: onlyAgencies,
                                       omitAgencies: omitAgencies,
                                       exclude: exclude,
@@ -100,6 +103,7 @@ public class TransportApiClient
                             completion: @escaping (_ result: TransportApiResult<[Agency]>) -> Void)
     {
         TransportApiCalls.GetAgencies(tokenComponent: self.tokenComponent,
+                                      transportApiClientSettings: self.transportApiClientSettings,
                                       onlyAgencies: onlyAgencies,
                                       omitAgencies: omitAgencies,
                                       location: location,
@@ -122,6 +126,7 @@ public class TransportApiClient
                                   completion: @escaping (_ result: TransportApiResult<[Agency]>) -> Void)
     {
         TransportApiCalls.GetAgencies(tokenComponent: self.tokenComponent,
+                                      transportApiClientSettings: self.transportApiClientSettings,
                                       onlyAgencies: onlyAgencies,
                                       omitAgencies: omitAgencies,
                                       boundingBox: boundingBox,
@@ -140,7 +145,8 @@ public class TransportApiClient
         completion: @escaping (_ result: TransportApiResult<Agency>) -> Void)
     {
         TransportApiCalls.GetAgency(tokenComponent: self.tokenComponent,
-                                      id: id,
+                                    transportApiClientSettings: self.transportApiClientSettings,
+                                    id: id,
                                       exclude: exclude)
         {
             (result: TransportApiResult<Agency>) in
@@ -159,7 +165,8 @@ public class TransportApiClient
                             completion: @escaping (_ result: TransportApiResult<[Stop]>) -> Void)
     {
         TransportApiCalls.GetStops(tokenComponent: self.tokenComponent,
-                                      onlyAgencies: onlyAgencies,
+                                   transportApiClientSettings: self.transportApiClientSettings,
+                                   onlyAgencies: onlyAgencies,
                                       omitAgencies: omitAgencies,
                                       limitModes: limitModes,
                                       servesLines: servesLines,
@@ -187,7 +194,8 @@ public class TransportApiClient
                                   completion: @escaping (_ result: TransportApiResult<[Stop]>) -> Void)
     {
         TransportApiCalls.GetStops(tokenComponent: self.tokenComponent,
-                                      onlyAgencies: onlyAgencies,
+                                   transportApiClientSettings: self.transportApiClientSettings,
+                                   onlyAgencies: onlyAgencies,
                                       omitAgencies: omitAgencies,
                                       limitModes: limitModes,
                                       servesLines: servesLines,
@@ -215,7 +223,8 @@ public class TransportApiClient
                                          completion: @escaping (_ result: TransportApiResult<[Stop]>) -> Void)
     {
         TransportApiCalls.GetStops(tokenComponent: self.tokenComponent,
-                                      onlyAgencies: onlyAgencies,
+                                   transportApiClientSettings: self.transportApiClientSettings,
+                                   onlyAgencies: onlyAgencies,
                                       omitAgencies: omitAgencies,
                                       limitModes: limitModes,
                                       servesLines: servesLines,
@@ -236,7 +245,8 @@ public class TransportApiClient
         completion: @escaping (_ result: TransportApiResult<Stop>) -> Void)
     {
         TransportApiCalls.GetStop(tokenComponent: self.tokenComponent,
-                                    id: id,
+                                  transportApiClientSettings: self.transportApiClientSettings,
+                                  id: id,
                                     exclude: exclude)
         {
             (result: TransportApiResult<Stop>) in
@@ -254,6 +264,7 @@ public class TransportApiClient
                          completion: @escaping (_ result: TransportApiResult<[Line]>) -> Void)
     {
         TransportApiCalls.GetLines(tokenComponent: self.tokenComponent,
+                                   transportApiClientSettings: self.transportApiClientSettings,
                                    onlyAgencies: onlyAgencies,
                                    omitAgencies: omitAgencies,
                                    limitModes: limitModes,
@@ -280,6 +291,7 @@ public class TransportApiClient
                                completion: @escaping (_ result: TransportApiResult<[Line]>) -> Void)
     {
         TransportApiCalls.GetLines(tokenComponent: self.tokenComponent,
+                                   transportApiClientSettings: self.transportApiClientSettings,
                                    onlyAgencies: onlyAgencies,
                                    omitAgencies: omitAgencies,
                                    limitModes: limitModes,
@@ -306,6 +318,7 @@ public class TransportApiClient
                                       completion: @escaping (_ result: TransportApiResult<[Line]>) -> Void)
     {
         TransportApiCalls.GetLines(tokenComponent: self.tokenComponent,
+                                   transportApiClientSettings: self.transportApiClientSettings,
                                    onlyAgencies: onlyAgencies,
                                    omitAgencies: omitAgencies,
                                    limitModes: limitModes,
@@ -326,6 +339,7 @@ public class TransportApiClient
         completion: @escaping (_ result: TransportApiResult<Line>) -> Void)
     {
         TransportApiCalls.GetLine(tokenComponent: self.tokenComponent,
+                                  transportApiClientSettings: self.transportApiClientSettings,
                                   id: id,
                                   exclude: exclude)
         {
@@ -342,7 +356,8 @@ public class TransportApiClient
                                       completion: @escaping (_ result: TransportApiResult<[FareProduct]>) -> Void)
     {
         TransportApiCalls.GetFareProducts(tokenComponent: self.tokenComponent,
-                                   onlyAgencies: onlyAgencies,
+                                          transportApiClientSettings: self.transportApiClientSettings,
+                                          onlyAgencies: onlyAgencies,
                                    omitAgencies: omitAgencies,
                                    exclude: exclude,
                                    limit: limit,
@@ -359,11 +374,61 @@ public class TransportApiClient
         completion: @escaping (_ result: TransportApiResult<FareProduct>) -> Void)
     {
         TransportApiCalls.GetFareProduct(tokenComponent: self.tokenComponent,
-                                  id: id,
+                                         transportApiClientSettings: self.transportApiClientSettings,
+                                         id: id,
                                   exclude: exclude)
         {
             (result: TransportApiResult<FareProduct>) in
             completion (result)
         }
     }
-}
+    
+    public func GetStopTimetable(
+        id: String,
+        earliestArrivalTime: Date! = nil,
+        latestArrivalTime: Date! = nil,
+        limit: Int = 100,
+        offset: Int = 0,
+        exclude: String! = nil,
+        completion: @escaping (_ result: TransportApiResult<[StopTimetable]>) -> Void)
+    {
+        TransportApiCalls.GetStopTimetable(tokenComponent: self.tokenComponent,
+                                           transportApiClientSettings: self.transportApiClientSettings,
+                                           id: id,
+                                         earliestArrivalTime: earliestArrivalTime,
+                                         latestArrivalTime: latestArrivalTime,
+                                         limit: limit,
+                                         offset: offset,
+                                         exclude: exclude)
+        {
+            (result: TransportApiResult<[StopTimetable]>) in
+            completion (result)
+        }
+    }
+    
+    public func GetLineTimetable(
+       id: String,
+       departureStopIdFilter: String! = nil,
+       arrivalStopIdFilter: String! = nil,
+       earliestDepartureTime: Date! = nil,
+       latestDepartureTime: Date! = nil,
+       limit: Int = 100,
+       offset: Int = 0,
+       exclude: String! = nil,
+       completion: @escaping (_ result: TransportApiResult<[LineTimetable]>) -> Void)
+    {
+        TransportApiCalls.GetLineTimetable(tokenComponent: self.tokenComponent,
+                                           transportApiClientSettings: self.transportApiClientSettings,
+                                           id: id,
+                                           departureStopIdFilter: departureStopIdFilter,
+                                           arrivalStopIdFilter: arrivalStopIdFilter,
+                                           earliestDepartureTime: earliestDepartureTime,
+                                           latestDepartureTime: latestDepartureTime,
+                                           limit: limit,
+                                           offset: offset,
+                                           exclude: exclude)
+        {
+            (result: TransportApiResult<[LineTimetable]>) in
+            completion (result)
+        }
+    }}
