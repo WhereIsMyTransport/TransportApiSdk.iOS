@@ -40,6 +40,7 @@ The following end-points are available:
 * GET api/stops/{id}/timetables
 * GET api/lines
 * GET api/lines/{id}
+* GET api/lines/{id}/timetables
 * GET api/fareproducts
 * GET api/fareproducts/{id}
 
