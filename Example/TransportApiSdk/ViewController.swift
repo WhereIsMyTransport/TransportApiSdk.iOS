@@ -13,8 +13,8 @@ import CoreLocation
 class ViewController: UIViewController {
 
     // To get access credentials go to https://developer.whereismytransport.com
-    let clientId = "CLIENT_ID"
-    let clientSecret = "CLIENT_SECRET"
+    let clientId = "84aaffba-6fe9-4f09-a603-f761f4643980"
+    let clientSecret = "lwD6Etbz7D1NpjMc/0DWGr0PiJ3owLkoqlfVogj/LK8="
     
     var transportApiClient: TransportApiClient!
     
@@ -22,21 +22,21 @@ class ViewController: UIViewController {
     
     @IBAction func requestButton(_ sender: UIButton) {
         //let exclude = "geometry,directions,distance"
-        let startLocation = CLLocationCoordinate2D(latitude: -25.760938159763594, longitude: 28.23760986328125)
-        let endLocation = CLLocationCoordinate2D(latitude: -26.02655312878948, longitude: 28.124313354492184)
+        //let startLocation = CLLocationCoordinate2D(latitude: -25.760938159763594, longitude: 28.23760986328125)
+        //let endLocation = CLLocationCoordinate2D(latitude: -26.02655312878948, longitude: 28.124313354492184)
         //let onlyMode = [TransportMode.Rail]
         //let onlyAgencies = [""]
         
         self.resultTextView.text = "Something amazing is about to happen..."
         
-        self.transportApiClient.PostJourney(startLocation: startLocation, endLocation: endLocation)
+        /*self.transportApiClient.PostJourney(startLocation: startLocation, endLocation: endLocation)
         {
             (result: TransportApiResult<Journey>) in
                 DispatchQueue.main.async
                 {
                     self.resultTextView.text = result.rawJson
                 }
-        }
+        }*/
         
         /*self.transportApiClient.GetJourney(id: "rHfzAvs4Rki3jKccAUoGYA")
         {
@@ -46,6 +46,16 @@ class ViewController: UIViewController {
                     self.resultTextView.text = result.rawJson
             }
         }*/
+        
+        self.transportApiClient.GetItinerary(journeyId: "rHfzAvs4Rki3jKccAUoGYA",
+                                             itineraryId: "QIuuBAmdhU-mxaccAUoNRw")
+         {
+            (result: TransportApiResult<Itinerary>) in
+            DispatchQueue.main.async
+                {
+                    self.resultTextView.text = result.rawJson
+            }
+         }
         
         /*self.transportApiClient.GetAgencies()
         {

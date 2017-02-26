@@ -272,6 +272,88 @@ internal class TransportApiCalls
             })
         }
     }
+    
+    class func GetItinerary(
+      tokenComponent: TokenComponent,
+      transportApiClientSettings: TransportApiClientSettings,
+      journeyId: String,
+      itineraryId: String,
+      exclude: String! = nil,
+      completion: @escaping (_ result: TransportApiResult<Itinerary>) -> Void)
+    {
+        tokenComponent.getAccessToken{
+            (accessToken: AccessToken) in
+            
+            let transportApiResult = TransportApiResult<Itinerary>()
+            
+            if (journeyId.isEmpty)
+            {
+                transportApiResult.error = "JourneyId is required."
+                
+                completion(transportApiResult)
+                
+                return
+            }
+            
+            if (itineraryId.isEmpty)
+            {
+                transportApiResult.error = "ItineraryId is required."
+                
+                completion(transportApiResult)
+                
+                return
+            }
+            
+            if (accessToken.accessToken == nil)
+            {
+                transportApiResult.error = accessToken.error
+                
+                completion(transportApiResult)
+                
+                return
+            }
+            
+            let query = ""
+                .addExclude(exclude: exclude)
+                .removeFirstCharacter()
+            
+            let path = self.platformURL + "journeys/" + journeyId + "/itineraries/" + itineraryId
+            
+            RestApiManager.sharedInstance.makeHTTPGetRequest(path: path,
+                                                             accessToken: accessToken.accessToken,
+                                                             timeout: Double(transportApiClientSettings.TimeoutInSeconds),
+                                                             query: query,
+                                                             onCompletion: { json, err, response in
+                                                                
+                                                                if (err != nil)
+                                                                {
+                                                                    transportApiResult.httpStatusCode = RestApiManager.sharedInstance.getErrorCode(error: err!)
+                                                                    transportApiResult.error = RestApiManager.sharedInstance.getErrorDescription(error: err!)
+                                                                    transportApiResult.isSuccess = false
+                                                                }
+                                                                else
+                                                                {
+                                                                    transportApiResult.httpStatusCode = response?.statusCode
+                                                                    if (response?.statusCode != 200)
+                                                                    {
+                                                                        transportApiResult.error = json.rawString()
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        let itineraryJson = json as JSON
+                                                                        
+                                                                        let itineraryModel = Itinerary.init(dictionary: NSDictionary(dictionary: itineraryJson.dictionaryObject!))
+                                                                        
+                                                                        transportApiResult.rawJson = itineraryJson.rawString(options: JSONSerialization.WritingOptions.prettyPrinted)
+                                                                        transportApiResult.isSuccess = true
+                                                                        transportApiResult.data = itineraryModel
+                                                                    }
+                                                                }
+                                                                
+                                                                completion(transportApiResult)
+            })
+        }
+    }
 
     class func GetAgencies(tokenComponent: TokenComponent,
                            transportApiClientSettings: TransportApiClientSettings,
