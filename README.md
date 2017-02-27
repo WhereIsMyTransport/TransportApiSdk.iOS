@@ -4,7 +4,9 @@
 [![License](https://img.shields.io/cocoapods/l/TransportApiSdk.svg?style=flat)](http://cocoapods.org/pods/TransportApiSdk)
 [![Platform](https://img.shields.io/cocoapods/p/TransportApiSdk.svg?style=flat)](http://cocoapods.org/pods/TransportApiSdk)
 
-The unofficial iOS SDK for the [WhereIsMyTransport](https://www.whereismytransport.com) API. 
+The official iOS SDK for the [WhereIsMyTransport](https://www.whereismytransport.com) API.
+
+Access to the platform is completely free, so for more information and to get credentials, just visit the [developer portal](https://developer.whereismytransport.com).
 
 ## Usage
 
@@ -68,10 +70,6 @@ Run `pod install` to build your dependencies.
 
 ### Carthage
 TODO
-
-## Documentation
-
-Access to the platform is completely free, so for more information and to get credentials, just visit the [developer portal](https://developer.whereismytransport.com).
 
 ## Author
 
