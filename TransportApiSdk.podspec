@@ -8,23 +8,17 @@
 
 Pod::Spec.new do |s|
   s.name             = 'TransportApiSdk'
-  s.version          = '1.0.0'
+  s.version          = '1.1.0'
   s.summary          = 'SDK for the WhereIsMyTransport Transport API.'
-
-# This description is used to generate tags and improve search results.
-#   * Think: What does it do? Why did you write it? What is the focus?
-#   * Try to keep it short, snappy and to the point.
-#   * Write the description between the DESC delimiters below.
-#   * Finally, don't worry about the indent, CocoaPods strips it!
 
   s.description      = <<-DESC
 Provides a wrapper for the WhereIsMyTransport Transport API.
                        DESC
 
-  s.homepage         = 'https://github.com/chrisk1ng/TransportApiSdk.iOS'
+  s.homepage         = 'https://github.com/WhereIsMyTransport/TransportApiSdk.iOS'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'Chris King' => 'support@whereismytransport.com' }
-  s.source           = { :git => 'https://github.com/chrisk1ng/TransportApiSdk.iOS.git', :tag => s.version.to_s }
+  s.source           = { :git => 'https://github.com/WhereIsMyTransport/TransportApiSdk.iOS.git', :tag => s.version.to_s }
   s.social_media_url = 'https://twitter.com/crkingza'
 
   s.ios.deployment_target = '8.1'

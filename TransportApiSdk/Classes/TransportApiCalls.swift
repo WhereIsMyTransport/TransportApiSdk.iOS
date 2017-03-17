@@ -20,14 +20,14 @@ internal class TransportApiCalls
                            fareProducts: [String]! = nil,
                            onlyAgencies: [String]! = nil,
                            omitAgencies: [String]! = nil,
-                           onlyModes: [TransportMode]! = nil,
-                           omitModes: [TransportMode]! = nil,
+                           onlyModes: [String]! = nil,
+                           omitModes: [String]! = nil,
                            exclude: String! = nil,
                            startLocation: CLLocationCoordinate2D,
                            endLocation: CLLocationCoordinate2D,
                            time: Date = Date(),
-                           timeType: TimeType = TimeType.DepartAfter,
-                           profile: Profile = Profile.ClosestToTime,
+                           timeType: String = "DepartAfter",
+                           profile: String = "ClosestToTime",
                            maxItineraries: Int = 3,
                            completion: @escaping (_ result: TransportApiResult<Journey>) -> Void)
     {
@@ -81,7 +81,7 @@ internal class TransportApiCalls
             {
                 for mode in onlyModes
                 {
-                    modes += "\"" + mode.rawValue + "\","
+                    modes += "\"" + mode + "\","
                 }
                 
                 modes = "\"modes\": [" + modes.removeLastCharacter() + "]"
@@ -124,7 +124,7 @@ internal class TransportApiCalls
             {
                 for mode in omitModes
                 {
-                    modes += "\"" + mode.rawValue + "\","
+                    modes += "\"" + mode + "\","
                 }
                 
                 modes = "\"modes\": [" + modes.removeLastCharacter() + "]"
@@ -167,7 +167,7 @@ internal class TransportApiCalls
             
             RestApiManager.sharedInstance.makeHTTPPostRequest(path: path,
                                                               accessToken : accessToken.accessToken,
-                                                              timeout: Double(transportApiClientSettings.TimeoutInSeconds),
+                                                              timeout: Double(transportApiClientSettings.timeoutInSeconds),
                                                               query: query,
                                                               json: json,
                                                               onCompletion: { json, err, response in
@@ -222,8 +222,7 @@ internal class TransportApiCalls
                 return
             }
             
-            if (accessToken.accessToken == nil)
-            {
+            guard let token = accessToken.accessToken else {
                 transportApiResult.error = accessToken.error
                 
                 completion(transportApiResult)
@@ -238,8 +237,8 @@ internal class TransportApiCalls
             let path = self.platformURL + "journeys/" + id
             
             RestApiManager.sharedInstance.makeHTTPGetRequest(path: path,
-                                                             accessToken: accessToken.accessToken,
-                                                             timeout: Double(transportApiClientSettings.TimeoutInSeconds),
+                                                             accessToken: token,
+                                                             timeout: Double(transportApiClientSettings.timeoutInSeconds),
                                                              query: query,
                                                              onCompletion: { json, err, response in
                                                                 
@@ -304,8 +303,7 @@ internal class TransportApiCalls
                 return
             }
             
-            if (accessToken.accessToken == nil)
-            {
+            guard let token = accessToken.accessToken else {
                 transportApiResult.error = accessToken.error
                 
                 completion(transportApiResult)
@@ -320,8 +318,8 @@ internal class TransportApiCalls
             let path = self.platformURL + "journeys/" + journeyId + "/itineraries/" + itineraryId
             
             RestApiManager.sharedInstance.makeHTTPGetRequest(path: path,
-                                                             accessToken: accessToken.accessToken,
-                                                             timeout: Double(transportApiClientSettings.TimeoutInSeconds),
+                                                             accessToken: token,
+                                                             timeout: Double(transportApiClientSettings.timeoutInSeconds),
                                                              query: query,
                                                              onCompletion: { json, err, response in
                                                                 
@@ -372,8 +370,7 @@ internal class TransportApiCalls
             
             let transportApiResult = TransportApiResult<[Agency]>()
             
-            if (accessToken.accessToken == nil)
-            {
+            guard let token = accessToken.accessToken else {
                 transportApiResult.error = accessToken.error
                 
                 completion(transportApiResult)
@@ -434,8 +431,8 @@ internal class TransportApiCalls
                 .removeFirstCharacter()
             
             RestApiManager.sharedInstance.makeHTTPGetRequest(path: path,
-                                                             accessToken: accessToken.accessToken,
-                                                             timeout: Double(transportApiClientSettings.TimeoutInSeconds),
+                                                             accessToken: token,
+                                                             timeout: Double(transportApiClientSettings.timeoutInSeconds),
                                                              query: query,
                                                              onCompletion: { json, err, response in
                                                                 
@@ -491,8 +488,7 @@ internal class TransportApiCalls
                 return
             }
             
-            if (accessToken.accessToken == nil)
-            {
+            guard let token = accessToken.accessToken else {
                 transportApiResult.error = accessToken.error
                 
                 completion(transportApiResult)
@@ -507,8 +503,8 @@ internal class TransportApiCalls
             let path = self.platformURL + "agencies/" + id
             
             RestApiManager.sharedInstance.makeHTTPGetRequest(path: path,
-                                                             accessToken: accessToken.accessToken,
-                                                             timeout: Double(transportApiClientSettings.TimeoutInSeconds),
+                                                             accessToken: token,
+                                                             timeout: Double(transportApiClientSettings.timeoutInSeconds),
                                                              query: query,
                                                              onCompletion: { json, err, response in
                                                                 
@@ -548,7 +544,7 @@ internal class TransportApiCalls
                         transportApiClientSettings: TransportApiClientSettings,
                            onlyAgencies: [String]! = nil,
                            omitAgencies: [String]! = nil,
-                           limitModes: [TransportMode]! = nil,
+                           limitModes: [String]! = nil,
                            servesLines: [String]! = nil,
                            showChildren: Bool = false,
                            location: CLLocationCoordinate2D! = nil,
@@ -564,8 +560,7 @@ internal class TransportApiCalls
             
             let transportApiResult = TransportApiResult<[Stop]>()
             
-            if (accessToken.accessToken == nil)
-            {
+            guard let token = accessToken.accessToken else {
                 transportApiResult.error = accessToken.error
                 
                 completion(transportApiResult)
@@ -629,8 +624,8 @@ internal class TransportApiCalls
                 .removeFirstCharacter()
             
             RestApiManager.sharedInstance.makeHTTPGetRequest(path: path,
-                                                             accessToken: accessToken.accessToken,
-                                                             timeout: Double(transportApiClientSettings.TimeoutInSeconds),
+                                                             accessToken: token,
+                                                             timeout: Double(transportApiClientSettings.timeoutInSeconds),
                                                              query: query,
                                                              onCompletion: { json, err, response in
                                                                 
@@ -686,8 +681,7 @@ internal class TransportApiCalls
                 return
             }
             
-            if (accessToken.accessToken == nil)
-            {
+            guard let token = accessToken.accessToken else {
                 transportApiResult.error = accessToken.error
                 
                 completion(transportApiResult)
@@ -702,8 +696,8 @@ internal class TransportApiCalls
             let path = self.platformURL + "stops/" + id
             
             RestApiManager.sharedInstance.makeHTTPGetRequest(path: path,
-                                                             accessToken: accessToken.accessToken,
-                                                             timeout: Double(transportApiClientSettings.TimeoutInSeconds),
+                                                             accessToken: token,
+                                                             timeout: Double(transportApiClientSettings.timeoutInSeconds),
                                                              query: query,
                                                              onCompletion: { json, err, response in
                                                                 
@@ -743,7 +737,7 @@ internal class TransportApiCalls
                         transportApiClientSettings: TransportApiClientSettings,
                         onlyAgencies: [String]! = nil,
                         omitAgencies: [String]! = nil,
-                        limitModes: [TransportMode]! = nil,
+                        limitModes: [String]! = nil,
                         servesStops: [String]! = nil,
                         location: CLLocationCoordinate2D! = nil,
                         boundingBox: String! = nil,
@@ -758,8 +752,7 @@ internal class TransportApiCalls
             
             let transportApiResult = TransportApiResult<[Line]>()
             
-            if (accessToken.accessToken == nil)
-            {
+            guard let token = accessToken.accessToken else {
                 transportApiResult.error = accessToken.error
                 
                 completion(transportApiResult)
@@ -822,8 +815,8 @@ internal class TransportApiCalls
                 .removeFirstCharacter()
             
             RestApiManager.sharedInstance.makeHTTPGetRequest(path: path,
-                                                             accessToken: accessToken.accessToken,
-                                                             timeout: Double(transportApiClientSettings.TimeoutInSeconds),
+                                                             accessToken: token,
+                                                             timeout: Double(transportApiClientSettings.timeoutInSeconds),
                                                              query: query,
                                                              onCompletion: { json, err, response in
                                                                 
@@ -879,8 +872,7 @@ internal class TransportApiCalls
                 return
             }
             
-            if (accessToken.accessToken == nil)
-            {
+            guard let token = accessToken.accessToken else {
                 transportApiResult.error = accessToken.error
                 
                 completion(transportApiResult)
@@ -895,8 +887,8 @@ internal class TransportApiCalls
             let path = self.platformURL + "lines/" + id
             
             RestApiManager.sharedInstance.makeHTTPGetRequest(path: path,
-                                                             accessToken: accessToken.accessToken,
-                                                             timeout: Double(transportApiClientSettings.TimeoutInSeconds),
+                                                             accessToken: token,
+                                                             timeout: Double(transportApiClientSettings.timeoutInSeconds),
                                                              query: query,
                                                              onCompletion: { json, err, response in
                                                                 
@@ -946,8 +938,7 @@ internal class TransportApiCalls
             
             let transportApiResult = TransportApiResult<[FareProduct]>()
             
-            if (accessToken.accessToken == nil)
-            {
+            guard let token = accessToken.accessToken else {
                 transportApiResult.error = accessToken.error
                 
                 completion(transportApiResult)
@@ -984,8 +975,8 @@ internal class TransportApiCalls
                 .removeFirstCharacter()
             
             RestApiManager.sharedInstance.makeHTTPGetRequest(path: path,
-                                                             accessToken: accessToken.accessToken,
-                                                             timeout: Double(transportApiClientSettings.TimeoutInSeconds),
+                                                             accessToken: token,
+                                                             timeout: Double(transportApiClientSettings.timeoutInSeconds),
                                                              query: query,
                                                              onCompletion: { json, err, response in
                                                                 
@@ -1041,8 +1032,7 @@ internal class TransportApiCalls
                 return
             }
             
-            if (accessToken.accessToken == nil)
-            {
+            guard let token = accessToken.accessToken else {
                 transportApiResult.error = accessToken.error
                 
                 completion(transportApiResult)
@@ -1057,8 +1047,8 @@ internal class TransportApiCalls
             let path = self.platformURL + "fareproducts/" + id
             
             RestApiManager.sharedInstance.makeHTTPGetRequest(path: path,
-                                                             accessToken: accessToken.accessToken,
-                                                             timeout: Double(transportApiClientSettings.TimeoutInSeconds),
+                                                             accessToken: token,
+                                                             timeout: Double(transportApiClientSettings.timeoutInSeconds),
                                                              query: query,
                                                              onCompletion: { json, err, response in
                                                                 
@@ -1119,8 +1109,7 @@ internal class TransportApiCalls
                 return
             }
             
-            if (accessToken.accessToken == nil)
-            {
+            guard let token = accessToken.accessToken else {
                 transportApiResult.error = accessToken.error
                 
                 completion(transportApiResult)
@@ -1139,8 +1128,8 @@ internal class TransportApiCalls
             let path = self.platformURL + "stops/" + id + "/timetables"
             
             RestApiManager.sharedInstance.makeHTTPGetRequest(path: path,
-                                                             accessToken: accessToken.accessToken,
-                                                             timeout: Double(transportApiClientSettings.TimeoutInSeconds),
+                                                             accessToken: token,
+                                                             timeout: Double(transportApiClientSettings.timeoutInSeconds),
                                                              query: query,
                                                              onCompletion: { json, err, response in
                                                                 
@@ -1202,8 +1191,7 @@ internal class TransportApiCalls
                 return
             }
             
-            if (accessToken.accessToken == nil)
-            {
+            guard let token = accessToken.accessToken else {
                 transportApiResult.error = accessToken.error
                 
                 completion(transportApiResult)
@@ -1224,8 +1212,8 @@ internal class TransportApiCalls
             let path = self.platformURL + "lines/" + id + "/timetables"
             
             RestApiManager.sharedInstance.makeHTTPGetRequest(path: path,
-                                                             accessToken: accessToken.accessToken,
-                                                             timeout: Double(transportApiClientSettings.TimeoutInSeconds),
+                                                             accessToken: token,
+                                                             timeout: Double(transportApiClientSettings.timeoutInSeconds),
                                                              query: query,
                                                              onCompletion: { json, err, response in
                                                                 

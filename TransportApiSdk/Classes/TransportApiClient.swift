@@ -12,33 +12,44 @@ import CoreLocation
 
 public class TransportApiClient
 {
-    private let platformURL = "https://platform.whereismytransport.com/api/"
+    private static let platformURL = "https://platform.whereismytransport.com/api/"
     
-    private var transportApiClientSettings: TransportApiClientSettings
-    private var tokenComponent: TokenComponent!
+    private static var transportApiClientSettings: TransportApiClientSettings?
+    private static var tokenComponent: TokenComponent?
     
-    public init(transportApiClientSettings: TransportApiClientSettings)
+    /// Entry point to the SDK.
+    open class func loadCredentials(clientId: String, clientSecret: String)
     {
-        self.transportApiClientSettings = transportApiClientSettings
-        self.tokenComponent = TokenComponent(transportApiClientSettings: transportApiClientSettings)
+        self.transportApiClientSettings = TransportApiClientSettings(clientId: clientId, clientSecret: clientSecret)
+        self.tokenComponent = TokenComponent(transportApiClientSettings: transportApiClientSettings!)
     }
     
-    public func PostJourney(fareProducts: [String]! = nil,
-                            onlyAgencies: [String]! = nil,
-                            omitAgencies: [String]! = nil,
-                            onlyModes: [TransportMode]! = nil,
-                            omitModes: [TransportMode]! = nil,
-                            exclude: String! = nil,
+    open class func postJourney(fareProducts: [String]? = nil,
+                            onlyAgencies: [String]? = nil,
+                            omitAgencies: [String]? = nil,
+                            onlyModes: [String]? = nil,
+                            omitModes: [String]? = nil,
+                            exclude: String? = nil,
                             startLocation: CLLocationCoordinate2D,
                             endLocation: CLLocationCoordinate2D,
                             time: Date = Date(),
-                            timeType: TimeType = TimeType.DepartAfter,
-                            profile: Profile = Profile.ClosestToTime,
+                            timeType: String = "DepartAfter",
+                            profile: String = "ClosestToTime",
                             maxItineraries: Int = 3,
                             completion: @escaping (_ result: TransportApiResult<Journey>) -> Void)
     {
-        TransportApiCalls.PostJourney(tokenComponent: self.tokenComponent,
-                                      transportApiClientSettings: self.transportApiClientSettings,
+        guard let tokenComponent = self.tokenComponent, let transportApiClientSettings = self.transportApiClientSettings else {
+            let transportApiResult = TransportApiResult<Journey>()
+            
+            transportApiResult.error = "Credentials not set, please call loadCredntials and provide your clientId and clientSecret.";
+            
+            completion(transportApiResult)
+            
+            return
+        }
+        
+        TransportApiCalls.PostJourney(tokenComponent: tokenComponent,
+                                      transportApiClientSettings: transportApiClientSettings,
                                       fareProducts: fareProducts,
                                       onlyAgencies: onlyAgencies,
                                       omitAgencies: omitAgencies,
@@ -57,13 +68,23 @@ public class TransportApiClient
         }
     }
     
-    public func GetJourney(
+    open class func getJourney(
         id: String,
-        exclude: String! = nil,
+        exclude: String? = nil,
         completion: @escaping (_ result: TransportApiResult<Journey>) -> Void)
     {
-        TransportApiCalls.GetJourney(tokenComponent: self.tokenComponent,
-                                     transportApiClientSettings: self.transportApiClientSettings,
+        guard let tokenComponent = self.tokenComponent, let transportApiClientSettings = self.transportApiClientSettings else {
+            let transportApiResult = TransportApiResult<Journey>()
+            
+            transportApiResult.error = "Credentials not set, please call loadCredntials and provide your clientId and clientSecret.";
+            
+            completion(transportApiResult)
+            
+            return
+        }
+        
+        TransportApiCalls.GetJourney(tokenComponent: tokenComponent,
+                                     transportApiClientSettings: transportApiClientSettings,
                                      id: id,
                                     exclude: exclude)
         {
@@ -72,14 +93,24 @@ public class TransportApiClient
         }
     }
     
-    public func GetItinerary(
+    open class func getItinerary(
         journeyId: String,
         itineraryId: String,
-        exclude: String! = nil,
+        exclude: String? = nil,
         completion: @escaping (_ result: TransportApiResult<Itinerary>) -> Void)
     {
-        TransportApiCalls.GetItinerary(tokenComponent: self.tokenComponent,
-                                     transportApiClientSettings: self.transportApiClientSettings,
+        guard let tokenComponent = self.tokenComponent, let transportApiClientSettings = self.transportApiClientSettings else {
+            let transportApiResult = TransportApiResult<Itinerary>()
+            
+            transportApiResult.error = "Credentials not set, please call loadCredntials and provide your clientId and clientSecret.";
+            
+            completion(transportApiResult)
+            
+            return
+        }
+        
+        TransportApiCalls.GetItinerary(tokenComponent: tokenComponent,
+                                     transportApiClientSettings: transportApiClientSettings,
                                      journeyId: journeyId,
                                      itineraryId : itineraryId,
                                      exclude: exclude)
@@ -89,15 +120,25 @@ public class TransportApiClient
         }
     }
     
-    public func GetAgencies(onlyAgencies: [String]! = nil,
-                                  omitAgencies: [String]! = nil,
-                                  exclude: String! = nil,
+    open class func getAgencies(onlyAgencies: [String]? = nil,
+                                  omitAgencies: [String]? = nil,
+                                  exclude: String? = nil,
                                   limit: Int = 100,
                                   offset: Int = 0,
                                   completion: @escaping (_ result: TransportApiResult<[Agency]>) -> Void)
     {
-        TransportApiCalls.GetAgencies(tokenComponent: self.tokenComponent,
-                                      transportApiClientSettings: self.transportApiClientSettings,
+        guard let tokenComponent = self.tokenComponent, let transportApiClientSettings = self.transportApiClientSettings else {
+            let transportApiResult = TransportApiResult<[Agency]>()
+            
+            transportApiResult.error = "Credentials not set, please call loadCredntials and provide your clientId and clientSecret.";
+            
+            completion(transportApiResult)
+            
+            return
+        }
+        
+        TransportApiCalls.GetAgencies(tokenComponent: tokenComponent,
+                                      transportApiClientSettings: transportApiClientSettings,
                                       onlyAgencies: onlyAgencies,
                                       omitAgencies: omitAgencies,
                                       exclude: exclude,
@@ -109,18 +150,28 @@ public class TransportApiClient
         }
     }
     
-    public func GetAgenciesNearby(onlyAgencies: [String]! = nil,
-                            omitAgencies: [String]! = nil,
-                            location: CLLocationCoordinate2D! = nil,
-                            boundingBox: String! = nil,
-                            exclude: String! = nil,
+    open class func getAgenciesNearby(onlyAgencies: [String]? = nil,
+                            omitAgencies: [String]? = nil,
+                            location: CLLocationCoordinate2D? = nil,
+                            boundingBox: String? = nil,
+                            exclude: String? = nil,
                             radiusInMeters: Int = -1,
                             limit: Int = 100,
                             offset: Int = 0,
                             completion: @escaping (_ result: TransportApiResult<[Agency]>) -> Void)
     {
-        TransportApiCalls.GetAgencies(tokenComponent: self.tokenComponent,
-                                      transportApiClientSettings: self.transportApiClientSettings,
+        guard let tokenComponent = self.tokenComponent, let transportApiClientSettings = self.transportApiClientSettings else {
+            let transportApiResult = TransportApiResult<[Agency]>()
+            
+            transportApiResult.error = "Credentials not set, please call loadCredntials and provide your clientId and clientSecret.";
+            
+            completion(transportApiResult)
+            
+            return
+        }
+        
+        TransportApiCalls.GetAgencies(tokenComponent: tokenComponent,
+                                      transportApiClientSettings: transportApiClientSettings,
                                       onlyAgencies: onlyAgencies,
                                       omitAgencies: omitAgencies,
                                       location: location,
@@ -134,16 +185,26 @@ public class TransportApiClient
         }
     }
     
-    public func GetAgenciesByBoundingBox(onlyAgencies: [String]! = nil,
-                                  omitAgencies: [String]! = nil,
-                                  boundingBox: String! = nil,
-                                  exclude: String! = nil,
+    open class func getAgenciesByBoundingBox(onlyAgencies: [String]? = nil,
+                                  omitAgencies: [String]? = nil,
+                                  boundingBox: String? = nil,
+                                  exclude: String? = nil,
                                   limit: Int = 100,
                                   offset: Int = 0,
                                   completion: @escaping (_ result: TransportApiResult<[Agency]>) -> Void)
     {
-        TransportApiCalls.GetAgencies(tokenComponent: self.tokenComponent,
-                                      transportApiClientSettings: self.transportApiClientSettings,
+        guard let tokenComponent = self.tokenComponent, let transportApiClientSettings = self.transportApiClientSettings else {
+            let transportApiResult = TransportApiResult<[Agency]>()
+            
+            transportApiResult.error = "Credentials not set, please call loadCredntials and provide your clientId and clientSecret.";
+            
+            completion(transportApiResult)
+            
+            return
+        }
+        
+        TransportApiCalls.GetAgencies(tokenComponent: tokenComponent,
+                                      transportApiClientSettings: transportApiClientSettings,
                                       onlyAgencies: onlyAgencies,
                                       omitAgencies: omitAgencies,
                                       boundingBox: boundingBox,
@@ -156,13 +217,23 @@ public class TransportApiClient
         }
     }
     
-    public func GetAgency(
+    open class func getAgency(
         id: String,
-        exclude: String! = nil,
+        exclude: String? = nil,
         completion: @escaping (_ result: TransportApiResult<Agency>) -> Void)
     {
-        TransportApiCalls.GetAgency(tokenComponent: self.tokenComponent,
-                                    transportApiClientSettings: self.transportApiClientSettings,
+        guard let tokenComponent = self.tokenComponent, let transportApiClientSettings = self.transportApiClientSettings else {
+            let transportApiResult = TransportApiResult<Agency>()
+            
+            transportApiResult.error = "Credentials not set, please call loadCredntials and provide your clientId and clientSecret.";
+            
+            completion(transportApiResult)
+            
+            return
+        }
+        
+        TransportApiCalls.GetAgency(tokenComponent: tokenComponent,
+                                    transportApiClientSettings: transportApiClientSettings,
                                     id: id,
                                       exclude: exclude)
         {
@@ -171,18 +242,28 @@ public class TransportApiClient
         }
     }
     
-    public func GetStops(onlyAgencies: [String]! = nil,
-                            omitAgencies: [String]! = nil,
-                            limitModes: [TransportMode]! = nil,
-                            servesLines: [String]! = nil,
+    open class func getStops(onlyAgencies: [String]? = nil,
+                            omitAgencies: [String]? = nil,
+                            limitModes: [String]? = nil,
+                            servesLines: [String]? = nil,
                             showChildren: Bool = false,
-                            exclude: String! = nil,
+                            exclude: String? = nil,
                             limit: Int = 100,
                             offset: Int = 0,
                             completion: @escaping (_ result: TransportApiResult<[Stop]>) -> Void)
     {
-        TransportApiCalls.GetStops(tokenComponent: self.tokenComponent,
-                                   transportApiClientSettings: self.transportApiClientSettings,
+        guard let tokenComponent = self.tokenComponent, let transportApiClientSettings = self.transportApiClientSettings else {
+            let transportApiResult = TransportApiResult<[Stop]>()
+            
+            transportApiResult.error = "Credentials not set, please call loadCredntials and provide your clientId and clientSecret.";
+            
+            completion(transportApiResult)
+            
+            return
+        }
+        
+        TransportApiCalls.GetStops(tokenComponent: tokenComponent,
+                                   transportApiClientSettings: transportApiClientSettings,
                                    onlyAgencies: onlyAgencies,
                                       omitAgencies: omitAgencies,
                                       limitModes: limitModes,
@@ -197,21 +278,31 @@ public class TransportApiClient
         }
     }
     
-    public func GetStopsNearby(onlyAgencies: [String]! = nil,
-                                  omitAgencies: [String]! = nil,
-                                  limitModes: [TransportMode]! = nil,
-                                  servesLines: [String]! = nil,
+    open class func getStopsNearby(onlyAgencies: [String]? = nil,
+                                  omitAgencies: [String]? = nil,
+                                  limitModes: [String]? = nil,
+                                  servesLines: [String]? = nil,
                                   showChildren: Bool = false,
-                                  location: CLLocationCoordinate2D! = nil,
-                                  boundingBox: String! = nil,
-                                  exclude: String! = nil,
+                                  location: CLLocationCoordinate2D? = nil,
+                                  boundingBox: String? = nil,
+                                  exclude: String? = nil,
                                   radiusInMeters: Int = -1,
                                   limit: Int = 100,
                                   offset: Int = 0,
                                   completion: @escaping (_ result: TransportApiResult<[Stop]>) -> Void)
     {
-        TransportApiCalls.GetStops(tokenComponent: self.tokenComponent,
-                                   transportApiClientSettings: self.transportApiClientSettings,
+        guard let tokenComponent = self.tokenComponent, let transportApiClientSettings = self.transportApiClientSettings else {
+            let transportApiResult = TransportApiResult<[Stop]>()
+            
+            transportApiResult.error = "Credentials not set, please call loadCredntials and provide your clientId and clientSecret.";
+            
+            completion(transportApiResult)
+            
+            return
+        }
+        
+        TransportApiCalls.GetStops(tokenComponent: tokenComponent,
+                                   transportApiClientSettings: transportApiClientSettings,
                                    onlyAgencies: onlyAgencies,
                                       omitAgencies: omitAgencies,
                                       limitModes: limitModes,
@@ -228,19 +319,29 @@ public class TransportApiClient
         }
     }
     
-    public func GetStopsByBoundingBox(onlyAgencies: [String]! = nil,
-                                         omitAgencies: [String]! = nil,
-                                         limitModes: [TransportMode]! = nil,
-                                         servesLines: [String]! = nil,
+    open class func getStopsByBoundingBox(onlyAgencies: [String]? = nil,
+                                         omitAgencies: [String]? = nil,
+                                         limitModes: [String]? = nil,
+                                         servesLines: [String]? = nil,
                                          showChildren: Bool = false,
-                                         boundingBox: String! = nil,
-                                         exclude: String! = nil,
+                                         boundingBox: String? = nil,
+                                         exclude: String? = nil,
                                          limit: Int = 100,
                                          offset: Int = 0,
                                          completion: @escaping (_ result: TransportApiResult<[Stop]>) -> Void)
     {
-        TransportApiCalls.GetStops(tokenComponent: self.tokenComponent,
-                                   transportApiClientSettings: self.transportApiClientSettings,
+        guard let tokenComponent = self.tokenComponent, let transportApiClientSettings = self.transportApiClientSettings else {
+            let transportApiResult = TransportApiResult<[Stop]>()
+            
+            transportApiResult.error = "Credentials not set, please call loadCredntials and provide your clientId and clientSecret.";
+            
+            completion(transportApiResult)
+            
+            return
+        }
+        
+        TransportApiCalls.GetStops(tokenComponent: tokenComponent,
+                                   transportApiClientSettings: transportApiClientSettings,
                                    onlyAgencies: onlyAgencies,
                                       omitAgencies: omitAgencies,
                                       limitModes: limitModes,
@@ -256,13 +357,23 @@ public class TransportApiClient
         }
     }
     
-    public func GetStop(
+    open class func getStop(
         id: String,
-        exclude: String! = nil,
+        exclude: String? = nil,
         completion: @escaping (_ result: TransportApiResult<Stop>) -> Void)
     {
-        TransportApiCalls.GetStop(tokenComponent: self.tokenComponent,
-                                  transportApiClientSettings: self.transportApiClientSettings,
+        guard let tokenComponent = self.tokenComponent, let transportApiClientSettings = self.transportApiClientSettings else {
+            let transportApiResult = TransportApiResult<Stop>()
+            
+            transportApiResult.error = "Credentials not set, please call loadCredntials and provide your clientId and clientSecret.";
+            
+            completion(transportApiResult)
+            
+            return
+        }
+        
+        TransportApiCalls.GetStop(tokenComponent: tokenComponent,
+                                  transportApiClientSettings: transportApiClientSettings,
                                   id: id,
                                     exclude: exclude)
         {
@@ -271,17 +382,27 @@ public class TransportApiClient
         }
     }
     
-    public func GetLines(onlyAgencies: [String]! = nil,
-                         omitAgencies: [String]! = nil,
-                         limitModes: [TransportMode]! = nil,
-                         servesStops: [String]! = nil,
-                         exclude: String! = nil,
+    open class func getLines(onlyAgencies: [String]? = nil,
+                         omitAgencies: [String]? = nil,
+                         limitModes: [String]? = nil,
+                         servesStops: [String]? = nil,
+                         exclude: String? = nil,
                          limit: Int = 100,
                          offset: Int = 0,
                          completion: @escaping (_ result: TransportApiResult<[Line]>) -> Void)
     {
-        TransportApiCalls.GetLines(tokenComponent: self.tokenComponent,
-                                   transportApiClientSettings: self.transportApiClientSettings,
+        guard let tokenComponent = self.tokenComponent, let transportApiClientSettings = self.transportApiClientSettings else {
+            let transportApiResult = TransportApiResult<[Line]>()
+            
+            transportApiResult.error = "Credentials not set, please call loadCredntials and provide your clientId and clientSecret.";
+            
+            completion(transportApiResult)
+            
+            return
+        }
+        
+        TransportApiCalls.GetLines(tokenComponent: tokenComponent,
+                                   transportApiClientSettings: transportApiClientSettings,
                                    onlyAgencies: onlyAgencies,
                                    omitAgencies: omitAgencies,
                                    limitModes: limitModes,
@@ -295,20 +416,30 @@ public class TransportApiClient
         }
     }
     
-    public func GetLinesNearby(onlyAgencies: [String]! = nil,
-                               omitAgencies: [String]! = nil,
-                               limitModes: [TransportMode]! = nil,
-                               servesStops: [String]! = nil,
-                               location: CLLocationCoordinate2D! = nil,
-                               boundingBox: String! = nil,
-                               exclude: String! = nil,
+    open class func getLinesNearby(onlyAgencies: [String]? = nil,
+                               omitAgencies: [String]? = nil,
+                               limitModes: [String]? = nil,
+                               servesStops: [String]? = nil,
+                               location: CLLocationCoordinate2D? = nil,
+                               boundingBox: String? = nil,
+                               exclude: String? = nil,
                                radiusInMeters: Int = -1,
                                limit: Int = 100,
                                offset: Int = 0,
                                completion: @escaping (_ result: TransportApiResult<[Line]>) -> Void)
     {
-        TransportApiCalls.GetLines(tokenComponent: self.tokenComponent,
-                                   transportApiClientSettings: self.transportApiClientSettings,
+        guard let tokenComponent = self.tokenComponent, let transportApiClientSettings = self.transportApiClientSettings else {
+            let transportApiResult = TransportApiResult<[Line]>()
+            
+            transportApiResult.error = "Credentials not set, please call loadCredntials and provide your clientId and clientSecret.";
+            
+            completion(transportApiResult)
+            
+            return
+        }
+        
+        TransportApiCalls.GetLines(tokenComponent: tokenComponent,
+                                   transportApiClientSettings: transportApiClientSettings,
                                    onlyAgencies: onlyAgencies,
                                    omitAgencies: omitAgencies,
                                    limitModes: limitModes,
@@ -324,18 +455,28 @@ public class TransportApiClient
         }
     }
     
-    public func GetLinesByBoundingBox(onlyAgencies: [String]! = nil,
-                                      omitAgencies: [String]! = nil,
-                                      limitModes: [TransportMode]! = nil,
-                                      servesStops: [String]! = nil,
-                                      boundingBox: String! = nil,
-                                      exclude: String! = nil,
+    open class func getLinesByBoundingBox(onlyAgencies: [String]? = nil,
+                                      omitAgencies: [String]? = nil,
+                                      limitModes: [String]? = nil,
+                                      servesStops: [String]? = nil,
+                                      boundingBox: String? = nil,
+                                      exclude: String? = nil,
                                       limit: Int = 100,
                                       offset: Int = 0,
                                       completion: @escaping (_ result: TransportApiResult<[Line]>) -> Void)
     {
-        TransportApiCalls.GetLines(tokenComponent: self.tokenComponent,
-                                   transportApiClientSettings: self.transportApiClientSettings,
+        guard let tokenComponent = self.tokenComponent, let transportApiClientSettings = self.transportApiClientSettings else {
+            let transportApiResult = TransportApiResult<[Line]>()
+            
+            transportApiResult.error = "Credentials not set, please call loadCredntials and provide your clientId and clientSecret.";
+            
+            completion(transportApiResult)
+            
+            return
+        }
+        
+        TransportApiCalls.GetLines(tokenComponent: tokenComponent,
+                                   transportApiClientSettings: transportApiClientSettings,
                                    onlyAgencies: onlyAgencies,
                                    omitAgencies: omitAgencies,
                                    limitModes: limitModes,
@@ -350,13 +491,23 @@ public class TransportApiClient
         }
     }
     
-    public func GetLine(
+    open class func getLine(
         id: String,
-        exclude: String! = nil,
+        exclude: String? = nil,
         completion: @escaping (_ result: TransportApiResult<Line>) -> Void)
     {
-        TransportApiCalls.GetLine(tokenComponent: self.tokenComponent,
-                                  transportApiClientSettings: self.transportApiClientSettings,
+        guard let tokenComponent = self.tokenComponent, let transportApiClientSettings = self.transportApiClientSettings else {
+            let transportApiResult = TransportApiResult<Line>()
+            
+            transportApiResult.error = "Credentials not set, please call loadCredntials and provide your clientId and clientSecret.";
+            
+            completion(transportApiResult)
+            
+            return
+        }
+        
+        TransportApiCalls.GetLine(tokenComponent: tokenComponent,
+                                  transportApiClientSettings: transportApiClientSettings,
                                   id: id,
                                   exclude: exclude)
         {
@@ -365,15 +516,25 @@ public class TransportApiClient
         }
     }
     
-    public func GetFareProducts(onlyAgencies: [String]! = nil,
-                                      omitAgencies: [String]! = nil,
-                                      exclude: String! = nil,
+    open class func getFareProducts(onlyAgencies: [String]? = nil,
+                                      omitAgencies: [String]? = nil,
+                                      exclude: String? = nil,
                                       limit: Int = 100,
                                       offset: Int = 0,
                                       completion: @escaping (_ result: TransportApiResult<[FareProduct]>) -> Void)
     {
-        TransportApiCalls.GetFareProducts(tokenComponent: self.tokenComponent,
-                                          transportApiClientSettings: self.transportApiClientSettings,
+        guard let tokenComponent = self.tokenComponent, let transportApiClientSettings = self.transportApiClientSettings else {
+            let transportApiResult = TransportApiResult<[FareProduct]>()
+            
+            transportApiResult.error = "Credentials not set, please call loadCredntials and provide your clientId and clientSecret.";
+            
+            completion(transportApiResult)
+            
+            return
+        }
+        
+        TransportApiCalls.GetFareProducts(tokenComponent: tokenComponent,
+                                          transportApiClientSettings: transportApiClientSettings,
                                           onlyAgencies: onlyAgencies,
                                    omitAgencies: omitAgencies,
                                    exclude: exclude,
@@ -385,13 +546,23 @@ public class TransportApiClient
         }
     }
     
-    public func GetFareProduct(
+    open class func getFareProduct(
         id: String,
-        exclude: String! = nil,
+        exclude: String? = nil,
         completion: @escaping (_ result: TransportApiResult<FareProduct>) -> Void)
     {
-        TransportApiCalls.GetFareProduct(tokenComponent: self.tokenComponent,
-                                         transportApiClientSettings: self.transportApiClientSettings,
+        guard let tokenComponent = self.tokenComponent, let transportApiClientSettings = self.transportApiClientSettings else {
+            let transportApiResult = TransportApiResult<FareProduct>()
+            
+            transportApiResult.error = "Credentials not set, please call loadCredntials and provide your clientId and clientSecret.";
+            
+            completion(transportApiResult)
+            
+            return
+        }
+        
+        TransportApiCalls.GetFareProduct(tokenComponent: tokenComponent,
+                                         transportApiClientSettings: transportApiClientSettings,
                                          id: id,
                                   exclude: exclude)
         {
@@ -400,17 +571,27 @@ public class TransportApiClient
         }
     }
     
-    public func GetStopTimetable(
+    open class func getStopTimetable(
         id: String,
-        earliestArrivalTime: Date! = nil,
-        latestArrivalTime: Date! = nil,
+        earliestArrivalTime: Date? = nil,
+        latestArrivalTime: Date? = nil,
         limit: Int = 100,
         offset: Int = 0,
-        exclude: String! = nil,
+        exclude: String? = nil,
         completion: @escaping (_ result: TransportApiResult<[StopTimetable]>) -> Void)
     {
-        TransportApiCalls.GetStopTimetable(tokenComponent: self.tokenComponent,
-                                           transportApiClientSettings: self.transportApiClientSettings,
+        guard let tokenComponent = self.tokenComponent, let transportApiClientSettings = self.transportApiClientSettings else {
+            let transportApiResult = TransportApiResult<[StopTimetable]>()
+            
+            transportApiResult.error = "Credentials not set, please call loadCredntials and provide your clientId and clientSecret.";
+            
+            completion(transportApiResult)
+            
+            return
+        }
+        
+        TransportApiCalls.GetStopTimetable(tokenComponent: tokenComponent,
+                                           transportApiClientSettings: transportApiClientSettings,
                                            id: id,
                                          earliestArrivalTime: earliestArrivalTime,
                                          latestArrivalTime: latestArrivalTime,
@@ -423,19 +604,29 @@ public class TransportApiClient
         }
     }
     
-    public func GetLineTimetable(
+    open class func getLineTimetable(
        id: String,
-       departureStopIdFilter: String! = nil,
-       arrivalStopIdFilter: String! = nil,
-       earliestDepartureTime: Date! = nil,
-       latestDepartureTime: Date! = nil,
+       departureStopIdFilter: String? = nil,
+       arrivalStopIdFilter: String? = nil,
+       earliestDepartureTime: Date? = nil,
+       latestDepartureTime: Date? = nil,
        limit: Int = 100,
        offset: Int = 0,
-       exclude: String! = nil,
+       exclude: String? = nil,
        completion: @escaping (_ result: TransportApiResult<[LineTimetable]>) -> Void)
     {
-        TransportApiCalls.GetLineTimetable(tokenComponent: self.tokenComponent,
-                                           transportApiClientSettings: self.transportApiClientSettings,
+        guard let tokenComponent = self.tokenComponent, let transportApiClientSettings = self.transportApiClientSettings else {
+            let transportApiResult = TransportApiResult<[LineTimetable]>()
+            
+            transportApiResult.error = "Credentials not set, please call loadCredntials and provide your clientId and clientSecret.";
+            
+            completion(transportApiResult)
+            
+            return
+        }
+        
+        TransportApiCalls.GetLineTimetable(tokenComponent: tokenComponent,
+                                           transportApiClientSettings: transportApiClientSettings,
                                            id: id,
                                            departureStopIdFilter: departureStopIdFilter,
                                            arrivalStopIdFilter: arrivalStopIdFilter,
@@ -448,4 +639,21 @@ public class TransportApiClient
             (result: TransportApiResult<[LineTimetable]>) in
             completion (result)
         }
-    }}
+    }
+
+    open class func startMonitoringWhenToGetOff(
+        itinerary: Itinerary,
+        crowdSourceFrequency: CrowdSourceFrequency = CrowdSourceFrequency.continuous)
+        -> TransportApiNotificationStatus
+    {
+        return LocationManager.sharedInstance.startMonitoringWhenToGetOff(itinerary: itinerary,
+                                                                          crowdSourceFrequency: crowdSourceFrequency)
+    }
+    
+    open class func stopMonitoringWhenToGetOff()
+    {
+        LocationManager.sharedInstance.stopMonitoringWhenToGetOff()
+    }
+    
+    
+}

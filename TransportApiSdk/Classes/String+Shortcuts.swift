@@ -138,14 +138,14 @@ extension String {
         }
     }
     
-    func addLimitModes(limitModes: [TransportMode]?) -> String {
+    func addLimitModes(limitModes: [String]?) -> String {
         if (limitModes != nil)
         {
             var limitedModes = ""
             
             for mode in limitModes!
             {
-                limitedModes = limitedModes + mode.rawValue + ","
+                limitedModes = limitedModes + mode + ","
             }
             
             return self + "&modes=" + limitedModes.removeLastCharacter()
@@ -179,5 +179,9 @@ extension String {
         }
         
         return self
+    }
+    
+    var dateFromISO8601: Date? {
+        return Date.iso8601Formatter.date(from: self)
     }
 }

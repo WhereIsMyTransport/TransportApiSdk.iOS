@@ -1,7 +1,7 @@
 internal class AccessToken
 {
-    public var error: String!
-    public var accessToken: String!
+    public var error: String?
+    public var accessToken: String?
     
     public init(accessToken: String?, error: String?)
     {

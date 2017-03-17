@@ -18,6 +18,10 @@
 		106A5F341E4BADB6002177DE /* Hail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 106A5F331E4BADB6002177DE /* Hail.swift */; };
 		106A5F761E5C60FA002177DE /* StopTimetable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 106A5F751E5C60F8002177DE /* StopTimetable.swift */; };
 		106A5F781E5C6733002177DE /* LineTimetable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 106A5F771E5C6733002177DE /* LineTimetable.swift */; };
+		10C4C8BE1E78803D00DEAF19 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10C4C8BD1E78803D00DEAF19 /* LocationManager.swift */; };
+		10C4C8C01E7ABA4600DEAF19 /* GetOffPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10C4C8BF1E7ABA4500DEAF19 /* GetOffPoint.swift */; };
+		10C4C8C41E7C595F00DEAF19 /* TransportApiNotificationStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10C4C8C31E7C595F00DEAF19 /* TransportApiNotificationStatus.swift */; };
+		10C4C8C61E7C5E7B00DEAF19 /* CrowdSourceFrequency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10C4C8C51E7C5E7B00DEAF19 /* CrowdSourceFrequency.swift */; };
 		10CA99831E5C7D4D0046E650 /* AccessToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10CA99821E5C7D4D0046E650 /* AccessToken.swift */; };
 		10D3D9E61E4A2BEE0077AD63 /* TransportApiCalls.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10D3D9E51E4A2BEE0077AD63 /* TransportApiCalls.swift */; };
 		1341E4CBA2B865016A2017500441516A /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDE506ECE97701EBA44FDBFF401C1A04 /* SwiftyJSON.swift */; };
@@ -34,7 +38,6 @@
 		6E032D83C97D519F8B54240D57E4E1CC /* Itinerary.swift in Sources */ = {isa = PBXBuildFile; fileRef = E234577DDB931CBCD6D822E7E03B48BB /* Itinerary.swift */; };
 		73DB161158000F47ED81D1E748384BAF /* TransportApiClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78E8E5308E227AF0E24B438A85A9C699 /* TransportApiClient.swift */; };
 		762D0B03B54E19B44C707C1DAEEEFD70 /* RestApiManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4356EFB56BCFEADC8FD49ED1B3AF9D6B /* RestApiManager.swift */; };
-		7867679FAE90113DEB4C780FC479089B /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C1D5FE8848A84897E349E8E83C67731 /* Enums.swift */; };
 		7DDB7EB21CC62AA87996FD7FFE30EC0C /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F05A2DDA9058082E37FAAA448F008219 /* SwiftyJSON.framework */; };
 		8D50B0ED603E3D83D552A6DD0A136BD2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B92C8AAF83FB3D050E8760B7427B0B23 /* Foundation.framework */; };
 		941C4DA733FA2F5AD5A24292FE85DD2A /* TransportApiResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A3B3E4D6EDD315EAA1D82D5D4E0484 /* TransportApiResult.swift */; };
@@ -80,7 +83,6 @@
 		015333A5702E4757E954E06B718E4968 /* Pods-TransportApiSdk_Example-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-TransportApiSdk_Example-dummy.m"; sourceTree = "<group>"; };
 		01637849588B41CF09BD0084EA2D0326 /* Pods_TransportApiSdk_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TransportApiSdk_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		05CA09B061E193906653AC21FD3A94F1 /* SwiftyJSON-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SwiftyJSON-umbrella.h"; sourceTree = "<group>"; };
-		0C1D5FE8848A84897E349E8E83C67731 /* Enums.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
 		106A5F291E4BAB1D002177DE /* Cost.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cost.swift; sourceTree = "<group>"; };
 		106A5F2A1E4BAB1D002177DE /* Fare.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Fare.swift; sourceTree = "<group>"; };
 		106A5F2B1E4BAB1D002177DE /* FareProduct.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FareProduct.swift; sourceTree = "<group>"; };
@@ -89,6 +91,10 @@
 		106A5F331E4BADB6002177DE /* Hail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Hail.swift; sourceTree = "<group>"; };
 		106A5F751E5C60F8002177DE /* StopTimetable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StopTimetable.swift; sourceTree = "<group>"; };
 		106A5F771E5C6733002177DE /* LineTimetable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LineTimetable.swift; sourceTree = "<group>"; };
+		10C4C8BD1E78803D00DEAF19 /* LocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		10C4C8BF1E7ABA4500DEAF19 /* GetOffPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetOffPoint.swift; sourceTree = "<group>"; };
+		10C4C8C31E7C595F00DEAF19 /* TransportApiNotificationStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransportApiNotificationStatus.swift; sourceTree = "<group>"; };
+		10C4C8C51E7C5E7B00DEAF19 /* CrowdSourceFrequency.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CrowdSourceFrequency.swift; sourceTree = "<group>"; };
 		10CA99821E5C7D4D0046E650 /* AccessToken.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccessToken.swift; sourceTree = "<group>"; };
 		10D3D9E51E4A2BEE0077AD63 /* TransportApiCalls.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransportApiCalls.swift; sourceTree = "<group>"; };
 		18C684373902A602B43851495089F10E /* TransportApiClientSettings.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TransportApiClientSettings.swift; sourceTree = "<group>"; };
@@ -181,7 +187,6 @@
 				D9949792B5D120EB84A93451337C4A13 /* Coordinate.swift */,
 				597B58842EAECCB48DFD98EE8DD67732 /* Direction.swift */,
 				1AAFD30B2ADF38BB05910F17F4C39C51 /* Distance.swift */,
-				0C1D5FE8848A84897E349E8E83C67731 /* Enums.swift */,
 				3F41A2C1E470AFCDCF3F90035BA8AC8B /* Geometry.swift */,
 				E234577DDB931CBCD6D822E7E03B48BB /* Itinerary.swift */,
 				AB5505557FE74C9FDB50BE18B1D38BCB /* Journey.swift */,
@@ -195,6 +200,7 @@
 				106A5F331E4BADB6002177DE /* Hail.swift */,
 				106A5F751E5C60F8002177DE /* StopTimetable.swift */,
 				106A5F771E5C6733002177DE /* LineTimetable.swift */,
+				10C4C8BF1E7ABA4500DEAF19 /* GetOffPoint.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -306,6 +312,9 @@
 				18C684373902A602B43851495089F10E /* TransportApiClientSettings.swift */,
 				55A3B3E4D6EDD315EAA1D82D5D4E0484 /* TransportApiResult.swift */,
 				10D3D9E51E4A2BEE0077AD63 /* TransportApiCalls.swift */,
+				10C4C8BD1E78803D00DEAF19 /* LocationManager.swift */,
+				10C4C8C31E7C595F00DEAF19 /* TransportApiNotificationStatus.swift */,
+				10C4C8C51E7C5E7B00DEAF19 /* CrowdSourceFrequency.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -501,17 +510,18 @@
 				481884B37FFDCB7F445EF913D3E5F586 /* Direction.swift in Sources */,
 				106A5F311E4BAB1D002177DE /* Line.swift in Sources */,
 				007D3B2533B7CC30EDCF3B7FE62617FE /* Distance.swift in Sources */,
-				7867679FAE90113DEB4C780FC479089B /* Enums.swift in Sources */,
 				B2BC4010DF0E392E17294DF03C8FB88F /* Geometry.swift in Sources */,
 				6E032D83C97D519F8B54240D57E4E1CC /* Itinerary.swift in Sources */,
 				9F864D480C76331AD9043E0A0B68F874 /* Journey.swift in Sources */,
 				106A5F341E4BADB6002177DE /* Hail.swift in Sources */,
 				0B2E060037A1381DA6BA999A2A07A8CD /* Leg.swift in Sources */,
 				106A5F781E5C6733002177DE /* LineTimetable.swift in Sources */,
+				10C4C8C01E7ABA4600DEAF19 /* GetOffPoint.swift in Sources */,
 				106A5F321E4BAB1D002177DE /* Vehicle.swift in Sources */,
 				99F40BC6D490A112FAC5C25478DEA695 /* Location.swift in Sources */,
 				B260133D1644FD8D525AEF65A9F12084 /* Omit.swift in Sources */,
 				106A5F2E1E4BAB1D002177DE /* Cost.swift in Sources */,
+				10C4C8BE1E78803D00DEAF19 /* LocationManager.swift in Sources */,
 				1DC4A10B86ED7E1EC2AA6C94F55174E9 /* Only.swift in Sources */,
 				BB5EBE73E81367C06DB313135D479662 /* ParentStop.swift in Sources */,
 				762D0B03B54E19B44C707C1DAEEEFD70 /* RestApiManager.swift in Sources */,
@@ -527,6 +537,8 @@
 				4AB07A35B16F936E21C13735DB44F683 /* TransportApiSdk-dummy.m in Sources */,
 				E9B7BC159C0DFC1E6DD59E33A14ABD2F /* Waypoint.swift in Sources */,
 				10CA99831E5C7D4D0046E650 /* AccessToken.swift in Sources */,
+				10C4C8C41E7C595F00DEAF19 /* TransportApiNotificationStatus.swift in Sources */,
+				10C4C8C61E7C5E7B00DEAF19 /* CrowdSourceFrequency.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

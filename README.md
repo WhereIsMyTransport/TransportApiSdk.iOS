@@ -10,17 +10,25 @@ Access to the platform is completely free, so for more information and to get cr
 
 ## Usage
 
+In your application delegate, import TransportApiSdk and inside `applicationDidFinishLaunching:` add:
+
 ```swift
 import TransportApiSdk
 
-// Setup your credentials.
-let transportApiClientSettings = TransportApiClientSettings(clientId: "YOUR_CLIENT_ID", clientSecret: "YOUR_CLIENT_SECRET")
+func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 
-// Define the api client.
-let transportApiClient = TransportApiClient(transportApiClientSettings: transportApiClientSettings)
+    TransportApiClient.loadCredentials(clientId: "YOUR_CLIENT_ID", clientSecret: "YOUR_CLIENT_SECRET")
 
-// Make an api call.
-transportApiClient.GetAgencies
+    return true
+}
+```
+
+Now you can make calls anywhere in your application:
+
+```swift
+import TransportApiSdk
+
+TransportApiClient.getAgencies
 {
 (result: TransportApiResult<[Agency]>) in
 
@@ -31,7 +39,35 @@ transportApiClient.GetAgencies
 
 ## Features
 
-The following end-points are available:
+NEW on-device feature available:
+
+###WhenToGetOff
+
+Notifies the user with vibrations and a banner when they are approaching a stop they need to disembark at.
+
+* App needs to be in the background/ foreground to function.
+* The function stops monitoring when: the user has no more stops to disembark at or the itinerary time has elapsed.
+* Calling the function again will over-write any existing function.
+* The function samples the user location for crowd-sourcing with minimal data usage. You can disabled this feature, but we recomend leaving it enabled to assist with advanced features such as ETAs and Service Alerts.
+
+Before using this feature, please do the following:
+* Add the `NSLocationAlwaysUsageDescription` description in your app's `Info.plist`
+* Turn on `Background Fetch` and `Location Updates` checkbox in `Project Settings > Capabilities > Background Modes`
+* Request authorization for notifications
+
+####iOS 10 Example
+
+```swift
+import TransportApiSdk
+
+// Grant access to notifications.
+UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]){(granted, error) in}
+
+// Call WhenToGetOff.
+TransportApiClient.startMonitoringWhenToGetOff(itinerary: USER_SELECTED_ITINERARY)
+```
+
+The following API end-points are available:
 
 * POST api/journeys
 * GET api/journeys/{id}

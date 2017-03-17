@@ -13,23 +13,19 @@ import CoreLocation
 class ViewController: UIViewController {
 
     // To get access credentials go to https://developer.whereismytransport.com
-    let clientId = "YOUR_CLIENT_ID"
-    let clientSecret = "YOUR_CLIENT_SECRET"
-    
-    var transportApiClient: TransportApiClient!
-    
+
     @IBOutlet weak var resultTextView: UITextView!
     
     @IBAction func requestButton(_ sender: UIButton) {
         //let exclude = "geometry,directions,distance"
-        //let startLocation = CLLocationCoordinate2D(latitude: -25.760938159763594, longitude: 28.23760986328125)
-        //let endLocation = CLLocationCoordinate2D(latitude: -26.02655312878948, longitude: 28.124313354492184)
-        //let onlyMode = [TransportMode.Rail]
+        //let startLocation = CLLocationCoordinate2D(latitude: -33.921776, longitude: 18.425955)
+        //let endLocation = CLLocationCoordinate2D(latitude: -34.002589, longitude: 18.47108)
+        //let onlyMode = ["Rail"]
         //let onlyAgencies = [""]
         
         self.resultTextView.text = "Something amazing is about to happen..."
         
-        /*self.transportApiClient.PostJourney(startLocation: startLocation, endLocation: endLocation)
+        /*TransportApiClient.postJourney(onlyModes: onlyMode, startLocation: startLocation, endLocation: endLocation, time: Date())
         {
             (result: TransportApiResult<Journey>) in
                 DispatchQueue.main.async
@@ -38,7 +34,7 @@ class ViewController: UIViewController {
                 }
         }*/
         
-        /*self.transportApiClient.GetJourney(id: "rHfzAvs4Rki3jKccAUoGYA")
+        /*self.transportApiClient.GetJourney(id: "Nef5Jhy-pk2LM6c4AO4ocw")
         {
             (result: TransportApiResult<Journey>) in
             DispatchQueue.main.async
@@ -47,13 +43,18 @@ class ViewController: UIViewController {
             }
         }*/
         
-        self.transportApiClient.GetItinerary(journeyId: "rHfzAvs4Rki3jKccAUoGYA",
+        TransportApiClient.getItinerary(journeyId: "rHfzAvs4Rki3jKccAUoGYA",
                                              itineraryId: "QIuuBAmdhU-mxaccAUoNRw")
          {
             (result: TransportApiResult<Itinerary>) in
+         
+         
             DispatchQueue.main.async
                 {
-                    self.resultTextView.text = result.rawJson
+                    _ = TransportApiClient.startMonitoringWhenToGetOff(itinerary: result.data)
+                    
+                    
+                    //TransportApiClient.stopMonitoringWhenToGetOff()
             }
          }
         
@@ -151,9 +152,9 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let transportApiClientSettings = TransportApiClientSettings(clientId: clientId, clientSecret: clientSecret)
+        //let transportApiClientSettings = TransportApiClientSettings(clientId: clientId, clientSecret: clientSecret)
         
-        transportApiClient = TransportApiClient(transportApiClientSettings: transportApiClientSettings)
+        //transportApiClient = TransportApiClient(transportApiClientSettings: transportApiClientSettings)
     }
     
     override func didReceiveMemoryWarning() {

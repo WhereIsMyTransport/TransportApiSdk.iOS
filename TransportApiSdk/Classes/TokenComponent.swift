@@ -34,14 +34,14 @@ internal class TokenComponent
         {
             // Get new access token.
             
-            let clientIdEncoded = addingPercentEncodingForFormUrlencoded(input: self.transportApiClientSettings.ClientId)!
-            let clientSecretEncoded = addingPercentEncodingForFormUrlencoded(input: self.transportApiClientSettings.ClientSecret)!
+            let clientIdEncoded = addingPercentEncodingForFormUrlencoded(input: self.transportApiClientSettings.clientId)!
+            let clientSecretEncoded = addingPercentEncodingForFormUrlencoded(input: self.transportApiClientSettings.clientSecret)!
             
             let query = "client_id=" + clientIdEncoded +
                 "&client_secret=" + clientSecretEncoded +
                 "&grant_type=client_credentials&scope=transportapi%3Aall"
 
-            RestApiManager.sharedInstance.makeHTTPPostRequest(path: identityURL, accessToken: nil, timeout: Double(self.transportApiClientSettings.TimeoutInSeconds), queryUrlEncoded: query, onCompletion: { json, err, response in
+            RestApiManager.sharedInstance.makeHTTPPostRequest(path: identityURL, accessToken: nil, timeout: Double(self.transportApiClientSettings.timeoutInSeconds), queryUrlEncoded: query, onCompletion: { json, err, response in
                 
                 var accessToken: AccessToken?
                 
