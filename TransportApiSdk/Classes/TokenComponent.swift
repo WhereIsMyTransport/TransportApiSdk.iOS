@@ -41,7 +41,7 @@ internal class TokenComponent
                 "&client_secret=" + clientSecretEncoded +
                 "&grant_type=client_credentials&scope=transportapi%3Aall"
 
-            RestApiManager.sharedInstance.makeHTTPPostRequest(path: identityURL, accessToken: nil, timeout: Double(self.transportApiClientSettings.timeoutInSeconds), queryUrlEncoded: query, onCompletion: { json, err, response in
+            RestApiManager.sharedInstance.makeHTTPPostRequest(path: identityURL, timeout: Double(self.transportApiClientSettings.timeoutInSeconds), queryUrlEncoded: query, onCompletion: { json, err, response in
                 
                 var accessToken: AccessToken?
                 

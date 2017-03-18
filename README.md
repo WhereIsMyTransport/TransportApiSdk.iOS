@@ -39,9 +39,9 @@ TransportApiClient.getAgencies
 
 ## Features
 
-NEW on-device feature available:
+*NEW* on-device feature available:
 
-###WhenToGetOff
+### WhenToGetOff (Beta)
 
 Notifies the user with vibrations and a banner when they are approaching a stop they need to disembark at.
 
@@ -55,7 +55,7 @@ Before using this feature, please do the following:
 * Turn on `Background Fetch` and `Location Updates` checkbox in `Project Settings > Capabilities > Background Modes`
 * Request authorization for notifications
 
-####iOS 10 Example
+#### iOS 10 Example
 
 ```swift
 import TransportApiSdk
@@ -66,6 +66,8 @@ UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound
 // Call WhenToGetOff.
 TransportApiClient.startMonitoringWhenToGetOff(itinerary: USER_SELECTED_ITINERARY)
 ```
+
+### Wrapper Functions
 
 The following API end-points are available:
 

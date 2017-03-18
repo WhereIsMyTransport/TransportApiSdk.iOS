@@ -50,15 +50,32 @@ internal class RestApiManager: NSObject {
             onCompletion(JSON.null, nil, nil)
         }
     }
+    
+    // MARK: Perform a POST Request
+    public func makeHTTPPostRequest(path: String, json: JSON)
+    {
+        do
+        {
+            let data = try json.rawString()?.data(using: .utf8)
+            
+            try makeHTTPPostRequest(isIdsRequest: false, path: path, data: data!, timeout: 30.0, onCompletion: { json, err, response in
+
+            })
+        }
+        catch
+        {
+            // Fail silently into the night...
+        }
+    }
 
     // MARK: Perform a POST Request
-    public func makeHTTPPostRequest(path: String, accessToken: String!, timeout: Double, query: String?, json: JSON, onCompletion: @escaping ServiceResponse)
+    public func makeHTTPPostRequest(path: String, accessToken: String, timeout: Double, query: String?, json: JSON, onCompletion: @escaping ServiceResponse)
     {
         do
         {
             let data = try json.rawString()?.data(using: .utf8)
 
-            try makeHTTPPostRequest(path: path, accessToken: accessToken, timeout: timeout, query: query, data: data!, onCompletion: { json, err, response in
+            try makeHTTPPostRequest(isIdsRequest: false, path: path, data: data!, timeout: timeout, accessToken: accessToken, query: query, onCompletion: { json, err, response in
                 
                 onCompletion(json, err, response)
             })
@@ -71,11 +88,11 @@ internal class RestApiManager: NSObject {
     }
     
     // MARK: Perform a POST Request
-    public func makeHTTPPostRequest(path: String, accessToken: String!, timeout: Double, queryUrlEncoded: String, onCompletion: @escaping ServiceResponse)
+    public func makeHTTPPostRequest(path: String, timeout: Double, queryUrlEncoded: String, onCompletion: @escaping ServiceResponse)
     {
         let data = queryUrlEncoded.data(using: .utf8)!
         
-        makeHTTPPostRequest(path: path, accessToken: accessToken, timeout: timeout, query: nil, data: data, onCompletion: { json, err, response in
+        makeHTTPPostRequest(isIdsRequest: true, path: path, data: data, timeout: timeout, onCompletion: { json, err, response in
 
             onCompletion(json, err, response)
         })
@@ -101,10 +118,10 @@ internal class RestApiManager: NSObject {
         return error.localizedDescription
     }
     
-    private func makeHTTPPostRequest(path: String, accessToken: String!, timeout: Double, query: String?, data: Data, onCompletion: @escaping ServiceResponse) {
+    private func makeHTTPPostRequest(isIdsRequest: Bool, path: String, data: Data, timeout: Double, accessToken: String? = nil, query: String? = nil, onCompletion: @escaping ServiceResponse) {
         var queryString = path
         
-        if (query != nil)
+        if (query != nil && !query!.isEmpty)
         {
             queryString.append("?")
             queryString.append(query!)
@@ -116,14 +133,18 @@ internal class RestApiManager: NSObject {
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Accept")
 
-        if (accessToken != nil && !accessToken.isEmpty)
+        if (!isIdsRequest && accessToken != nil && !(accessToken?.isEmpty)!)
         {
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-            request.setValue("Bearer " + accessToken, forHTTPHeaderField: "Authorization")
+            request.setValue("Bearer " + accessToken!, forHTTPHeaderField: "Authorization")
+        }
+        else if (isIdsRequest)
+        {
+            request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         }
         else
         {
-            request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         }
         
         do {

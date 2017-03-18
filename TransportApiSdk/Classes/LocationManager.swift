@@ -9,6 +9,7 @@
 import CoreLocation
 import AudioToolbox
 import UserNotifications
+import SwiftyJSON
 
 class LocationManager: NSObject, CLLocationManagerDelegate {
     static let sharedInstance = LocationManager()
@@ -17,6 +18,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
     private var getOffPoints: [GetOffPoint]?
     private var itinerary: Itinerary?
     private var itinereryArrivalTimePlus15: Date?
+    private var crowdSourceFrequency: CrowdSourceFrequency?
     
     private lazy var locationManager: CLLocationManager = {
         let manager = CLLocationManager()
@@ -57,6 +59,8 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         
         self.itinerary = itinerary
         
+        self.crowdSourceFrequency = crowdSourceFrequency
+        
         self.getOffPoints = determineGetOffPoints(itinerary: itinerary)
         
         self.locationManager.startUpdatingLocation()
@@ -89,6 +93,23 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
             // Stop monitoring as the trip is likely over.
             
             self.locationManager.stopUpdatingLocation()
+        }
+        
+        // This is temporary for testing still.
+        
+        if (self.crowdSourceFrequency != CrowdSourceFrequency.never)
+        {
+            let lineId = determineLineId(itinerary: self.itinerary!)
+            
+            if (lineId != nil)
+            {
+                DispatchQueue.main.async
+                {
+                    self.sampleUserCoordinates(latitude: String(mostRecentLocation.coordinate.latitude),
+                                               longitude: String(mostRecentLocation.coordinate.longitude),
+                                               lineId: lineId!)
+                }
+            }
         }
         
         // Defer updates until the user moves a certain distance or a period of time has passed
@@ -265,6 +286,43 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         
         return getOffPoints
     }
+    
+    private func determineLineId(itinerary: Itinerary) -> String?
+    {
+        guard let legs = itinerary.legs else {
+            return nil
+        }
+        
+        for leg in legs
+        {
+            if (leg.type == "Transit")
+            {
+                return leg.line?.id
+            }
+        }
+        
+        return nil
+    }
+    
+    private func sampleUserCoordinates(latitude: String, longitude: String, lineId: String)
+    {
+        let path = "https://prometheus.whereismytransport.com/streams/e67e676f-cd33-4e77-aa85-b46b33baa3f9/updates"
+        
+        var input = "{\"devideId\": 1," +
+        "\"confidence\": " +
+        "[{\"confidence\": 0.5," +
+        "\"type\": \"lineId\"," +
+        "\"id\": \"" + lineId + "\"}]," +
+        "\"longitude\": " + longitude + "," +
+        "\"latitude\": " + latitude + "," +
+        "\"coordinateDate\": \"" + String(Date().timeIntervalSince1970) + "\"," +
+        "\"version\": 2}"
+
+        let json:JSON = JSON(parseJSON: input)
+        
+        RestApiManager.sharedInstance.makeHTTPPostRequest(path: path,
+                                                          json: json)
+     }
     
     
 }

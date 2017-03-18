@@ -43,7 +43,7 @@ class ViewController: UIViewController {
             }
         }*/
         
-        TransportApiClient.getItinerary(journeyId: "rHfzAvs4Rki3jKccAUoGYA",
+        /*TransportApiClient.getItinerary(journeyId: "rHfzAvs4Rki3jKccAUoGYA",
                                              itineraryId: "QIuuBAmdhU-mxaccAUoNRw")
          {
             (result: TransportApiResult<Itinerary>) in
@@ -56,16 +56,16 @@ class ViewController: UIViewController {
                     
                     //TransportApiClient.stopMonitoringWhenToGetOff()
             }
-         }
+         }*/
         
-        /*self.transportApiClient.GetAgencies()
+        TransportApiClient.getAgencies()
         {
             (result: TransportApiResult<[Agency]>) in
             DispatchQueue.main.async
                 {
                     self.resultTextView.text = result.rawJson
             }
-        }*/
+        }
         
         /*self.transportApiClient.GetAgency(id: "A1JHSPIg_kWV5XRHIepCLw")
             {
@@ -151,10 +151,6 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        //let transportApiClientSettings = TransportApiClientSettings(clientId: clientId, clientSecret: clientSecret)
-        
-        //transportApiClient = TransportApiClient(transportApiClientSettings: transportApiClientSettings)
     }
     
     override func didReceiveMemoryWarning() {

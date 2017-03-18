@@ -166,7 +166,7 @@ internal class TransportApiCalls
                 .removeFirstCharacter()
             
             RestApiManager.sharedInstance.makeHTTPPostRequest(path: path,
-                                                              accessToken : accessToken.accessToken,
+                                                              accessToken : accessToken.accessToken!,
                                                               timeout: Double(transportApiClientSettings.timeoutInSeconds),
                                                               query: query,
                                                               json: json,
