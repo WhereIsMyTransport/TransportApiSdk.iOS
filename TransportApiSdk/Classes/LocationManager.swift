@@ -65,6 +65,8 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         
         self.locationManager.startUpdatingLocation()
         
+        print("Start monitoring")
+        
         return TransportApiNotificationStatus.Created
     }
     
@@ -77,6 +79,8 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         guard let mostRecentLocation = locations.last else {
             return
         }
+        
+        print("Got location")
         
         if let getOffPoint = getOffPointToNotify(location: mostRecentLocation)
         {
