@@ -50,13 +50,13 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         {
             // Too early!
             
-            return TransportApiNotificationStatus.TooEarly
+            //return TransportApiNotificationStatus.TooEarly
         }
         else if (currentDateTime > self.itinereryArrivalTimePlus15!)
         {
             // Too late!
             
-            return TransportApiNotificationStatus.TooLate
+            //return TransportApiNotificationStatus.TooLate
         }
         
         self.itinerary = itinerary
