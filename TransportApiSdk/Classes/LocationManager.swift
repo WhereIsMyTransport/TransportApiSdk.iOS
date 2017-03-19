@@ -19,6 +19,9 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
     private var itinerary: Itinerary?
     private var itinereryArrivalTimePlus15: Date?
     private var crowdSourceFrequency: CrowdSourceFrequency?
+    private var lastSourced = Date()
+    
+    private let calendar = Calendar.current
     
     private lazy var locationManager: CLLocationManager = {
         let manager = CLLocationManager()
@@ -38,7 +41,6 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         itinerary: Itinerary,
         crowdSourceFrequency: CrowdSourceFrequency) -> TransportApiNotificationStatus
     {
-        let calendar = Calendar.current
         let currentDateTime = Date()
         
         let itineraryDepartureTimeLess15 = calendar.date(byAdding: .minute, value: -15, to: itinerary.departureTime!.dateFromISO8601!, wrappingComponents: false)
@@ -48,13 +50,13 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         {
             // Too early!
             
-            //return TransportApiNotificationStatus.TooEarly
+            return TransportApiNotificationStatus.TooEarly
         }
         else if (currentDateTime > self.itinereryArrivalTimePlus15!)
         {
             // Too late!
             
-            //return TransportApiNotificationStatus.TooLate
+            return TransportApiNotificationStatus.TooLate
         }
         
         self.itinerary = itinerary
@@ -63,9 +65,12 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         
         self.getOffPoints = determineGetOffPoints(itinerary: itinerary)
         
-        self.locationManager.startUpdatingLocation()
-        
-        print("Start monitoring")
+        DispatchQueue.main.async
+        {
+            print("Start monitoring")
+            
+            self.locationManager.startUpdatingLocation()
+        }
         
         return TransportApiNotificationStatus.Created
     }
@@ -100,7 +105,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
             
             self.writeToLogFile(s: "Stopping: Gone over arrival time")
             
-            //self.locationManager.stopUpdatingLocation()
+            self.locationManager.stopUpdatingLocation()
         }
         
         // This is temporary for testing still.
@@ -113,9 +118,15 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
             {
                 DispatchQueue.main.async
                 {
-                    self.sampleUserCoordinates(latitude: String(mostRecentLocation.coordinate.latitude),
-                                               longitude: String(mostRecentLocation.coordinate.longitude),
-                                               lineId: lineId!)
+                    let timeLess1 = self.calendar.date(byAdding: .minute, value: -1, to:  mostRecentLocation.timestamp, wrappingComponents: false)
+                    
+                    // Only sample every minute.
+                    if (timeLess1! > self.lastSourced)
+                    {
+                        self.sampleUserCoordinates(latitude: String(mostRecentLocation.coordinate.latitude),
+                                                   longitude: String(mostRecentLocation.coordinate.longitude),
+                                                   lineId: lineId!)
+                    }
                 }
             }
         }
@@ -148,7 +159,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         
         // Vibrate 5 times.
         for _ in 1...5 {
-            AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
+            AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
             sleep(1)
         }
     }
@@ -180,23 +191,23 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
                     case .notSupported:
                         isAlertEndabled = false
                 }
-            }
-            
-            if (isSoundEnabled && isAlertEndabled)
-            {
-                let content = UNMutableNotificationContent()
                 
-                content.title = "Time to get off!"
-                content.body = "Approaching " + getOffPointName + " in less than 500 meters"
-                content.sound = UNNotificationSound.default()
-            
-                let trigger = UNTimeIntervalNotificationTrigger.init(timeInterval: 5, repeats: false)
-                let request = UNNotificationRequest.init(identifier: "ReminderToGetOff", content: content, trigger: trigger)
-                
-                // Schedule the notification.
-                let center = UNUserNotificationCenter.current()
-                center.add(request) { (error) in
+                if (isSoundEnabled && isAlertEndabled)
+                {
+                    let content = UNMutableNotificationContent()
                     
+                    content.title = "Time to get off!"
+                    content.body = "Approaching " + getOffPointName + " in less than 500 meters"
+                    content.sound = UNNotificationSound.default()
+                    
+                    let trigger = UNTimeIntervalNotificationTrigger.init(timeInterval: 1, repeats: false)
+                    let request = UNNotificationRequest.init(identifier: "ReminderToGetOff", content: content, trigger: trigger)
+                    
+                    // Schedule the notification.
+                    let center = UNUserNotificationCenter.current()
+                    center.add(request) { (error) in
+                        
+                    }
                 }
             }
         }
@@ -316,8 +327,11 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
     
     private func sampleUserCoordinates(latitude: String, longitude: String, lineId: String)
     {
+        self.lastSourced = Date()
+        
         let log = latitude + "," + longitude + "," + Date().iso8601
         self.writeToLogFile(s: log)
+        print (log)
         
         let path = "https://prometheus.whereismytransport.com/streams/e67e676f-cd33-4e77-aa85-b46b33baa3f9/updates"
         
@@ -335,7 +349,24 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         
         RestApiManager.sharedInstance.makeHTTPPostRequest(path: path,
                                                           json: json)
-     }
+    }
+    
+    private func clearLogFile(s: String)
+    {
+        print ("Clear Logs")
+        
+        let fileName = "GetOffLogs"
+        let DocumentDirURL = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+        
+        let fileURL = DocumentDirURL.appendingPathComponent(fileName).appendingPathExtension("txt")
+        
+        do {
+            // Write to the file
+            try "".write(to: fileURL, atomically: true, encoding: String.Encoding.utf8)
+        } catch let error as NSError {
+            print("Failed writing to URL: \(fileURL), Error: " + error.localizedDescription)
+        }
+    }
     
     private func writeToLogFile(s: String)
     {
@@ -354,7 +385,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
             print("Failed reading from URL: \(fileURL), Error: " + error.localizedDescription)
         }
         
-        let writeString = readString + "\n" + s
+        let writeString = s + "\n" + readString
         
         do {
             // Write to the file
