@@ -48,13 +48,13 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         {
             // Too early!
             
-            return TransportApiNotificationStatus.TooEarly
+            //return TransportApiNotificationStatus.TooEarly
         }
         else if (currentDateTime > self.itinereryArrivalTimePlus15!)
         {
             // Too late!
             
-            return TransportApiNotificationStatus.TooLate
+            //return TransportApiNotificationStatus.TooLate
         }
         
         self.itinerary = itinerary
@@ -84,6 +84,8 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
             
             if (!hasMoreGetOffPoints())
             {
+                self.writeToLogFile(s: "Stopping: No more points")
+                
                 self.locationManager.stopUpdatingLocation()
             }
         }
@@ -92,7 +94,9 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         {
             // Stop monitoring as the trip is likely over.
             
-            self.locationManager.stopUpdatingLocation()
+            self.writeToLogFile(s: "Stopping: Gone over arrival time")
+            
+            //self.locationManager.stopUpdatingLocation()
         }
         
         // This is temporary for testing still.
@@ -132,6 +136,8 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         getOffPoint.isNotified = true
         
         let notificationText = "Time to get off at " + getOffPoint.name
+        
+        self.writeToLogFile(s:notificationText)
         
         // Try create a location notification.
         self.createLocalNotification(getOffPointName: getOffPoint.name)
@@ -306,6 +312,9 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
     
     private func sampleUserCoordinates(latitude: String, longitude: String, lineId: String)
     {
+        let log = latitude + "," + longitude + "," + Date().iso8601
+        self.writeToLogFile(s: log)
+        
         let path = "https://prometheus.whereismytransport.com/streams/e67e676f-cd33-4e77-aa85-b46b33baa3f9/updates"
         
         var input = "{\"devideId\": 1," +
@@ -323,6 +332,33 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         RestApiManager.sharedInstance.makeHTTPPostRequest(path: path,
                                                           json: json)
      }
+    
+    private func writeToLogFile(s: String)
+    {
+        // Save data to file
+        let fileName = "GetOffLogs"
+        let DocumentDirURL = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+        
+        let fileURL = DocumentDirURL.appendingPathComponent(fileName).appendingPathExtension("txt")
+        print("FilePath: \(fileURL.path)")
+        
+        var readString = "" // Used to store the file contents
+        do {
+            // Read the file contents
+            readString = try String(contentsOf: fileURL)
+        } catch let error as NSError {
+            print("Failed reading from URL: \(fileURL), Error: " + error.localizedDescription)
+        }
+        
+        let writeString = readString + "\n" + s
+        
+        do {
+            // Write to the file
+            try writeString.write(to: fileURL, atomically: true, encoding: String.Encoding.utf8)
+        } catch let error as NSError {
+            print("Failed writing to URL: \(fileURL), Error: " + error.localizedDescription)
+        }
+    }
     
     
 }

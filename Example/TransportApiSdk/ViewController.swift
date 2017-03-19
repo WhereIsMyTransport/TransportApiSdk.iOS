@@ -16,6 +16,22 @@ class ViewController: UIViewController {
 
     @IBOutlet weak var resultTextView: UITextView!
     
+    @IBAction func viewLogsButton(_ sender: UIButton) {
+        let fileName = "GetOffLogs"
+        let DocumentDirURL = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+        
+        let fileURL = DocumentDirURL.appendingPathComponent(fileName).appendingPathExtension("txt")
+        // Read from the file
+        var readString = "" // Used to store the file contents
+        do {
+            // Read the file contents
+            readString = try String(contentsOf: fileURL)
+        } catch let error as NSError {
+            print("Failed reading from URL: \(fileURL), Error: " + error.localizedDescription)
+        }
+        print("File Text: \(readString)")
+    }
+    
     @IBAction func requestButton(_ sender: UIButton) {
         //let exclude = "geometry,directions,distance"
         //let startLocation = CLLocationCoordinate2D(latitude: -33.921776, longitude: 18.425955)
@@ -43,7 +59,7 @@ class ViewController: UIViewController {
             }
         }*/
         
-        /*TransportApiClient.getItinerary(journeyId: "rHfzAvs4Rki3jKccAUoGYA",
+        TransportApiClient.getItinerary(journeyId: "rHfzAvs4Rki3jKccAUoGYA",
                                              itineraryId: "QIuuBAmdhU-mxaccAUoNRw")
          {
             (result: TransportApiResult<Itinerary>) in
@@ -56,7 +72,7 @@ class ViewController: UIViewController {
                     
                     //TransportApiClient.stopMonitoringWhenToGetOff()
             }
-         }*/
+         }
         
         TransportApiClient.getAgencies()
         {

@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'TransportApiSdk'
-  s.version          = '1.1.1'
+  s.version          = '1.1.2'
   s.summary          = 'SDK for the WhereIsMyTransport Transport API.'
 
   s.description      = <<-DESC
