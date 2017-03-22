@@ -5,6 +5,12 @@
 //  Created by Chris on 3/14/17.
 //
 //
+// TODO Notifications for iOS < 10
+// TODO Delegates to allow dev to listen for notificaitons
+// TODO Make notifications optional if dev wants to handle them rather
+// TODO More accurate check of when to get off. It's quite optimistic atm.
+// TODO What if the itinerary is running late? Location will cut off 15min after scheduled arrival time.
+// TODO Crowd sourcing at stops only if dev requests it. Currently does every 100m no matter what.
 
 import CoreLocation
 import AudioToolbox
@@ -14,14 +20,15 @@ import SwiftyJSON
 class LocationManager: NSObject, CLLocationManagerDelegate {
     static let sharedInstance = LocationManager()
     
-    private var deferringUpdates = false
-    private var getOffPoints: [GetOffPoint]?
-    private var itinerary: Itinerary?
-    private var itinereryArrivalTimePlus15: Date?
-    private var crowdSourceFrequency: CrowdSourceFrequency?
+    private var getOffPoints: [GetOffPoint]!
+    private var itinerary: Itinerary!
+    private var itinereryArrivalTimePlus15: Date!
+    private var crowdSourceFrequency: CrowdSourceFrequency!
     private var lastSourced = Date()
+    private var tokenComponent: TokenComponent!
     
     private let calendar = Calendar.current
+    
     
     private lazy var locationManager: CLLocationManager = {
         let manager = CLLocationManager()
@@ -29,6 +36,11 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         manager.activityType = .automotiveNavigation
         manager.delegate = self
         manager.requestAlwaysAuthorization()
+        if #available(iOS 9.0, *) {
+            manager.allowsBackgroundLocationUpdates = true
+        }
+        manager.pausesLocationUpdatesAutomatically = true
+        manager.distanceFilter = 100.0
         return manager
     }()
     
@@ -38,6 +50,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
     }
     
     public func startMonitoringWhenToGetOff(
+        tokenComponent: TokenComponent,
         itinerary: Itinerary,
         crowdSourceFrequency: CrowdSourceFrequency) -> TransportApiNotificationStatus
     {
@@ -50,16 +63,18 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         {
             // Too early!
             
-            //return TransportApiNotificationStatus.TooEarly
+            return TransportApiNotificationStatus.TooEarly
         }
         else if (currentDateTime > self.itinereryArrivalTimePlus15!)
         {
             // Too late!
             
-            //return TransportApiNotificationStatus.TooLate
+            return TransportApiNotificationStatus.TooLate
         }
         
         self.itinerary = itinerary
+        
+        self.tokenComponent = tokenComponent
         
         self.crowdSourceFrequency = crowdSourceFrequency
         
@@ -67,8 +82,6 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         
         DispatchQueue.main.async
         {
-            print("Start monitoring")
-            
             self.locationManager.startUpdatingLocation()
         }
         
@@ -85,65 +98,34 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
             return
         }
         
-        print("Got location")
-        
         if let getOffPoint = getOffPointToNotify(location: mostRecentLocation)
         {
             notify(getOffPoint: getOffPoint)
             
             if (!hasMoreGetOffPoints())
             {
-                self.writeToLogFile(s: "Stopping: No more points")
-                
                 self.locationManager.stopUpdatingLocation()
             }
         }
         
-        if (Date() > self.itinereryArrivalTimePlus15!)
+        if (Date() > self.itinereryArrivalTimePlus15)
         {
             // Stop monitoring as the trip is likely over.
-            
-            self.writeToLogFile(s: "Stopping: Gone over arrival time")
             
             self.locationManager.stopUpdatingLocation()
         }
         
-        // This is temporary for testing still.
-        
-        if (self.crowdSourceFrequency != CrowdSourceFrequency.never)
+        DispatchQueue.main.async
         {
-            let lineId = determineLineId(itinerary: self.itinerary!)
+            let timeLess1 = self.calendar.date(byAdding: .minute, value: -1, to:  mostRecentLocation.timestamp, wrappingComponents: false)!
             
-            if (lineId != nil)
+            // Only sample every minute for now.
+            if (timeLess1 > self.lastSourced)
             {
-                DispatchQueue.main.async
-                {
-                    let timeLess1 = self.calendar.date(byAdding: .minute, value: -1, to:  mostRecentLocation.timestamp, wrappingComponents: false)
-                    
-                    // Only sample every minute.
-                    if (timeLess1! > self.lastSourced)
-                    {
-                        self.sampleUserCoordinates(latitude: String(mostRecentLocation.coordinate.latitude),
-                                                   longitude: String(mostRecentLocation.coordinate.longitude),
-                                                   lineId: lineId!)
-                    }
-                }
+                self.sampleUserCoordinates(latitude: String(mostRecentLocation.coordinate.latitude),
+                                           longitude: String(mostRecentLocation.coordinate.longitude))
             }
         }
-        
-        // Defer updates until the user moves a certain distance or a period of time has passed
-        if (!self.deferringUpdates)
-        {
-            // Defer for 100m or 30seconds
-            self.locationManager.allowDeferredLocationUpdates(untilTraveled: 100, timeout:30000.0)
-            
-            self.deferringUpdates = true;
-        }
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didFinishDeferredUpdatesWithError error: NSError!) {
-        // Stop deferring updates
-        self.deferringUpdates = false
     }
     
     private func notify(getOffPoint: GetOffPoint)
@@ -151,8 +133,6 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         getOffPoint.isNotified = true
         
         let notificationText = "Time to get off at " + getOffPoint.name
-        
-        self.writeToLogFile(s:notificationText)
         
         // Try create a location notification.
         self.createLocalNotification(getOffPointName: getOffPoint.name)
@@ -219,7 +199,12 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
     
     private func hasMoreGetOffPoints() -> Bool
     {
-        for getOffPoint in self.getOffPoints!
+        if (self.getOffPoints.last?.isNotified)!
+        {
+            return false
+        }
+        
+        for getOffPoint in self.getOffPoints
         {
             if (!getOffPoint.isNotified)
             {
@@ -232,7 +217,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
     
     private func getOffPointToNotify(location: CLLocation) -> GetOffPoint?
     {
-        for getOffPoint in self.getOffPoints!
+        for getOffPoint in self.getOffPoints
         {
             if (!getOffPoint.isNotified)
             {
@@ -308,92 +293,35 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         return getOffPoints
     }
     
-    private func determineLineId(itinerary: Itinerary) -> String?
+    private func sampleUserCoordinates(latitude: String, longitude: String)
     {
-        guard let legs = itinerary.legs else {
-            return nil
-        }
-        
-        for leg in legs
-        {
-            if (leg.type == "Transit")
-            {
-                return leg.line?.id
-            }
-        }
-        
-        return nil
-    }
-    
-    private func sampleUserCoordinates(latitude: String, longitude: String, lineId: String)
-    {
-        self.lastSourced = Date()
-        
-        let log = latitude + "," + longitude + "," + Date().iso8601
-        self.writeToLogFile(s: log)
-        print (log)
-        
-        let path = "https://prometheus.whereismytransport.com/streams/e67e676f-cd33-4e77-aa85-b46b33baa3f9/updates"
-        
-        var input = "{\"devideId\": 1," +
-        "\"confidence\": " +
-        "[{\"confidence\": 0.5," +
-        "\"type\": \"lineId\"," +
-        "\"id\": \"" + lineId + "\"}]," +
-        "\"longitude\": " + longitude + "," +
-        "\"latitude\": " + latitude + "," +
-        "\"coordinateDate\": \"" + String(Date().timeIntervalSince1970) + "\"," +
-        "\"version\": 2}"
+        tokenComponent.getAccessToken{
+            (accessToken: AccessToken) in
+            
+            self.lastSourced = Date()
 
-        let json:JSON = JSON(parseJSON: input)
-        
-        RestApiManager.sharedInstance.makeHTTPPostRequest(path: path,
-                                                          json: json)
-    }
-    
-    private func clearLogFile(s: String)
-    {
-        print ("Clear Logs")
-        
-        let fileName = "GetOffLogs"
-        let DocumentDirURL = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
-        
-        let fileURL = DocumentDirURL.appendingPathComponent(fileName).appendingPathExtension("txt")
-        
-        do {
-            // Write to the file
-            try "".write(to: fileURL, atomically: true, encoding: String.Encoding.utf8)
-        } catch let error as NSError {
-            print("Failed writing to URL: \(fileURL), Error: " + error.localizedDescription)
+            let path = "https://prometheus.whereismytransport.com/streams/e67e676f-cd33-4e77-aa85-b46b33baa3f9/updates"
+            let date = String(Date().timeIntervalSince1970)
+            let id = self.itinerary.id!
+            
+            var input = "{\"deviceId\": 1," +
+            "\"confidence\": " +
+            "[{\"confidence\": 1.0," +
+            "\"type\": \"itineraryId\"," +
+            "\"id\": \"" + id + "\"}]," +
+            "\"longitude\": " + longitude + "," +
+            "\"latitude\": " + latitude + "," +
+            "\"coordinateDate\": \"" + date + "\"," +
+            "\"version\": 2}"
+
+            let json:JSON = JSON(parseJSON: input)
+            
+            RestApiManager.sharedInstance.makeHTTPPostRequest(path: path,
+                                                              accessToken : accessToken.accessToken!,
+                                                              timeout: 30.0,
+                                                              query: nil,
+                                                              json: json,
+                                                              onCompletion: { json, err, response in })
         }
     }
-    
-    private func writeToLogFile(s: String)
-    {
-        // Save data to file
-        let fileName = "GetOffLogs"
-        let DocumentDirURL = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
-        
-        let fileURL = DocumentDirURL.appendingPathComponent(fileName).appendingPathExtension("txt")
-        print("FilePath: \(fileURL.path)")
-        
-        var readString = "" // Used to store the file contents
-        do {
-            // Read the file contents
-            readString = try String(contentsOf: fileURL)
-        } catch let error as NSError {
-            print("Failed reading from URL: \(fileURL), Error: " + error.localizedDescription)
-        }
-        
-        let writeString = s + "\n" + readString
-        
-        do {
-            // Write to the file
-            try writeString.write(to: fileURL, atomically: true, encoding: String.Encoding.utf8)
-        } catch let error as NSError {
-            print("Failed writing to URL: \(fileURL), Error: " + error.localizedDescription)
-        }
-    }
-    
-    
 }

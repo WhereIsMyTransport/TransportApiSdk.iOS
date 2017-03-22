@@ -646,7 +646,13 @@ public class TransportApiClient
         crowdSourceFrequency: CrowdSourceFrequency = CrowdSourceFrequency.continuous)
         -> TransportApiNotificationStatus
     {
-        return LocationManager.sharedInstance.startMonitoringWhenToGetOff(itinerary: itinerary,
+        guard let tokenComponent = self.tokenComponent, let transportApiClientSettings = self.transportApiClientSettings else {
+
+            return TransportApiNotificationStatus.FailedNoCredentials
+        }
+        
+        return LocationManager.sharedInstance.startMonitoringWhenToGetOff(tokenComponent: tokenComponent,
+                                                                          itinerary: itinerary,
                                                                           crowdSourceFrequency: crowdSourceFrequency)
     }
     

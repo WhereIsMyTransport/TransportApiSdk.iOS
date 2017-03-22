@@ -13,4 +13,5 @@ public enum TransportApiNotificationStatus: Int
     case Created
     case TooEarly
     case TooLate
+    case FailedNoCredentials
 }

@@ -45,10 +45,9 @@ TransportApiClient.getAgencies
 
 Notifies the user with vibrations and a banner when they are approaching a stop they need to disembark at.
 
-* App needs to be in the background/ foreground to function.
 * The function stops monitoring when: the user has no more stops to disembark at or the itinerary time has elapsed.
 * Calling the function again will over-write any existing function.
-* The function samples the user location for crowd-sourcing with minimal data usage. You can disabled this feature, but we recomend leaving it enabled to assist with advanced features such as ETAs and Service Alerts.
+* The function samples the user location for crowd-sourcing with minimal data usage.
 
 Before using this feature, please do the following:
 * Add the `NSLocationAlwaysUsageDescription` description in your app's `Info.plist`

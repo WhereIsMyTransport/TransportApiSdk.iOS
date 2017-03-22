@@ -52,23 +52,6 @@ internal class RestApiManager: NSObject {
     }
     
     // MARK: Perform a POST Request
-    public func makeHTTPPostRequest(path: String, json: JSON)
-    {
-        do
-        {
-            let data = try json.rawString()?.data(using: .utf8)
-            
-            try makeHTTPPostRequest(isIdsRequest: false, path: path, data: data!, timeout: 30.0, onCompletion: { json, err, response in
-
-            })
-        }
-        catch
-        {
-            // Fail silently into the night...
-        }
-    }
-
-    // MARK: Perform a POST Request
     public func makeHTTPPostRequest(path: String, accessToken: String, timeout: Double, query: String?, json: JSON, onCompletion: @escaping ServiceResponse)
     {
         do

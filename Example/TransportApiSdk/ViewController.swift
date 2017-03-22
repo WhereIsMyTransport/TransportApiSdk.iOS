@@ -74,14 +74,14 @@ class ViewController: UIViewController {
             }
          }
         
-        TransportApiClient.getAgencies()
+        /*TransportApiClient.getAgencies()
         {
             (result: TransportApiResult<[Agency]>) in
             DispatchQueue.main.async
                 {
                     self.resultTextView.text = result.rawJson
             }
-        }
+        }*/
         
         /*self.transportApiClient.GetAgency(id: "A1JHSPIg_kWV5XRHIepCLw")
             {
