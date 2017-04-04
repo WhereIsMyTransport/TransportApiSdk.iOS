@@ -303,8 +303,9 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
             let path = "https://prometheus.whereismytransport.com/streams/e67e676f-cd33-4e77-aa85-b46b33baa3f9/updates"
             let date = String(Date().timeIntervalSince1970)
             let id = self.itinerary.id!
+            let deviceId = UIDevice.current.identifierForVendor!.uuidString
             
-            var input = "{\"deviceId\": 1," +
+            var input = "{\"deviceId\": " + deviceId + "," +
             "\"confidence\": " +
             "[{\"confidence\": 1.0," +
             "\"type\": \"itineraryId\"," +
