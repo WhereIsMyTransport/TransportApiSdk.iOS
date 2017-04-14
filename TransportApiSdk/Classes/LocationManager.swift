@@ -5,12 +5,11 @@
 //  Created by Chris on 3/14/17.
 //
 //
-// TODO Notifications for iOS < 10
 // TODO Delegates to allow dev to listen for notificaitons
 // TODO Make notifications optional if dev wants to handle them rather
 // TODO More accurate check of when to get off. It's quite optimistic atm.
 // TODO What if the itinerary is running late? Location will cut off 15min after scheduled arrival time.
-// TODO Crowd sourcing at stops only if dev requests it. Currently does every 100m no matter what.
+// TODO Crowd sourcing at stops only if dev requests it. Currently does every 125m no matter what.
 
 import CoreLocation
 import AudioToolbox
@@ -40,7 +39,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
             manager.allowsBackgroundLocationUpdates = true
         }
         manager.pausesLocationUpdatesAutomatically = true
-        manager.distanceFilter = 100.0
+        manager.distanceFilter = 125.0
         return manager
     }()
     
@@ -54,6 +53,13 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         itinerary: Itinerary,
         crowdSourceFrequency: CrowdSourceFrequency) -> TransportApiNotificationStatus
     {
+        if #available(iOS 10.0, *) {
+            UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]){(granted, error) in}
+        }
+        else {
+            UIApplication.shared.registerUserNotificationSettings(UIUserNotificationSettings(types: [.alert, .sound], categories: nil))
+        }
+        
         let currentDateTime = Date()
         
         let itineraryDepartureTimeLess15 = calendar.date(byAdding: .minute, value: -15, to: itinerary.departureTime!.dateFromISO8601!, wrappingComponents: false)
@@ -132,8 +138,6 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
     {
         getOffPoint.isNotified = true
         
-        let notificationText = "Time to get off at " + getOffPoint.name
-        
         // Try create a location notification.
         self.createLocalNotification(getOffPointName: getOffPoint.name)
         
@@ -146,6 +150,9 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
     
     private func createLocalNotification(getOffPointName: String)
     {
+        let title = "Time to get off!"
+        let body = "Approaching " + getOffPointName + " in less than 500 meters"
+        
         if #available(iOS 10.0, *) {
             var isSoundEnabled = false
             var isAlertEndabled = false
@@ -176,12 +183,17 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
                 {
                     let content = UNMutableNotificationContent()
                     
-                    content.title = "Time to get off!"
-                    content.body = "Approaching " + getOffPointName + " in less than 500 meters"
+                    content.title = title
+                    content.body = body
                     content.sound = UNNotificationSound.default()
+                    content.categoryIdentifier = "timeToGetOff"
                     
                     let trigger = UNTimeIntervalNotificationTrigger.init(timeInterval: 1, repeats: false)
                     let request = UNNotificationRequest.init(identifier: "ReminderToGetOff", content: content, trigger: trigger)
+                    
+                    // Allow notification to fire while app is in the foreground.
+                    let category = UNNotificationCategory(identifier: "timeToGetOff", actions: [], intentIdentifiers: [], options: [])
+                    UNUserNotificationCenter.current().setNotificationCategories([category])
                     
                     // Schedule the notification.
                     let center = UNUserNotificationCenter.current()
@@ -193,7 +205,22 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         }
         else
         {
-            // TODO Fallback on earlier versions
+            UIApplication.shared.cancelAllLocalNotifications()
+            
+            let notification = UILocalNotification()
+            notification.alertBody = title + " " + body
+            notification.fireDate = Date(timeIntervalSinceNow: 1)
+            notification.soundName = UILocalNotificationDefaultSoundName
+            notification.hasAction = false
+            notification.category = "timeToGetOff"
+            
+            UIApplication.shared.scheduleLocalNotification(notification)
+        }
+        
+        let state = UIApplication.shared.applicationState
+        
+        if state == .active {
+            self.presentLocalAlert(title: title, body: body)
         }
     }
     
@@ -324,5 +351,18 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
                                                               json: json,
                                                               onCompletion: { json, err, response in })
         }
+    }
+    
+    private func presentLocalAlert(title: String, body: String)
+    {
+        let localAlert = UIAlertController(title: title, message: body, preferredStyle: UIAlertControllerStyle.alert)
+        
+        localAlert.addAction(UIAlertAction(title: "Got it!", style: UIAlertActionStyle.default, handler: nil))
+        
+        guard let window = UIApplication.shared.delegate?.window??.rootViewController else {
+            return
+        }
+        
+        window.present(localAlert, animated: true, completion: nil)
     }
 }

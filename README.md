@@ -54,15 +54,12 @@ Before using this feature, please do the following:
 * Turn on `Background Fetch` and `Location Updates` checkbox in `Project Settings > Capabilities > Background Modes`
 * Request authorization for notifications
 
-#### iOS 10 Example
+#### Example
 
 ```swift
 import TransportApiSdk
 
-// Grant access to notifications.
-UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]){(granted, error) in}
-
-// Call WhenToGetOff.
+// Call WhenToGetOff with the itinerary.
 TransportApiClient.startMonitoringWhenToGetOff(itinerary: USER_SELECTED_ITINERARY)
 ```
 

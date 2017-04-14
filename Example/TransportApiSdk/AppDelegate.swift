@@ -15,8 +15,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     
     // To get access credentials go to https://developer.whereismytransport.com
-    let clientId = "YOUR_CLIENT_ID"
-    let clientSecret = "YOUR_CLIENT_SECRET"
+    let clientId = "CLIENT_ID"
+    let clientSecret = "CLIENT_SECRET"
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
