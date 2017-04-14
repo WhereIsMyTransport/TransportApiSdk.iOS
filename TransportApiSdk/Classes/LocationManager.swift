@@ -53,12 +53,15 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         itinerary: Itinerary,
         crowdSourceFrequency: CrowdSourceFrequency) -> TransportApiNotificationStatus
     {
-        if #available(iOS 10.0, *) {
-            UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]){(granted, error) in}
-        }
-        else {
-            UIApplication.shared.registerUserNotificationSettings(UIUserNotificationSettings(types: [.alert, .sound], categories: nil))
-        }
+#if TRANSPORTAPI_APP_EXTENSIONS
+#else
+            if #available(iOS 10.0, *) {
+                UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]){(granted, error) in}
+            }
+            else {
+                UIApplication.shared.registerUserNotificationSettings(UIUserNotificationSettings(types: [.alert, .sound], categories: nil))
+            }
+#endif
         
         let currentDateTime = Date()
         
@@ -205,6 +208,8 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         }
         else
         {
+#if TRANSPORTAPI_APP_EXTENSIONS
+#else
             UIApplication.shared.cancelAllLocalNotifications()
             
             let notification = UILocalNotification()
@@ -215,13 +220,17 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
             notification.category = "timeToGetOff"
             
             UIApplication.shared.scheduleLocalNotification(notification)
+#endif
         }
         
+#if TRANSPORTAPI_APP_EXTENSIONS
+#else
         let state = UIApplication.shared.applicationState
         
         if state == .active {
             self.presentLocalAlert(title: title, body: body)
         }
+#endif
     }
     
     private func hasMoreGetOffPoints() -> Bool
@@ -355,6 +364,8 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
     
     private func presentLocalAlert(title: String, body: String)
     {
+#if TRANSPORTAPI_APP_EXTENSIONS
+#else
         let localAlert = UIAlertController(title: title, message: body, preferredStyle: UIAlertControllerStyle.alert)
         
         localAlert.addAction(UIAlertAction(title: "Got it!", style: UIAlertActionStyle.default, handler: nil))
@@ -364,5 +375,6 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         }
         
         window.present(localAlert, animated: true, completion: nil)
+#endif
     }
 }

@@ -41,7 +41,7 @@ public class TransportApiClient
         guard let tokenComponent = self.tokenComponent, let transportApiClientSettings = self.transportApiClientSettings else {
             let transportApiResult = TransportApiResult<Journey>()
             
-            transportApiResult.error = "Credentials not set, please call loadCredntials and provide your clientId and clientSecret.";
+            transportApiResult.error = "Credentials not set, please call loadCredentials and provide your clientId and clientSecret.";
             
             completion(transportApiResult)
             
@@ -76,7 +76,7 @@ public class TransportApiClient
         guard let tokenComponent = self.tokenComponent, let transportApiClientSettings = self.transportApiClientSettings else {
             let transportApiResult = TransportApiResult<Journey>()
             
-            transportApiResult.error = "Credentials not set, please call loadCredntials and provide your clientId and clientSecret.";
+            transportApiResult.error = "Credentials not set, please call loadCredentials and provide your clientId and clientSecret.";
             
             completion(transportApiResult)
             
@@ -102,7 +102,7 @@ public class TransportApiClient
         guard let tokenComponent = self.tokenComponent, let transportApiClientSettings = self.transportApiClientSettings else {
             let transportApiResult = TransportApiResult<Itinerary>()
             
-            transportApiResult.error = "Credentials not set, please call loadCredntials and provide your clientId and clientSecret.";
+            transportApiResult.error = "Credentials not set, please call loadCredentials and provide your clientId and clientSecret.";
             
             completion(transportApiResult)
             
@@ -130,7 +130,7 @@ public class TransportApiClient
         guard let tokenComponent = self.tokenComponent, let transportApiClientSettings = self.transportApiClientSettings else {
             let transportApiResult = TransportApiResult<[Agency]>()
             
-            transportApiResult.error = "Credentials not set, please call loadCredntials and provide your clientId and clientSecret.";
+            transportApiResult.error = "Credentials not set, please call loadCredentials and provide your clientId and clientSecret.";
             
             completion(transportApiResult)
             
@@ -163,7 +163,7 @@ public class TransportApiClient
         guard let tokenComponent = self.tokenComponent, let transportApiClientSettings = self.transportApiClientSettings else {
             let transportApiResult = TransportApiResult<[Agency]>()
             
-            transportApiResult.error = "Credentials not set, please call loadCredntials and provide your clientId and clientSecret.";
+            transportApiResult.error = "Credentials not set, please call loadCredentials and provide your clientId and clientSecret.";
             
             completion(transportApiResult)
             
@@ -196,7 +196,7 @@ public class TransportApiClient
         guard let tokenComponent = self.tokenComponent, let transportApiClientSettings = self.transportApiClientSettings else {
             let transportApiResult = TransportApiResult<[Agency]>()
             
-            transportApiResult.error = "Credentials not set, please call loadCredntials and provide your clientId and clientSecret.";
+            transportApiResult.error = "Credentials not set, please call loadCredentials and provide your clientId and clientSecret.";
             
             completion(transportApiResult)
             
@@ -225,7 +225,7 @@ public class TransportApiClient
         guard let tokenComponent = self.tokenComponent, let transportApiClientSettings = self.transportApiClientSettings else {
             let transportApiResult = TransportApiResult<Agency>()
             
-            transportApiResult.error = "Credentials not set, please call loadCredntials and provide your clientId and clientSecret.";
+            transportApiResult.error = "Credentials not set, please call loadCredentials and provide your clientId and clientSecret.";
             
             completion(transportApiResult)
             
@@ -255,7 +255,7 @@ public class TransportApiClient
         guard let tokenComponent = self.tokenComponent, let transportApiClientSettings = self.transportApiClientSettings else {
             let transportApiResult = TransportApiResult<[Stop]>()
             
-            transportApiResult.error = "Credentials not set, please call loadCredntials and provide your clientId and clientSecret.";
+            transportApiResult.error = "Credentials not set, please call loadCredentials and provide your clientId and clientSecret.";
             
             completion(transportApiResult)
             
@@ -294,7 +294,7 @@ public class TransportApiClient
         guard let tokenComponent = self.tokenComponent, let transportApiClientSettings = self.transportApiClientSettings else {
             let transportApiResult = TransportApiResult<[Stop]>()
             
-            transportApiResult.error = "Credentials not set, please call loadCredntials and provide your clientId and clientSecret.";
+            transportApiResult.error = "Credentials not set, please call loadCredentials and provide your clientId and clientSecret.";
             
             completion(transportApiResult)
             
@@ -333,7 +333,7 @@ public class TransportApiClient
         guard let tokenComponent = self.tokenComponent, let transportApiClientSettings = self.transportApiClientSettings else {
             let transportApiResult = TransportApiResult<[Stop]>()
             
-            transportApiResult.error = "Credentials not set, please call loadCredntials and provide your clientId and clientSecret.";
+            transportApiResult.error = "Credentials not set, please call loadCredentials and provide your clientId and clientSecret.";
             
             completion(transportApiResult)
             
@@ -365,7 +365,7 @@ public class TransportApiClient
         guard let tokenComponent = self.tokenComponent, let transportApiClientSettings = self.transportApiClientSettings else {
             let transportApiResult = TransportApiResult<Stop>()
             
-            transportApiResult.error = "Credentials not set, please call loadCredntials and provide your clientId and clientSecret.";
+            transportApiResult.error = "Credentials not set, please call loadCredentials and provide your clientId and clientSecret.";
             
             completion(transportApiResult)
             
@@ -394,7 +394,7 @@ public class TransportApiClient
         guard let tokenComponent = self.tokenComponent, let transportApiClientSettings = self.transportApiClientSettings else {
             let transportApiResult = TransportApiResult<[Line]>()
             
-            transportApiResult.error = "Credentials not set, please call loadCredntials and provide your clientId and clientSecret.";
+            transportApiResult.error = "Credentials not set, please call loadCredentials and provide your clientId and clientSecret.";
             
             completion(transportApiResult)
             
@@ -431,7 +431,7 @@ public class TransportApiClient
         guard let tokenComponent = self.tokenComponent, let transportApiClientSettings = self.transportApiClientSettings else {
             let transportApiResult = TransportApiResult<[Line]>()
             
-            transportApiResult.error = "Credentials not set, please call loadCredntials and provide your clientId and clientSecret.";
+            transportApiResult.error = "Credentials not set, please call loadCredentials and provide your clientId and clientSecret.";
             
             completion(transportApiResult)
             
@@ -468,7 +468,7 @@ public class TransportApiClient
         guard let tokenComponent = self.tokenComponent, let transportApiClientSettings = self.transportApiClientSettings else {
             let transportApiResult = TransportApiResult<[Line]>()
             
-            transportApiResult.error = "Credentials not set, please call loadCredntials and provide your clientId and clientSecret.";
+            transportApiResult.error = "Credentials not set, please call loadCredentials and provide your clientId and clientSecret.";
             
             completion(transportApiResult)
             
@@ -499,7 +499,7 @@ public class TransportApiClient
         guard let tokenComponent = self.tokenComponent, let transportApiClientSettings = self.transportApiClientSettings else {
             let transportApiResult = TransportApiResult<Line>()
             
-            transportApiResult.error = "Credentials not set, please call loadCredntials and provide your clientId and clientSecret.";
+            transportApiResult.error = "Credentials not set, please call loadCredentials and provide your clientId and clientSecret.";
             
             completion(transportApiResult)
             
@@ -526,7 +526,7 @@ public class TransportApiClient
         guard let tokenComponent = self.tokenComponent, let transportApiClientSettings = self.transportApiClientSettings else {
             let transportApiResult = TransportApiResult<[FareProduct]>()
             
-            transportApiResult.error = "Credentials not set, please call loadCredntials and provide your clientId and clientSecret.";
+            transportApiResult.error = "Credentials not set, please call loadCredentials and provide your clientId and clientSecret.";
             
             completion(transportApiResult)
             
@@ -554,7 +554,7 @@ public class TransportApiClient
         guard let tokenComponent = self.tokenComponent, let transportApiClientSettings = self.transportApiClientSettings else {
             let transportApiResult = TransportApiResult<FareProduct>()
             
-            transportApiResult.error = "Credentials not set, please call loadCredntials and provide your clientId and clientSecret.";
+            transportApiResult.error = "Credentials not set, please call loadCredentials and provide your clientId and clientSecret.";
             
             completion(transportApiResult)
             
@@ -583,7 +583,7 @@ public class TransportApiClient
         guard let tokenComponent = self.tokenComponent, let transportApiClientSettings = self.transportApiClientSettings else {
             let transportApiResult = TransportApiResult<[StopTimetable]>()
             
-            transportApiResult.error = "Credentials not set, please call loadCredntials and provide your clientId and clientSecret.";
+            transportApiResult.error = "Credentials not set, please call loadCredentials and provide your clientId and clientSecret.";
             
             completion(transportApiResult)
             
@@ -618,7 +618,7 @@ public class TransportApiClient
         guard let tokenComponent = self.tokenComponent, let transportApiClientSettings = self.transportApiClientSettings else {
             let transportApiResult = TransportApiResult<[LineTimetable]>()
             
-            transportApiResult.error = "Credentials not set, please call loadCredntials and provide your clientId and clientSecret.";
+            transportApiResult.error = "Credentials not set, please call loadCredentials and provide your clientId and clientSecret.";
             
             completion(transportApiResult)
             
