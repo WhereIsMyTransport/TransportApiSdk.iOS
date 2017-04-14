@@ -35,9 +35,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         manager.activityType = .automotiveNavigation
         manager.delegate = self
         manager.requestAlwaysAuthorization()
-        if #available(iOS 9.0, *) {
-            manager.allowsBackgroundLocationUpdates = true
-        }
+        manager.allowsBackgroundLocationUpdates = true
         manager.pausesLocationUpdatesAutomatically = true
         manager.distanceFilter = 125.0
         return manager
@@ -53,15 +51,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         itinerary: Itinerary,
         crowdSourceFrequency: CrowdSourceFrequency) -> TransportApiNotificationStatus
     {
-#if TRANSPORTAPI_APP_EXTENSIONS
-#else
-            if #available(iOS 10.0, *) {
-                UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]){(granted, error) in}
-            }
-            else {
-                UIApplication.shared.registerUserNotificationSettings(UIUserNotificationSettings(types: [.alert, .sound], categories: nil))
-            }
-#endif
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]){(granted, error) in}
         
         let currentDateTime = Date()
         
@@ -156,81 +146,55 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         let title = "Time to get off!"
         let body = "Approaching " + getOffPointName + " in less than 500 meters"
         
-        if #available(iOS 10.0, *) {
-            var isSoundEnabled = false
-            var isAlertEndabled = false
+
+        var isSoundEnabled = false
+        var isAlertEndabled = false
+        
+        UNUserNotificationCenter.current().getNotificationSettings() { (setttings) in
             
-            UNUserNotificationCenter.current().getNotificationSettings() { (setttings) in
+            switch setttings.soundSetting
+            {
+                case .enabled:
+                    isSoundEnabled = true
+                case .disabled:
+                    isSoundEnabled = false
+                case .notSupported:
+                    isSoundEnabled = false
+            }
+            
+            switch setttings.alertSetting
+            {
+                case .enabled:
+                    isAlertEndabled = true
+                case .disabled:
+                    isAlertEndabled = false
+                case .notSupported:
+                    isAlertEndabled = false
+            }
+            
+            if (isSoundEnabled && isAlertEndabled)
+            {
+                let content = UNMutableNotificationContent()
                 
-                switch setttings.soundSetting
-                {
-                    case .enabled:
-                        isSoundEnabled = true
-                    case .disabled:
-                        isSoundEnabled = false
-                    case .notSupported:
-                        isSoundEnabled = false
-                }
+                content.title = title
+                content.body = body
+                content.sound = UNNotificationSound.default()
+                content.categoryIdentifier = "timeToGetOff"
                 
-                switch setttings.alertSetting
-                {
-                    case .enabled:
-                        isAlertEndabled = true
-                    case .disabled:
-                        isAlertEndabled = false
-                    case .notSupported:
-                        isAlertEndabled = false
-                }
+                let trigger = UNTimeIntervalNotificationTrigger.init(timeInterval: 1, repeats: false)
+                let request = UNNotificationRequest.init(identifier: "ReminderToGetOff", content: content, trigger: trigger)
                 
-                if (isSoundEnabled && isAlertEndabled)
-                {
-                    let content = UNMutableNotificationContent()
+                // Allow notification to fire while app is in the foreground.
+                let category = UNNotificationCategory(identifier: "timeToGetOff", actions: [], intentIdentifiers: [], options: [])
+                UNUserNotificationCenter.current().setNotificationCategories([category])
+                
+                // Schedule the notification.
+                let center = UNUserNotificationCenter.current()
+                center.add(request) { (error) in
                     
-                    content.title = title
-                    content.body = body
-                    content.sound = UNNotificationSound.default()
-                    content.categoryIdentifier = "timeToGetOff"
-                    
-                    let trigger = UNTimeIntervalNotificationTrigger.init(timeInterval: 1, repeats: false)
-                    let request = UNNotificationRequest.init(identifier: "ReminderToGetOff", content: content, trigger: trigger)
-                    
-                    // Allow notification to fire while app is in the foreground.
-                    let category = UNNotificationCategory(identifier: "timeToGetOff", actions: [], intentIdentifiers: [], options: [])
-                    UNUserNotificationCenter.current().setNotificationCategories([category])
-                    
-                    // Schedule the notification.
-                    let center = UNUserNotificationCenter.current()
-                    center.add(request) { (error) in
-                        
-                    }
                 }
             }
         }
-        else
-        {
-#if TRANSPORTAPI_APP_EXTENSIONS
-#else
-            UIApplication.shared.cancelAllLocalNotifications()
-            
-            let notification = UILocalNotification()
-            notification.alertBody = title + " " + body
-            notification.fireDate = Date(timeIntervalSinceNow: 1)
-            notification.soundName = UILocalNotificationDefaultSoundName
-            notification.hasAction = false
-            notification.category = "timeToGetOff"
-            
-            UIApplication.shared.scheduleLocalNotification(notification)
-#endif
-        }
-        
-#if TRANSPORTAPI_APP_EXTENSIONS
-#else
-        let state = UIApplication.shared.applicationState
-        
-        if state == .active {
-            self.presentLocalAlert(title: title, body: body)
-        }
-#endif
     }
     
     private func hasMoreGetOffPoints() -> Bool
@@ -360,21 +324,5 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
                                                               json: json,
                                                               onCompletion: { json, err, response in })
         }
-    }
-    
-    private func presentLocalAlert(title: String, body: String)
-    {
-#if TRANSPORTAPI_APP_EXTENSIONS
-#else
-        let localAlert = UIAlertController(title: title, message: body, preferredStyle: UIAlertControllerStyle.alert)
-        
-        localAlert.addAction(UIAlertAction(title: "Got it!", style: UIAlertActionStyle.default, handler: nil))
-        
-        guard let window = UIApplication.shared.delegate?.window??.rootViewController else {
-            return
-        }
-        
-        window.present(localAlert, animated: true, completion: nil)
-#endif
     }
 }

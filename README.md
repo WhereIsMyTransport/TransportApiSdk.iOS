@@ -59,6 +59,9 @@ Before using this feature, please do the following:
 ```swift
 import TransportApiSdk
 
+// Grant access to notifications.
+UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]){(granted, error) in}
+
 // Call WhenToGetOff with the itinerary.
 TransportApiClient.startMonitoringWhenToGetOff(itinerary: USER_SELECTED_ITINERARY)
 ```
@@ -92,7 +95,7 @@ gem install cocoapods
 Integrate TransportApiSdk into your Xcode project by creating a `Podfile`:
 
 ```ruby
-platform :ios, '8.1'
+platform :ios, '10.0'
 use_frameworks!
 
 target '<Your Target Name>' do
