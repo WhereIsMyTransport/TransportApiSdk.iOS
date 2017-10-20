@@ -13,7 +13,7 @@ internal class TokenComponent
     private let defaultErrorResponse = "Unable to generate access token. Please check your credentials."
     private let noInternetErrorResponse = "The internet connection appears to be offline."
     
-    private let identityURL = "https://identity.whereismytransport.com/connect/token/"
+    private let identityURL = "https://identity.whereismytransport.com/connect/token"
     private var transportApiClientSettings: TransportApiClientSettings
     private var accessToken: String!
     private var expiryDate = NSDate()
