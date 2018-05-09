@@ -24,6 +24,12 @@ public class TransportApiClient
         self.tokenComponent = TokenComponent(transportApiClientSettings: transportApiClientSettings!)
     }
     
+    open class func loadCredentials(clientId: String, clientSecret: String, uniqueContextId: String)
+    {
+        self.transportApiClientSettings = TransportApiClientSettings(clientId: clientId, clientSecret: clientSecret, timeoutInSeconds: 60, uniqueContextId: uniqueContextId)
+        self.tokenComponent = TokenComponent(transportApiClientSettings: transportApiClientSettings!)
+    }
+    
     open class func postJourney(fareProducts: [String]? = nil,
                             onlyAgencies: [String]? = nil,
                             omitAgencies: [String]? = nil,
