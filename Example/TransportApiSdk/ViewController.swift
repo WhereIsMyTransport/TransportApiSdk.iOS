@@ -34,21 +34,21 @@ class ViewController: UIViewController {
     
     @IBAction func requestButton(_ sender: UIButton) {
         //let exclude = "geometry,directions,distance"
-        //let startLocation = CLLocationCoordinate2D(latitude: -33.921776, longitude: 18.425955)
-        //let endLocation = CLLocationCoordinate2D(latitude: -34.002589, longitude: 18.47108)
-        //let onlyMode = ["Rail"]
+        let startLocation = CLLocationCoordinate2D(latitude: -33.921776, longitude: 18.425955)
+        let endLocation = CLLocationCoordinate2D(latitude: -34.002589, longitude: 18.47108)
+        let onlyMode = ["Rail"]
         //let onlyAgencies = [""]
         
         self.resultTextView.text = "Something amazing is about to happen..."
         
-        /*TransportApiClient.postJourney(onlyModes: onlyMode, startLocation: startLocation, endLocation: endLocation, time: Date())
+        TransportApiClient.postJourney(onlyModes: onlyMode, startLocation: startLocation, endLocation: endLocation, time: Date())
         {
             (result: TransportApiResult<Journey>) in
                 DispatchQueue.main.async
                 {
                     self.resultTextView.text = result.rawJson
                 }
-        }*/
+        }
         
         /*self.transportApiClient.GetJourney(id: "Nef5Jhy-pk2LM6c4AO4ocw")
         {
@@ -59,7 +59,7 @@ class ViewController: UIViewController {
             }
         }*/
         
-        TransportApiClient.getItinerary(journeyId: "rHfzAvs4Rki3jKccAUoGYA",
+        /*TransportApiClient.getItinerary(journeyId: "rHfzAvs4Rki3jKccAUoGYA",
                                              itineraryId: "QIuuBAmdhU-mxaccAUoNRw")
          {
             (result: TransportApiResult<Itinerary>) in
@@ -72,7 +72,7 @@ class ViewController: UIViewController {
                     
                     //TransportApiClient.stopMonitoringWhenToGetOff()
             }
-         }
+         }*/
         
         /*TransportApiClient.getAgencies()
         {

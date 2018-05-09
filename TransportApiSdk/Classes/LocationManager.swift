@@ -113,18 +113,6 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
             
             self.locationManager.stopUpdatingLocation()
         }
-        
-        DispatchQueue.main.async
-        {
-            let timeLess1 = self.calendar.date(byAdding: .minute, value: -1, to:  mostRecentLocation.timestamp, wrappingComponents: false)!
-            
-            // Only sample every minute for now.
-            if (timeLess1 > self.lastSourced)
-            {
-                self.sampleUserCoordinates(latitude: String(mostRecentLocation.coordinate.latitude),
-                                           longitude: String(mostRecentLocation.coordinate.longitude))
-            }
-        }
     }
     
     private func notify(getOffPoint: GetOffPoint)
@@ -291,38 +279,5 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         }
         
         return getOffPoints
-    }
-    
-    private func sampleUserCoordinates(latitude: String, longitude: String)
-    {
-        tokenComponent.getAccessToken{
-            (accessToken: AccessToken) in
-            
-            self.lastSourced = Date()
-
-            let path = "https://prometheus.whereismytransport.com/streams/e67e676f-cd33-4e77-aa85-b46b33baa3f9/updates"
-            let date = String(Date().timeIntervalSince1970)
-            let id = self.itinerary.id!
-            let deviceId = UIDevice.current.identifierForVendor!.uuidString
-            
-            var input = "{\"deviceId\": " + deviceId + "," +
-            "\"confidence\": " +
-            "[{\"confidence\": 1.0," +
-            "\"type\": \"itineraryId\"," +
-            "\"id\": \"" + id + "\"}]," +
-            "\"longitude\": " + longitude + "," +
-            "\"latitude\": " + latitude + "," +
-            "\"coordinateDate\": \"" + date + "\"," +
-            "\"version\": 2}"
-
-            let json:JSON = JSON(parseJSON: input)
-            
-            RestApiManager.sharedInstance.makeHTTPPostRequest(path: path,
-                                                              accessToken : accessToken.accessToken!,
-                                                              timeout: 30.0,
-                                                              query: nil,
-                                                              json: json,
-                                                              onCompletion: { json, err, response in })
-        }
     }
 }

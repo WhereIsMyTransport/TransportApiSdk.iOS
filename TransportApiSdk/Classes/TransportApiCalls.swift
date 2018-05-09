@@ -165,7 +165,8 @@ internal class TransportApiCalls
                 .addExclude(exclude: exclude)
                 .removeFirstCharacter()
             
-            RestApiManager.sharedInstance.makeHTTPPostRequest(path: path,
+            RestApiManager.sharedInstance.makeHTTPPostRequest(uniqueContextId: transportApiClientSettings.uniqueContextId,
+                                                              path: path,
                                                               accessToken : accessToken.accessToken!,
                                                               timeout: Double(transportApiClientSettings.timeoutInSeconds),
                                                               query: query,
@@ -236,7 +237,8 @@ internal class TransportApiCalls
             
             let path = self.platformURL + "journeys/" + id
             
-            RestApiManager.sharedInstance.makeHTTPGetRequest(path: path,
+            RestApiManager.sharedInstance.makeHTTPGetRequest(uniqueContextId: transportApiClientSettings.uniqueContextId,
+                                                             path: path,
                                                              accessToken: token,
                                                              timeout: Double(transportApiClientSettings.timeoutInSeconds),
                                                              query: query,
@@ -317,7 +319,8 @@ internal class TransportApiCalls
             
             let path = self.platformURL + "journeys/" + journeyId + "/itineraries/" + itineraryId
             
-            RestApiManager.sharedInstance.makeHTTPGetRequest(path: path,
+            RestApiManager.sharedInstance.makeHTTPGetRequest(uniqueContextId: transportApiClientSettings.uniqueContextId,
+                                                             path: path,
                                                              accessToken: token,
                                                              timeout: Double(transportApiClientSettings.timeoutInSeconds),
                                                              query: query,
@@ -430,7 +433,8 @@ internal class TransportApiCalls
                 .addOffset(offset: offset)
                 .removeFirstCharacter()
             
-            RestApiManager.sharedInstance.makeHTTPGetRequest(path: path,
+            RestApiManager.sharedInstance.makeHTTPGetRequest(uniqueContextId: transportApiClientSettings.uniqueContextId,
+                                                             path: path,
                                                              accessToken: token,
                                                              timeout: Double(transportApiClientSettings.timeoutInSeconds),
                                                              query: query,
@@ -502,7 +506,8 @@ internal class TransportApiCalls
             
             let path = self.platformURL + "agencies/" + id
             
-            RestApiManager.sharedInstance.makeHTTPGetRequest(path: path,
+            RestApiManager.sharedInstance.makeHTTPGetRequest(uniqueContextId: transportApiClientSettings.uniqueContextId,
+                                                             path: path,
                                                              accessToken: token,
                                                              timeout: Double(transportApiClientSettings.timeoutInSeconds),
                                                              query: query,
@@ -623,7 +628,8 @@ internal class TransportApiCalls
                 .addOffset(offset: offset)
                 .removeFirstCharacter()
             
-            RestApiManager.sharedInstance.makeHTTPGetRequest(path: path,
+            RestApiManager.sharedInstance.makeHTTPGetRequest(uniqueContextId: transportApiClientSettings.uniqueContextId,
+                                                             path: path,
                                                              accessToken: token,
                                                              timeout: Double(transportApiClientSettings.timeoutInSeconds),
                                                              query: query,
@@ -695,7 +701,8 @@ internal class TransportApiCalls
             
             let path = self.platformURL + "stops/" + id
             
-            RestApiManager.sharedInstance.makeHTTPGetRequest(path: path,
+            RestApiManager.sharedInstance.makeHTTPGetRequest(uniqueContextId: transportApiClientSettings.uniqueContextId,
+                                                             path: path,
                                                              accessToken: token,
                                                              timeout: Double(transportApiClientSettings.timeoutInSeconds),
                                                              query: query,
@@ -814,7 +821,8 @@ internal class TransportApiCalls
                 .addOffset(offset: offset)
                 .removeFirstCharacter()
             
-            RestApiManager.sharedInstance.makeHTTPGetRequest(path: path,
+            RestApiManager.sharedInstance.makeHTTPGetRequest(uniqueContextId: transportApiClientSettings.uniqueContextId,
+                                                             path: path,
                                                              accessToken: token,
                                                              timeout: Double(transportApiClientSettings.timeoutInSeconds),
                                                              query: query,
@@ -886,7 +894,8 @@ internal class TransportApiCalls
             
             let path = self.platformURL + "lines/" + id
             
-            RestApiManager.sharedInstance.makeHTTPGetRequest(path: path,
+            RestApiManager.sharedInstance.makeHTTPGetRequest(uniqueContextId: transportApiClientSettings.uniqueContextId,
+                                                             path: path,
                                                              accessToken: token,
                                                              timeout: Double(transportApiClientSettings.timeoutInSeconds),
                                                              query: query,
@@ -974,7 +983,8 @@ internal class TransportApiCalls
                 .addOffset(offset: offset)
                 .removeFirstCharacter()
             
-            RestApiManager.sharedInstance.makeHTTPGetRequest(path: path,
+            RestApiManager.sharedInstance.makeHTTPGetRequest(uniqueContextId: transportApiClientSettings.uniqueContextId,
+                                                             path: path,
                                                              accessToken: token,
                                                              timeout: Double(transportApiClientSettings.timeoutInSeconds),
                                                              query: query,
@@ -1046,7 +1056,8 @@ internal class TransportApiCalls
             
             let path = self.platformURL + "fareproducts/" + id
             
-            RestApiManager.sharedInstance.makeHTTPGetRequest(path: path,
+            RestApiManager.sharedInstance.makeHTTPGetRequest(uniqueContextId: transportApiClientSettings.uniqueContextId,
+                                                             path: path,
                                                              accessToken: token,
                                                              timeout: Double(transportApiClientSettings.timeoutInSeconds),
                                                              query: query,
@@ -1127,7 +1138,8 @@ internal class TransportApiCalls
             
             let path = self.platformURL + "stops/" + id + "/timetables"
             
-            RestApiManager.sharedInstance.makeHTTPGetRequest(path: path,
+            RestApiManager.sharedInstance.makeHTTPGetRequest(uniqueContextId: transportApiClientSettings.uniqueContextId,
+                                                             path: path,
                                                              accessToken: token,
                                                              timeout: Double(transportApiClientSettings.timeoutInSeconds),
                                                              query: query,
@@ -1211,7 +1223,8 @@ internal class TransportApiCalls
             
             let path = self.platformURL + "lines/" + id + "/timetables"
             
-            RestApiManager.sharedInstance.makeHTTPGetRequest(path: path,
+            RestApiManager.sharedInstance.makeHTTPGetRequest(uniqueContextId: transportApiClientSettings.uniqueContextId,
+                                                             path: path,
                                                              accessToken: token,
                                                              timeout: Double(transportApiClientSettings.timeoutInSeconds),
                                                              query: query,

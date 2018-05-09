@@ -15,7 +15,7 @@ internal class RestApiManager: NSObject {
     static let sharedInstance = RestApiManager()
     
     // MARK: Perform a GET Request
-    public func makeHTTPGetRequest(path: String, accessToken: String, timeout: Double, query: String, onCompletion: @escaping ServiceResponse) {
+    public func makeHTTPGetRequest(uniqueContextId: String, path: String, accessToken: String, timeout: Double, query: String, onCompletion: @escaping ServiceResponse) {
         var queryString = path
         
         if (!query.isEmpty)
@@ -24,50 +24,35 @@ internal class RestApiManager: NSObject {
             queryString.append(query)
         }
         
-        do
-        {
-            let request = try NSMutableURLRequest(url: NSURL(string: queryString)! as URL, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: timeout)
-            
-            let session = URLSession.shared
-            
-            request.setValue("Bearer " + accessToken, forHTTPHeaderField: "Authorization")
-            
-            let task = try session.dataTask(with: request as URLRequest, completionHandler: {data, response, error -> Void in
-                if let jsonData = data
-                {
-                    let json:JSON = JSON(data: jsonData)
-                    onCompletion(json, nil, response as! HTTPURLResponse?)
-                } else
-                {
-                    onCompletion(JSON.null, error as NSError?, response as! HTTPURLResponse?)
-                }
-            })
-            task.resume()
-        }
-        catch
-        {
-            // TODO Error Stuffs
-            onCompletion(JSON.null, nil, nil)
-        }
+        let request = NSMutableURLRequest(url: NSURL(string: queryString)! as URL, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: timeout)
+        
+        let session = URLSession.shared
+        
+        request.setValue("Bearer " + accessToken, forHTTPHeaderField: "Authorization")
+        request.setValue(uniqueContextId, forHTTPHeaderField: "Unique-Context-Id")
+        
+        let task = session.dataTask(with: request as URLRequest, completionHandler: {data, response, error -> Void in
+            if let jsonData = data
+            {
+                let json:JSON = JSON(data: jsonData)
+                onCompletion(json, nil, response as! HTTPURLResponse?)
+            } else
+            {
+                onCompletion(JSON.null, error as NSError?, response as! HTTPURLResponse?)
+            }
+        })
+        task.resume()
     }
     
     // MARK: Perform a POST Request
-    public func makeHTTPPostRequest(path: String, accessToken: String, timeout: Double, query: String?, json: JSON, onCompletion: @escaping ServiceResponse)
+    public func makeHTTPPostRequest(uniqueContextId: String, path: String, accessToken: String, timeout: Double, query: String?, json: JSON, onCompletion: @escaping ServiceResponse)
     {
-        do
-        {
-            let data = try json.rawString()?.data(using: .utf8)
+        let data = json.rawString()?.data(using: .utf8)
 
-            try makeHTTPPostRequest(isIdsRequest: false, path: path, data: data!, timeout: timeout, accessToken: accessToken, query: query, onCompletion: { json, err, response in
-                
-                onCompletion(json, err, response)
-            })
-        }
-        catch
-        {
-            // TODO Error Stuffs
-            onCompletion(JSON.null, nil, nil)
-        }
+        makeHTTPPostRequest(uniqueContextId: uniqueContextId, isIdsRequest: false, path: path, data: data!, timeout: timeout, accessToken: accessToken, query: query, onCompletion: { json, err, response in
+            
+            onCompletion(json, err, response)
+        })
     }
     
     // MARK: Perform a POST Request
@@ -75,7 +60,7 @@ internal class RestApiManager: NSObject {
     {
         let data = queryUrlEncoded.data(using: .utf8)!
         
-        makeHTTPPostRequest(isIdsRequest: true, path: path, data: data, timeout: timeout, onCompletion: { json, err, response in
+        makeHTTPPostRequest(uniqueContextId: "", isIdsRequest: true, path: path, data: data, timeout: timeout, onCompletion: { json, err, response in
 
             onCompletion(json, err, response)
         })
@@ -101,7 +86,7 @@ internal class RestApiManager: NSObject {
         return error.localizedDescription
     }
     
-    private func makeHTTPPostRequest(isIdsRequest: Bool, path: String, data: Data, timeout: Double, accessToken: String? = nil, query: String? = nil, onCompletion: @escaping ServiceResponse) {
+    private func makeHTTPPostRequest(uniqueContextId: String, isIdsRequest: Bool, path: String, data: Data, timeout: Double, accessToken: String? = nil, query: String? = nil, onCompletion: @escaping ServiceResponse) {
         var queryString = path
         
         if (query != nil && !query!.isEmpty)
@@ -115,6 +100,7 @@ internal class RestApiManager: NSObject {
         // Set the method to POST
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Accept")
+        request.setValue(uniqueContextId, forHTTPHeaderField: "Unique-Context-Id")
 
         if (!isIdsRequest && accessToken != nil && !(accessToken?.isEmpty)!)
         {
