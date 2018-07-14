@@ -453,7 +453,7 @@ internal class TransportApiCalls
                                                                     {
                                                                         let agenciesJson = json as JSON
                                                                         
-                                                                        let agenciesArray = agenciesJson.arrayObject as! NSArray
+                                                                        let agenciesArray = agenciesJson.arrayObject! as NSArray
                                                                         
                                                                         let agenciesModel = Agency.modelsFromDictionaryArray(array: agenciesArray)
                                                                         
@@ -525,7 +525,7 @@ internal class TransportApiCalls
                                                                     {
                                                                         let agencyJson = json as JSON
                                         
-                                                                        let agencyDict = agencyJson.dictionaryObject as! NSDictionary
+                                                                        let agencyDict = agencyJson.dictionaryObject! as NSDictionary
                                                                        
                                                                         let agencyModel = Agency(dictionary: agencyDict)
                                                                         
@@ -646,7 +646,7 @@ internal class TransportApiCalls
                                                                     {
                                                                         let stopsJson = json as JSON
                                                                         
-                                                                        let stopsArray = stopsJson.arrayObject as! NSArray
+                                                                        let stopsArray = stopsJson.arrayObject! as NSArray
                                                                         
                                                                         let stopsModel = Stop.modelsFromDictionaryArray(array: stopsArray)
                                                                         
@@ -718,7 +718,7 @@ internal class TransportApiCalls
                                                                     {
                                                                         let stopJson = json as JSON
                                                                         
-                                                                        let stopDict = stopJson.dictionaryObject as! NSDictionary
+                                                                        let stopDict = stopJson.dictionaryObject! as NSDictionary
                                                                         
                                                                         let stopModel = Stop.init(dictionary: stopDict)
                                                                         
@@ -837,7 +837,7 @@ internal class TransportApiCalls
                                                                     {
                                                                         let linesJson = json as JSON
                                                                         
-                                                                        let linesArray = linesJson.arrayObject as! NSArray
+                                                                        let linesArray = linesJson.arrayObject! as NSArray
                                                                         
                                                                         let linesModel = Line.modelsFromDictionaryArray(array: linesArray)
                                                                         
@@ -909,7 +909,7 @@ internal class TransportApiCalls
                                                                     {
                                                                         let lineJson = json as JSON
                                                                         
-                                                                        let lineDict = lineJson.dictionaryObject as! NSDictionary
+                                                                        let lineDict = lineJson.dictionaryObject! as NSDictionary
                                                                         
                                                                         let lineModel = Line.init(dictionary: lineDict)
                                                                         
@@ -997,7 +997,7 @@ internal class TransportApiCalls
                                                                     {
                                                                         let fareProductsJson = json as JSON
                                                                         
-                                                                        let fareProductsArray = fareProductsJson.arrayObject as! NSArray
+                                                                        let fareProductsArray = fareProductsJson.arrayObject! as NSArray
                                                                         
                                                                         let fareProductsModel = FareProduct.modelsFromDictionaryArray(array: fareProductsArray)
                                                                         
@@ -1069,7 +1069,7 @@ internal class TransportApiCalls
                                                                     {
                                                                         let fareProductJson = json as JSON
                                                                         
-                                                                        let fareProductDict = fareProductJson.dictionaryObject as! NSDictionary
+                                                                        let fareProductDict = fareProductJson.dictionaryObject! as NSDictionary
                                                                         
                                                                         let fareProductModel = FareProduct.init(dictionary: fareProductDict)
                                                                         
@@ -1150,7 +1150,7 @@ internal class TransportApiCalls
                                                                     {
                                                                         let stopTimetableJson = json as JSON
                                                                         
-                                                                        let stopTimetableArray = stopTimetableJson.arrayObject as! NSArray
+                                                                        let stopTimetableArray = stopTimetableJson.arrayObject! as NSArray
                                                                         
                                                                         let stopTimetableModel = StopTimetable.modelsFromDictionaryArray(array: stopTimetableArray)
 
@@ -1234,7 +1234,7 @@ internal class TransportApiCalls
                                                                     {
                                                                         let lineTimetableJson = json as JSON
                                                                         
-                                                                        let lineTimetableArray = lineTimetableJson.arrayObject as! NSArray
+                                                                        let lineTimetableArray = lineTimetableJson.arrayObject! as NSArray
                                                                         
                                                                         let lineTimetableModel = LineTimetable.modelsFromDictionaryArray(array: lineTimetableArray)
                                                                         

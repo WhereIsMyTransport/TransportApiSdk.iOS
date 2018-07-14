@@ -646,7 +646,7 @@ public class TransportApiClient
         crowdSourceFrequency: CrowdSourceFrequency = CrowdSourceFrequency.continuous)
         -> TransportApiNotificationStatus
     {
-        guard let tokenComponent = self.tokenComponent, let transportApiClientSettings = self.transportApiClientSettings else {
+        guard let tokenComponent = self.tokenComponent, let _ = self.transportApiClientSettings else {
 
             return TransportApiNotificationStatus.FailedNoCredentials
         }

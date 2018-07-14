@@ -305,7 +305,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
             let id = self.itinerary.id!
             let deviceId = UIDevice.current.identifierForVendor!.uuidString
             
-            var input = "{\"deviceId\": " + deviceId + "," +
+            let input = "{\"deviceId\": " + deviceId + "," +
             "\"confidence\": " +
             "[{\"confidence\": 1.0," +
             "\"type\": \"itineraryId\"," +
