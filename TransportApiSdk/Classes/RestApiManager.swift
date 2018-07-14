@@ -24,15 +24,14 @@ internal class RestApiManager: NSObject {
             queryString.append(query)
         }
         
-        do
-        {
-            let request = try NSMutableURLRequest(url: NSURL(string: queryString)! as URL, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: timeout)
+      
+            let request =  NSMutableURLRequest(url: NSURL(string: queryString)! as URL, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: timeout)
             
             let session = URLSession.shared
             
             request.setValue("Bearer " + accessToken, forHTTPHeaderField: "Authorization")
             
-            let task = try session.dataTask(with: request as URLRequest, completionHandler: {data, response, error -> Void in
+            let task =  session.dataTask(with: request as URLRequest, completionHandler: {data, response, error -> Void in
                 if let jsonData = data
                 {
                     let json:JSON = JSON(data: jsonData)
@@ -43,31 +42,22 @@ internal class RestApiManager: NSObject {
                 }
             })
             task.resume()
-        }
-        catch
-        {
-            // TODO Error Stuffs
-            onCompletion(JSON.null, nil, nil)
-        }
+     
+       
     }
     
     // MARK: Perform a POST Request
     public func makeHTTPPostRequest(path: String, accessToken: String, timeout: Double, query: String?, json: JSON, onCompletion: @escaping ServiceResponse)
     {
-        do
-        {
-            let data = try json.rawString()?.data(using: .utf8)
+       
+            let data = json.rawString()?.data(using: .utf8)
 
-            try makeHTTPPostRequest(isIdsRequest: false, path: path, data: data!, timeout: timeout, accessToken: accessToken, query: query, onCompletion: { json, err, response in
+             makeHTTPPostRequest(isIdsRequest: false, path: path, data: data!, timeout: timeout, accessToken: accessToken, query: query, onCompletion: { json, err, response in
                 
                 onCompletion(json, err, response)
             })
-        }
-        catch
-        {
-            // TODO Error Stuffs
-            onCompletion(JSON.null, nil, nil)
-        }
+       
+      
     }
     
     // MARK: Perform a POST Request
@@ -130,13 +120,13 @@ internal class RestApiManager: NSObject {
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         }
         
-        do {
+      
             // Set the POST body for the request
             request.httpBody = data
             
             let session = URLSession.shared
             
-            let task = try session.dataTask(with: request as URLRequest, completionHandler: {data, response, error -> Void in
+            let task =  session.dataTask(with: request as URLRequest, completionHandler: {data, response, error -> Void in
                 if let jsonData = data
                 {
                     let json:JSON = JSON(data: jsonData)
@@ -147,11 +137,7 @@ internal class RestApiManager: NSObject {
                 }
             })
             task.resume()
-        }
-        catch
-        {
-            // TODO Error Stuffs
-            onCompletion(JSON.null, nil, nil)
-        }
+       
+      
     }
 }

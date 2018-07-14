@@ -53,7 +53,7 @@ public class Fare {
 		description = dictionary["description"] as? String
 		if (dictionary["fareProduct"] != nil) { fareProduct = FareProduct(dictionary: dictionary["fareProduct"] as! NSDictionary) }
 		if (dictionary["cost"] != nil) { cost = Cost(dictionary: dictionary["cost"] as! NSDictionary) }
-		if (dictionary["messages"] != nil) { messages = dictionary["messages"] as! Array<String> }
+        if (dictionary["messages"] != nil) { messages = dictionary["messages"] as? Array<String> }
 	}
 
 		
